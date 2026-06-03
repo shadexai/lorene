@@ -22,9 +22,9 @@ export async function onRequest(context) {
       headers: corsHeaders,
     });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: "offline", uptime: 0, servers: 0, ping: 0 }),
-      { status: 503, headers: corsHeaders }
-    );
-  }
+  return new Response(
+    JSON.stringify({ status: "offline", uptime: 0, servers: 0, ping: 0, error: err.message }),
+    { status: 503, headers: corsHeaders }
+  );
+}
 }
