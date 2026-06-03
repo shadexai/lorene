@@ -3,29 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lorene — Your Server's Fun Bot</title>
+<title>Lorene — Shade of Thoughts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --bg3: #18181f;
-    --card: #1c1c25;
-    --card2: #22222d;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.13);
-    --accent: #7c6af7;
+    --bg:      #08080e;
+    --bg2:     #0e0e17;
+    --bg3:     #141420;
+    --card:    #181825;
+    --card2:   #1e1e2e;
+    --border:  rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.11);
+    --accent:  #7c6af7;
     --accent2: #a78bfa;
-    --pink: #f472b6;
-    --teal: #34d399;
-    --amber: #fbbf24;
-    --red: #f87171;
-    --blue: #60a5fa;
-    --text: #f1f0fa;
-    --muted: #8b89a8;
-    --faint: #3a3a4a;
+    --pink:    #f472b6;
+    --teal:    #2dd4bf;
+    --amber:   #fbbf24;
+    --red:     #f87171;
+    --blue:    #60a5fa;
+    --green:   #4ade80;
+    --text:    #eeedf8;
+    --muted:   #7e7c9a;
+    --faint:   #2e2e42;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,29 +41,30 @@
     overflow-x: hidden;
   }
 
+  /* grid overlay */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(124,106,247,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124,106,247,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+      linear-gradient(rgba(124,106,247,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
     pointer-events: none;
     z-index: 0;
   }
 
-  .glow-blob {
+  .blob {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
+    filter: blur(130px);
     pointer-events: none;
     z-index: 0;
   }
 
   section, nav, footer { position: relative; z-index: 1; }
 
-  /* NAV */
+  /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -71,68 +73,60 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(10,10,15,0.8);
-    backdrop-filter: blur(16px);
+    background: rgba(8,8,14,0.75);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
   }
 
   .nav-logo {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--text);
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
+    letter-spacing: -0.02em;
   }
 
-  .nav-logo .logo-dot {
-    width: 10px; height: 10px;
+  .logo-pip {
+    width: 9px; height: 9px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 12px var(--accent);
-    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 14px var(--accent);
+    animation: pip 2.4s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(0.85); }
+  @keyframes pip {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:.5; transform:scale(.8); }
   }
 
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-
+  .nav-links { display:flex; gap:1.8rem; list-style:none; }
   .nav-links a {
     color: var(--muted);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    transition: color 0.2s;
-    letter-spacing: 0.02em;
+    transition: color .2s;
+    letter-spacing: .01em;
   }
-
   .nav-links a:hover { color: var(--text); }
 
   .nav-cta {
-    background: var(--accent);
+    background: var(--accent) !important;
     color: #fff !important;
-    padding: 0.45rem 1.2rem;
+    padding: .42rem 1.1rem;
     border-radius: 100px;
-    font-size: 0.85rem !important;
-    transition: background 0.2s, transform 0.15s !important;
+    font-size: .82rem !important;
+    transition: background .2s, transform .15s !important;
   }
+  .nav-cta:hover { background: var(--accent2) !important; transform: translateY(-1px); }
 
-  .nav-cta:hover {
-    background: var(--accent2) !important;
-    transform: translateY(-1px);
-    color: #fff !important;
-  }
+  @media (max-width:640px) { .nav-links { display:none; } }
 
-  /* HERO */
+  /* ── HERO ── */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -140,575 +134,617 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 8rem 2rem 4rem;
+    padding: 9rem 2rem 5rem;
     overflow: hidden;
   }
 
-  .hero-badge {
+  .hero-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(124,106,247,0.12);
-    border: 1px solid rgba(124,106,247,0.3);
+    background: rgba(124,106,247,.1);
+    border: 1px solid rgba(124,106,247,.28);
     border-radius: 100px;
-    padding: 0.35rem 1rem;
-    font-size: 0.8rem;
+    padding: .32rem .95rem;
+    font-size: .75rem;
     color: var(--accent2);
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 2rem;
-    letter-spacing: 0.04em;
+    letter-spacing: .07em;
     text-transform: uppercase;
-    animation: fadeUp 0.6s ease both;
+    animation: fadeUp .5s ease both;
   }
 
-  .hero-badge span {
-    width: 6px; height: 6px;
-    border-radius: 50%;
+  .hero-eyebrow .dot {
+    width:6px; height:6px;
+    border-radius:50%;
     background: var(--teal);
-    animation: pulse 2s ease-in-out infinite;
+    animation: pip 2s ease-in-out infinite;
   }
 
   .hero h1 {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-size: clamp(3.2rem, 8vw, 6.5rem);
     font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -0.03em;
+    line-height: .94;
+    letter-spacing: -.035em;
     margin-bottom: 1.5rem;
-    animation: fadeUp 0.6s 0.1s ease both;
+    animation: fadeUp .55s .08s ease both;
   }
 
-  .hero h1 .name-accent {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 60%, var(--amber) 100%);
+  .grad {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 55%, var(--amber) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .hero p {
-    font-size: 1.2rem;
+  .hero-sub {
+    font-size: 1.1rem;
     color: var(--muted);
-    max-width: 520px;
+    max-width: 500px;
     margin: 0 auto 2.5rem;
     font-weight: 300;
-    animation: fadeUp 0.6s 0.2s ease both;
+    animation: fadeUp .55s .16s ease both;
   }
 
   .hero-btns {
     display: flex;
-    gap: 1rem;
+    gap: .9rem;
     flex-wrap: wrap;
     justify-content: center;
-    animation: fadeUp 0.6s 0.3s ease both;
+    animation: fadeUp .55s .23s ease both;
   }
 
-  .btn-primary {
+  .btn-main {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     background: var(--accent);
     color: #fff;
     text-decoration: none;
-    padding: 0.8rem 2rem;
+    padding: .78rem 1.85rem;
     border-radius: 100px;
     font-weight: 600;
-    font-size: 0.95rem;
-    transition: transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 4px 30px rgba(124,106,247,0.35);
+    font-size: .92rem;
+    transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 28px rgba(124,106,247,.38);
   }
+  .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(124,106,247,.55); }
 
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 40px rgba(124,106,247,0.5);
-  }
-
-  .btn-secondary {
+  .btn-ghost {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     background: transparent;
     color: var(--text);
     text-decoration: none;
-    padding: 0.8rem 2rem;
+    padding: .78rem 1.85rem;
     border-radius: 100px;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: .92rem;
     border: 1px solid var(--border2);
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color .2s, background .2s;
   }
+  .btn-ghost:hover { border-color: var(--accent); background: rgba(124,106,247,.07); }
 
-  .btn-secondary:hover {
-    border-color: var(--accent);
-    background: rgba(124,106,247,0.07);
-  }
-
-  /* LIVE STATUS WIDGET */
-  .status-widget {
+  /* status bar */
+  .status-bar {
     display: inline-flex;
     align-items: center;
     gap: 14px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 0.9rem 1.5rem;
+    border-radius: 14px;
+    padding: .8rem 1.4rem;
     margin-top: 2.5rem;
-    animation: fadeUp 0.6s 0.35s ease both;
-    transition: border-color 0.3s;
+    animation: fadeUp .55s .3s ease both;
+    transition: border-color .3s;
   }
+  .status-bar.online  { border-color: rgba(45,212,191,.28); }
+  .status-bar.offline { border-color: rgba(248,113,113,.28); }
 
-  .status-widget.online  { border-color: rgba(52,211,153,0.3); }
-  .status-widget.offline { border-color: rgba(248,113,113,0.3); }
-
-  .status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .status-indicator .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
+  .s-dot {
+    width:8px; height:8px;
+    border-radius:50%;
     background: var(--muted);
-    transition: background 0.3s;
+    transition: background .3s;
   }
+  .status-bar.online  .s-dot { background: var(--teal); animation: pip 2s infinite; box-shadow: 0 0 8px var(--teal); }
+  .status-bar.offline .s-dot { background: var(--red); }
 
-  .status-widget.online  .dot { background: var(--teal); animation: pulse 2s infinite; box-shadow: 0 0 8px var(--teal); }
-  .status-widget.offline .dot { background: var(--red); }
+  .s-label { font-size:.78rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); transition:color .3s; }
+  .status-bar.online  .s-label { color: var(--teal); }
+  .status-bar.offline .s-label { color: var(--red); }
 
-  .status-indicator .label { color: var(--muted); transition: color 0.3s; }
-  .status-widget.online  .label { color: var(--teal); }
-  .status-widget.offline .label { color: var(--red); }
+  .s-div { width:1px; height:22px; background:var(--border2); }
 
-  .status-divider {
-    width: 1px;
-    height: 24px;
-    background: var(--border2);
+  .s-stat { text-align:center; }
+  .s-val {
+    font-family:'Syne',sans-serif;
+    font-size:.95rem; font-weight:700;
+    color:var(--text); line-height:1;
   }
+  .s-lbl { font-size:.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
 
-  .status-stat {
-    text-align: center;
-  }
+  .status-bar.loading .s-val { color:var(--faint); animation:shimmer 1.5s ease-in-out infinite; }
+  @keyframes shimmer { 0%,100%{opacity:.4} 50%{opacity:1} }
 
-  .status-stat-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1;
-  }
-
-  .status-stat-label {
-    font-size: 0.68rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 2px;
-  }
-
-  .status-loading .status-stat-val {
-    color: var(--faint);
-    animation: shimmer 1.5s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
-  /* HERO STATS */
-  .hero-stats {
+  /* server facts */
+  .hero-facts {
     display: flex;
-    gap: 3rem;
-    margin-top: 3rem;
+    gap: 2.5rem;
+    margin-top: 2.8rem;
     justify-content: center;
     flex-wrap: wrap;
-    animation: fadeUp 0.6s 0.4s ease both;
+    animation: fadeUp .55s .36s ease both;
+  }
+  .fact { text-align:center; }
+  .fact-n { font-family:'Syne',sans-serif; font-size:1.85rem; font-weight:700; }
+  .fact-l { font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-top:1px; }
+
+  /* ── SECTION SHARED ── */
+  .sec-label {
+    text-align:center;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.13em;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:.85rem;
   }
 
-  .stat { text-align: center; }
-
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text);
+  .sec-title {
+    font-family:'Syne',sans-serif;
+    font-size: clamp(1.9rem,4vw,2.85rem);
+    font-weight:700;
+    text-align:center;
+    line-height:1.13;
+    letter-spacing:-.022em;
+    margin-bottom:.85rem;
   }
 
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  .sec-sub {
+    text-align:center;
+    color:var(--muted);
+    font-size:1rem;
+    max-width:460px;
+    margin:0 auto 3.5rem;
+    font-weight:300;
   }
 
-  /* FEATURES */
+  /* ── FEATURES ── */
   .features {
     padding: 6rem 2rem;
-    max-width: 1200px;
+    max-width: 1160px;
     margin: 0 auto;
   }
 
-  .section-label {
-    text-align: center;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 1rem;
+  .feat-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap:1.25rem;
   }
 
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    text-align: center;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-bottom: 1rem;
-  }
-
-  .section-sub {
-    text-align: center;
-    color: var(--muted);
-    font-size: 1.05rem;
-    max-width: 480px;
-    margin: 0 auto 4rem;
-    font-weight: 300;
-  }
-
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .feature-card {
+  .feat-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 2rem;
-    transition: border-color 0.3s, transform 0.3s, background 0.3s;
+    padding: 1.85rem;
+    transition: border-color .3s, transform .3s, background .3s;
     position: relative;
     overflow: hidden;
   }
+  .feat-card::after {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;
+    height:2px;
+    background: linear-gradient(90deg, transparent, var(--ca, var(--accent)), transparent);
+    opacity:0;
+    transition:opacity .3s;
+  }
+  .feat-card:hover { border-color:var(--border2); transform:translateY(-4px); background:var(--card2); }
+  .feat-card:hover::after { opacity:1; }
+  .feat-card.wide { grid-column: span 2; }
+  @media (max-width:700px) { .feat-card.wide { grid-column:span 1; } }
 
-  .feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
+  .feat-icon {
+    width:46px; height:46px;
+    border-radius:13px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem;
+    margin-bottom:1.1rem;
   }
 
-  .feature-card:hover { border-color: var(--border2); transform: translateY(-4px); background: var(--card2); }
-  .feature-card:hover::before { opacity: 1; }
-  .feature-card.big { grid-column: span 2; }
-
-  @media (max-width: 700px) { .feature-card.big { grid-column: span 1; } }
-
-  .feature-icon {
-    width: 48px; height: 48px;
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem;
+  .feat-title {
+    font-family:'Syne',sans-serif;
+    font-size:1.1rem;
+    font-weight:700;
+    margin-bottom:.42rem;
+    color:var(--text);
   }
 
-  .feature-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
+  .feat-desc { color:var(--muted); font-size:.88rem; line-height:1.65; }
 
-  .feature-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-
-  .feature-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.25rem; }
-
+  .feat-tags { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:1.1rem; }
   .tag {
-    padding: 0.25rem 0.7rem;
-    border-radius: 100px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
+    padding:.22rem .65rem;
+    border-radius:100px;
+    font-size:.72rem;
+    font-weight:600;
+    font-family:'DM Sans',sans-serif;
+    letter-spacing:.01em;
   }
 
-  /* COMMANDS */
-  .commands {
+  /* ── COMMANDS ── */
+  .commands-sec {
     padding: 6rem 2rem;
     background: var(--bg2);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
   }
 
-  .commands-inner { max-width: 1000px; margin: 0 auto; }
+  .cmd-wrap { max-width:1020px; margin:0 auto; }
 
-  .cmd-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
-    margin-top: 3rem;
+  .cmd-tabs {
+    display:flex;
+    gap:.5rem;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-bottom:2rem;
   }
+
+  .cmd-tab {
+    padding:.35rem .9rem;
+    border-radius:100px;
+    font-size:.78rem;
+    font-weight:600;
+    border:1px solid var(--border2);
+    background:transparent;
+    color:var(--muted);
+    cursor:pointer;
+    transition:all .2s;
+    font-family:'DM Sans',sans-serif;
+  }
+  .cmd-tab:hover { border-color:var(--accent); color:var(--text); }
+  .cmd-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+  .cmd-panel { display:none; }
+  .cmd-panel.active { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.7rem; }
 
   .cmd-item {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1rem 1.25rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    transition: border-color 0.2s, background 0.2s;
+    border-radius:13px;
+    padding:.95rem 1.1rem;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    transition:border-color .2s, background .2s;
   }
+  .cmd-item:hover { border-color:var(--border2); background:var(--card2); }
 
-  .cmd-item:hover { border-color: var(--border2); background: var(--card2); }
-  .cmd-emoji { font-size: 1.4rem; line-height: 1; margin-top: 2px; }
+  .cmd-ico { font-size:1.3rem; line-height:1; margin-top:1px; flex-shrink:0; }
 
   .cmd-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 2px;
+    font-family:'Syne',sans-serif;
+    font-weight:600;
+    font-size:.9rem;
+    color:var(--text);
+    margin-bottom:2px;
   }
 
-  .cmd-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
-
-  /* ECONOMY */
-  .economy { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
-
-  .economy-showcase {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 3rem;
+  .cmd-name code {
+    font-family: 'Courier New', monospace;
+    font-size:.82rem;
+    color:var(--accent2);
+    background: rgba(124,106,247,.1);
+    padding:1px 5px;
+    border-radius:5px;
   }
 
-  @media (max-width: 660px) { .economy-showcase { grid-template-columns: 1fr; } }
+  .cmd-desc { font-size:.76rem; color:var(--muted); line-height:1.4; }
 
-  .eco-panel {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 1.75rem;
-  }
-
-  .eco-panel-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text);
-  }
-
-  .eco-panel-title .dot { width: 8px; height: 8px; border-radius: 50%; }
-
-  .balance-display {
-    background: var(--bg3);
-    border-radius: 12px;
-    padding: 1.5rem;
-    text-align: center;
-    border: 1px solid var(--border);
-    margin-bottom: 1rem;
-  }
-
-  .balance-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-  .balance-amt { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--teal); }
-  .balance-sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
-
-  .leaderboard-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.7rem 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.88rem;
-  }
-
-  .leaderboard-row:last-child { border-bottom: none; }
-  .lb-left { display: flex; align-items: center; gap: 10px; }
-
-  .lb-rank { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--muted); width: 20px; }
-  .lb-rank.gold { color: var(--amber); }
-  .lb-rank.silver { color: #c0c0c0; }
-  .lb-rank.bronze { color: #cd7f32; }
-
-  .lb-avatar {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-
-  .lb-name { font-weight: 500; color: var(--text); }
-  .lb-amt { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--teal); }
-
-  /* STOCK TICKER */
-  .stock-ticker-wrap {
-    overflow: hidden;
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 0.75rem 0;
-    margin: 0 -2rem;
-  }
-
-  .stock-ticker {
-    display: flex;
-    gap: 3rem;
-    animation: ticker 30s linear infinite;
-    white-space: nowrap;
-    width: max-content;
-  }
-
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  .ticker-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 500; }
-  .ticker-sym { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--text); }
-  .ticker-price { color: var(--muted); }
-  .ticker-change { font-weight: 600; }
-  .up { color: var(--teal); }
-  .down { color: var(--red); }
-
-  /* FISHING */
-  .fishing {
+  /* ── FISHING ── */
+  .fishing-sec {
     padding: 6rem 2rem;
-    background: linear-gradient(180deg, var(--bg) 0%, rgba(52,211,153,0.04) 50%, var(--bg) 100%);
+    background: linear-gradient(180deg, var(--bg) 0%, rgba(45,212,191,.035) 50%, var(--bg) 100%);
   }
+  .fish-inner { max-width:920px; margin:0 auto; }
 
-  .fishing-inner { max-width: 900px; margin: 0 auto; }
-
-  .fish-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
-    margin-top: 2.5rem;
+  .fish-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+    gap:.9rem;
+    margin-bottom:1.5rem;
   }
 
   .fish-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.25rem 1rem;
-    text-align: center;
-    transition: transform 0.25s, border-color 0.25s;
-    cursor: default;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:1.1rem .85rem;
+    text-align:center;
+    cursor:default;
+    transition:transform .25s, border-color .25s, background .25s;
+    position:relative;
+    overflow:hidden;
+  }
+  .fish-card:hover { transform:translateY(-5px) rotate(-1.5deg); background:var(--card2); }
+  .fish-card.common:hover    { border-color:rgba(126,124,154,.5); }
+  .fish-card.uncommon:hover  { border-color:rgba(96,165,250,.4); }
+  .fish-card.rare:hover      { border-color:rgba(167,139,250,.5); }
+  .fish-card.legendary:hover { border-color:rgba(251,191,36,.45); }
+  .fish-card.mythic:hover    { border-color:rgba(244,114,182,.5); }
+
+  .fish-emoji { font-size:2.2rem; display:block; margin-bottom:.45rem; }
+  .fish-nm    { font-family:'Syne',sans-serif; font-size:.8rem; font-weight:700; color:var(--text); margin-bottom:2px; }
+  .fish-rar   { font-size:.65rem; text-transform:uppercase; letter-spacing:.07em; font-weight:600; }
+  .fish-val   { font-size:.74rem; color:var(--teal); margin-top:4px; font-weight:500; }
+
+  .r-common    { color:var(--muted); }
+  .r-uncommon  { color:var(--blue); }
+  .r-rare      { color:var(--accent2); }
+  .r-legendary { color:var(--amber); }
+  .r-mythic    { color:var(--pink); }
+
+  .fish-more {
+    text-align:center;
+    color:var(--muted);
+    font-size:.83rem;
+    padding:.6rem;
+    border:1px dashed var(--faint);
+    border-radius:12px;
+    margin-top:.5rem;
   }
 
-  .fish-card:hover { transform: translateY(-5px) rotate(-1deg); border-color: rgba(52,211,153,0.35); }
-  .fish-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
-  .fish-name { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-  .fish-rarity { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
-  .fish-value { font-size: 0.78rem; color: var(--teal); margin-top: 4px; font-weight: 500; }
-  .rarity-common { color: var(--muted); }
-  .rarity-uncommon { color: var(--blue); }
-  .rarity-rare { color: var(--accent2); }
-  .rarity-epic { color: var(--pink); }
-  .rarity-legendary { color: var(--amber); }
+  /* fishing boosters */
+  .boosters {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+    margin-top:2.5rem;
+  }
+  @media(max-width:540px) { .boosters{grid-template-columns:1fr;} }
 
-  /* INVITE */
-  .invite { padding: 8rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  .booster-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:1.4rem 1.5rem;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    transition:transform .2s,border-color .2s;
+  }
+  .booster-card:hover { transform:translateY(-2px); }
+  .booster-card.b2:hover { border-color:rgba(96,165,250,.35); }
+  .booster-card.b3:hover { border-color:rgba(167,139,250,.4); }
 
-  .invite-card {
-    background: var(--card);
-    border: 1px solid rgba(124,106,247,0.25);
-    border-radius: 28px;
-    padding: 4rem 3rem;
-    max-width: 680px;
+  .booster-icon { font-size:2rem; flex-shrink:0; }
+  .booster-title { font-family:'Syne',sans-serif; font-weight:700; font-size:.95rem; color:var(--text); margin-bottom:2px; }
+  .booster-desc  { font-size:.78rem; color:var(--muted); line-height:1.4; }
+  .booster-price { font-size:.8rem; font-weight:600; margin-top:5px; }
+  .b2 .booster-price { color:var(--blue); }
+  .b3 .booster-price { color:var(--accent2); }
+
+  /* ── ECONOMY ticker ── */
+  .ticker-wrap {
+    overflow:hidden;
+    background:var(--bg2);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:.7rem 0;
+    margin:0;
+  }
+  .ticker-track {
+    display:flex;
+    gap:2.5rem;
+    animation:tick 28s linear infinite;
+    white-space:nowrap;
+    width:max-content;
+  }
+  @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  .t-item { display:flex; align-items:center; gap:7px; font-size:.8rem; font-weight:500; }
+  .t-sym  { font-family:'Syne',sans-serif; font-weight:700; font-size:.82rem; color:var(--text); }
+  .t-px   { color:var(--muted); }
+  .up     { color:var(--teal); font-weight:600; }
+  .dn     { color:var(--red); font-weight:600; }
+
+  /* ── SERVER ── */
+  .server-sec {
+    padding: 6rem 2rem;
+    max-width: 860px;
     margin: 0 auto;
+  }
+
+  .server-card {
+    background: var(--card);
+    border: 1px solid rgba(124,106,247,.22);
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .server-banner {
+    height: 120px;
+    background: linear-gradient(135deg, #1a0940 0%, #2d1b69 40%, #1a0940 100%);
     position: relative;
     overflow: hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
-  .invite-card::before {
-    content: '';
-    position: absolute;
-    top: -80px; left: 50%; transform: translateX(-50%);
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(124,106,247,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+  .server-banner::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(124,106,247,.4) 0%, transparent 50%),
+      radial-gradient(circle at 80% 30%, rgba(244,114,182,.25) 0%, transparent 50%);
   }
 
-  .invite-card h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin-bottom: 1rem;
+  .server-banner-text {
+    font-family:'Syne',sans-serif;
+    font-size:1.6rem;
+    font-weight:800;
+    letter-spacing:-.02em;
+    color:#fff;
+    position:relative;
+    z-index:1;
+    text-shadow:0 2px 20px rgba(0,0,0,.5);
   }
 
-  .invite-card p { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; font-weight: 300; }
-
-  /* FOOTER */
-  footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 3rem 2rem 2rem; }
-
-  .footer-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+  .server-body {
+    padding:2rem;
   }
 
-  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--text); }
-
-  .footer-links { display: flex; gap: 1.5rem; list-style: none; }
-  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--text); }
-
-  .footer-copy {
-    font-size: 0.8rem;
-    color: var(--faint);
-    width: 100%;
-    text-align: center;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
+  .server-meta {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:1rem;
+    margin-bottom:1.25rem;
   }
 
-  /* ANIMATIONS */
+  .server-name {
+    font-family:'Syne',sans-serif;
+    font-size:1.4rem;
+    font-weight:800;
+    letter-spacing:-.02em;
+    color:var(--text);
+  }
+
+  .server-handle { font-size:.82rem; color:var(--muted); margin-top:2px; }
+
+  .server-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(124,106,247,.12);
+    border:1px solid rgba(124,106,247,.25);
+    border-radius:100px;
+    padding:.28rem .8rem;
+    font-size:.72rem;
+    color:var(--accent2);
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+
+  .server-desc {
+    color:var(--muted);
+    font-size:.9rem;
+    line-height:1.65;
+    margin-bottom:1.5rem;
+    border-left:2px solid var(--faint);
+    padding-left:.9rem;
+  }
+
+  .server-stats {
+    display:flex;
+    gap:1.5rem;
+    flex-wrap:wrap;
+    margin-bottom:1.75rem;
+  }
+
+  .srv-stat { text-align:left; }
+  .srv-stat-n { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; }
+  .srv-stat-l { font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
+
+  /* ── INVITE CTA ── */
+  .invite-sec {
+    padding: 8rem 2rem;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .invite-box {
+    background:var(--card);
+    border:1px solid rgba(124,106,247,.2);
+    border-radius:28px;
+    padding:4rem 3rem;
+    max-width:660px;
+    margin:0 auto;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .invite-box::before {
+    content:'';
+    position:absolute;
+    top:-100px;left:50%;transform:translateX(-50%);
+    width:380px;height:380px;
+    background:radial-gradient(circle,rgba(124,106,247,.13) 0%,transparent 70%);
+    border-radius:50%;
+    pointer-events:none;
+  }
+
+  .invite-box h2 {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(1.8rem,4vw,2.6rem);
+    font-weight:800;
+    letter-spacing:-.03em;
+    line-height:1.08;
+    margin-bottom:1rem;
+  }
+
+  .invite-box p { color:var(--muted); font-size:.98rem; margin-bottom:2rem; font-weight:300; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--bg2);
+    border-top:1px solid var(--border);
+    padding:2.5rem 2rem 1.8rem;
+  }
+
+  .foot-inner {
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:1rem;
+  }
+
+  .foot-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.15rem; color:var(--text); }
+  .foot-links { display:flex; gap:1.5rem; list-style:none; }
+  .foot-links a { color:var(--muted); text-decoration:none; font-size:.82rem; transition:color .2s; }
+  .foot-links a:hover { color:var(--text); }
+
+  .foot-copy {
+    font-size:.75rem;
+    color:var(--faint);
+    width:100%;
+    text-align:center;
+    margin-top:1.75rem;
+    padding-top:1.25rem;
+    border-top:1px solid var(--border);
+  }
+
+  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(22px); }
+    to   { opacity:1; transform:translateY(0); }
   }
 
   .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    opacity:0;
+    transform:translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
   }
+  .reveal.visible { opacity:1; transform:translateY(0); }
 
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 640px) {
-    .nav-links { display: none; }
-    .hero h1 { font-size: 3rem; }
-    .status-widget { flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .status-divider { display: none; }
-  }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--faint); border-radius: 3px; }
+  /* scrollbar */
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--faint); border-radius:3px; }
 </style>
 </head>
 <body>
@@ -716,378 +752,452 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <div class="logo-dot"></div>
+    <div class="logo-pip"></div>
     Lorene
   </a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#commands">Commands</a></li>
-    <li><a href="#economy">Economy</a></li>
     <li><a href="#fishing">Fishing</a></li>
-    <li><a href="#invite" class="nav-cta">Add to Server</a></li>
+    <li><a href="#server">Server</a></li>
+    <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" class="nav-cta">Join Server</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="glow-blob" style="width:500px;height:500px;background:rgba(124,106,247,0.12);top:-100px;left:-100px;"></div>
-  <div class="glow-blob" style="width:400px;height:400px;background:rgba(244,114,182,0.07);bottom:0;right:-80px;"></div>
+  <div class="blob" style="width:520px;height:520px;background:rgba(124,106,247,.1);top:-80px;left:-120px;"></div>
+  <div class="blob" style="width:400px;height:400px;background:rgba(244,114,182,.06);bottom:60px;right:-80px;"></div>
 
-  <div class="hero-badge">
-    <span></span>
-    Live on Discord
+  <div class="hero-eyebrow">
+    <span class="dot"></span>
+    Exclusive to Shade of Thoughts
   </div>
 
-  <h1>Meet <span class="name-accent">Lorene</span><br>Your server's<br>fun bot.</h1>
-  <p>Trivia, roasts, quotes, fishing, economy with racks, fake stocks — all the chaos your server deserves.</p>
+  <h1>Meet <span class="grad">Lorene.</span><br>Your server's<br>own bot.</h1>
+
+  <p class="hero-sub">Economy, fishing, AI, stocks, gambling — built exclusively for Shade of Thoughts. This is not your average Discord bot.</p>
 
   <div class="hero-btns">
-    <a href="#invite" class="btn-primary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      Add Lorene Free
+    <a href="https://discord.gg/MaRtdKbY2n" target="_blank" class="btn-main">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Join the Server
     </a>
-    <a href="#commands" class="btn-secondary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      View Commands
+    <a href="#commands" class="btn-ghost">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Browse Commands
     </a>
   </div>
 
-  <!-- LIVE STATUS WIDGET -->
-  <div class="status-widget status-loading" id="statusWidget">
-    <div class="status-indicator">
-      <div class="dot"></div>
-      <span class="label" id="statusLabel">Checking...</span>
-    </div>
-    <div class="status-divider"></div>
-    <div class="status-stat">
-      <div class="status-stat-val" id="statusUptime">--</div>
-      <div class="status-stat-label">Uptime</div>
-    </div>
-    <div class="status-divider"></div>
-    <div class="status-stat">
-      <div class="status-stat-val" id="statusServers">--</div>
-      <div class="status-stat-label">Servers</div>
-    </div>
-    <div class="status-divider"></div>
-    <div class="status-stat">
-      <div class="status-stat-val" id="statusPing">--</div>
-      <div class="status-stat-label">Ping</div>
-    </div>
+  <div class="status-bar loading" id="statusBar">
+    <div class="s-dot"></div>
+    <span class="s-label" id="sLabel">Checking…</span>
+    <div class="s-div"></div>
+    <div class="s-stat"><div class="s-val" id="sUptime">--</div><div class="s-lbl">Uptime</div></div>
+    <div class="s-div"></div>
+    <div class="s-stat"><div class="s-val" id="sPing">--</div><div class="s-lbl">Ping</div></div>
   </div>
 
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num">50+</div>
-      <div class="stat-label">Commands</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">6</div>
-      <div class="stat-label">Feature Modules</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">∞</div>
-      <div class="stat-label">Fun Level</div>
-    </div>
+  <div class="hero-facts">
+    <div class="fact"><div class="fact-n" style="color:var(--accent2)">142</div><div class="fact-l">Members</div></div>
+    <div class="fact"><div class="fact-n" style="color:var(--pink)">7</div><div class="fact-l">Modules</div></div>
+    <div class="fact"><div class="fact-n" style="color:var(--teal)">50+</div><div class="fact-l">Commands</div></div>
+    <div class="fact"><div class="fact-n" style="color:var(--amber)">∞</div><div class="fact-l">Chaos</div></div>
   </div>
 </section>
 
 <!-- FEATURES -->
 <section class="features" id="features">
-  <div class="section-label">What Lorene does</div>
-  <h2 class="section-title reveal">Everything your server needs.</h2>
-  <p class="section-sub reveal">Six packed modules — each one built for maximum chaos and community engagement.</p>
+  <div class="sec-label">What Lorene does</div>
+  <h2 class="sec-title reveal">Everything in one bot.</h2>
+  <p class="sec-sub reveal">Seven modules, all running 24/7 just for this server.</p>
 
-  <div class="features-grid">
-    <div class="feature-card reveal" style="--card-accent: #7c6af7;">
-      <div class="feature-icon" style="background:rgba(124,106,247,0.15);">🎯</div>
-      <div class="feature-title">Trivia &amp; Fun Games</div>
-      <div class="feature-desc">Challenge your server with trivia questions across dozens of topics. Keep score, build streaks, and crown the smartest person in the chat.</div>
-      <div class="feature-tags">
-        <span class="tag" style="background:rgba(124,106,247,0.12);color:#a78bfa;">/trivia</span>
-        <span class="tag" style="background:rgba(124,106,247,0.12);color:#a78bfa;">/quiz</span>
-        <span class="tag" style="background:rgba(124,106,247,0.12);color:#a78bfa;">/riddle</span>
+  <div class="feat-grid">
+
+    <div class="feat-card reveal" style="--ca:#7c6af7;">
+      <div class="feat-icon" style="background:rgba(124,106,247,.14);">🤖</div>
+      <div class="feat-title">AI Chat</div>
+      <div class="feat-desc">Talk to Lorene with <code style="font-family:monospace;font-size:.85em;color:var(--accent2);">?ai</code>, mention her directly, or let auto-starters keep the conversation going. Full context memory per conversation.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">?ai</span>
+        <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">?aiclear</span>
+        <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">@mention</span>
       </div>
     </div>
 
-    <div class="feature-card reveal" style="--card-accent: #f472b6;">
-      <div class="feature-icon" style="background:rgba(244,114,182,0.12);">🔥</div>
-      <div class="feature-title">Roasts &amp; Quotes</div>
-      <div class="feature-desc">Generate savage roasts or drop wisdom bombs with random quotes. Roast your friends, lift your spirits — Lorene's got range.</div>
-      <div class="feature-tags">
-        <span class="tag" style="background:rgba(244,114,182,0.12);color:#f472b6;">/roast</span>
-        <span class="tag" style="background:rgba(244,114,182,0.12);color:#f472b6;">/quote</span>
-        <span class="tag" style="background:rgba(244,114,182,0.12);color:#f472b6;">/compliment</span>
+    <div class="feat-card reveal" style="--ca:#34d399;">
+      <div class="feat-icon" style="background:rgba(52,211,153,.12);">🎣</div>
+      <div class="feat-title">Fishing</div>
+      <div class="feat-desc">Cast your rod for 50 racks, reel in fish across 5 rarity tiers. Fish of the Day gives 3× sell value. Buy luck boosters to catch rarer fish more often.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?fs</span>
+        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?fi</span>
+        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?sell</span>
+        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">/fishingluck</span>
       </div>
     </div>
 
-    <div class="feature-card reveal" style="--card-accent: #34d399;">
-      <div class="feature-icon" style="background:rgba(52,211,153,0.12);">🎣</div>
-      <div class="feature-title">Fishing System</div>
-      <div class="feature-desc">Cast your rod, reel in fish of all rarities — from common sardines to legendary sea creatures. Build your collection and sell your catch for racks.</div>
-      <div class="feature-tags">
-        <span class="tag" style="background:rgba(52,211,153,0.12);color:#34d399;">/fish</span>
-        <span class="tag" style="background:rgba(52,211,153,0.12);color:#34d399;">/inventory</span>
-        <span class="tag" style="background:rgba(52,211,153,0.12);color:#34d399;">/sell</span>
+    <div class="feat-card wide reveal" style="--ca:#fbbf24;">
+      <div class="feat-icon" style="background:rgba(251,191,36,.12);">💰</div>
+      <div class="feat-title">Economy — Racks</div>
+      <div class="feat-desc">Full server economy built around racks. Earn passively by chatting, claim daily bonuses, rob other members, run heists, buy items from the shop, or blow it all on slots. Check the leaderboard to see who's running the server financially.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?racks</span>
+        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?daily</span>
+        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?rob</span>
+        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?heist</span>
+        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?lb</span>
+        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">/shop</span>
       </div>
     </div>
 
-    <div class="feature-card big reveal" style="--card-accent: #fbbf24;">
-      <div class="feature-icon" style="background:rgba(251,191,36,0.12);">💰</div>
-      <div class="feature-title">Economy &amp; Racks</div>
-      <div class="feature-desc">A full server economy built around racks — earn them, spend them, gamble them. Daily rewards, work commands, heists, and more. Build your empire or lose it all in the slots. The choice is yours.</div>
-      <div class="feature-tags">
-        <span class="tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">/balance</span>
-        <span class="tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">/daily</span>
-        <span class="tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">/work</span>
-        <span class="tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">/slots</span>
-        <span class="tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">/heist</span>
-        <span class="tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">/leaderboard</span>
+    <div class="feat-card reveal" style="--ca:#60a5fa;">
+      <div class="feat-icon" style="background:rgba(96,165,250,.12);">📈</div>
+      <div class="feat-title">Fake Stock Market</div>
+      <div class="feat-desc">5 in-server companies (SHADE, LORENE, CHAOS, DRIP, NOVA). Prices fluctuate live. Buy low, sell high, flex your portfolio.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">?st</span>
+        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/buystock</span>
+        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/sellstock</span>
+        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/portfolio</span>
       </div>
     </div>
 
-    <div class="feature-card reveal" style="--card-accent: #60a5fa;">
-      <div class="feature-icon" style="background:rgba(96,165,250,0.12);">📈</div>
-      <div class="feature-title">Fake Stock Market</div>
-      <div class="feature-desc">Buy and sell fake stocks inside your server. Prices fluctuate in real time. Play the market, short your enemies, become the Wolf of Discord.</div>
-      <div class="feature-tags">
-        <span class="tag" style="background:rgba(96,165,250,0.12);color:#60a5fa;">/buy</span>
-        <span class="tag" style="background:rgba(96,165,250,0.12);color:#60a5fa;">/sell stock</span>
-        <span class="tag" style="background:rgba(96,165,250,0.12);color:#60a5fa;">/portfolio</span>
+    <div class="feat-card reveal" style="--ca:#f472b6;">
+      <div class="feat-icon" style="background:rgba(244,114,182,.12);">🔥</div>
+      <div class="feat-title">Hype System</div>
+      <div class="feat-desc">Give or take hype from members. Use HypeNuke to blast ±10 hype for 1,000 racks. Flex your hype score on the server.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">+hype</span>
+        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">-hype</span>
+        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">?hype</span>
+        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">/hypenuke</span>
       </div>
     </div>
 
-    <div class="feature-card reveal" style="--card-accent: #a78bfa;">
-      <div class="feature-icon" style="background:rgba(167,139,250,0.12);">🎲</div>
-      <div class="feature-title">More Fun Commands</div>
-      <div class="feature-desc">8ball, coinflip, dice, meme generator, would-you-rather, and a whole bag of commands to keep the chat alive 24/7.</div>
-      <div class="feature-tags">
-        <span class="tag" style="background:rgba(167,139,250,0.12);color:#a78bfa;">/8ball</span>
-        <span class="tag" style="background:rgba(167,139,250,0.12);color:#a78bfa;">/flip</span>
-        <span class="tag" style="background:rgba(167,139,250,0.12);color:#a78bfa;">/meme</span>
+    <div class="feat-card reveal" style="--ca:#a78bfa;">
+      <div class="feat-icon" style="background:rgba(167,139,250,.12);">🎰</div>
+      <div class="feat-title">Gambling</div>
+      <div class="feat-desc">Coinflip, slots, dice — risk your racks for a chance to double up. Classic server degenerate activity, no judgment.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?cf</span>
+        <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?slots</span>
+        <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?dice</span>
       </div>
     </div>
+
+    <div class="feat-card reveal" style="--ca:#2dd4bf;">
+      <div class="feat-icon" style="background:rgba(45,212,191,.12);">🧠</div>
+      <div class="feat-title">Trivia &amp; Fun</div>
+      <div class="feat-desc">Trivia, roasts, facts, jokes, would-you-rather, aura tracking — all the tools needed to keep chat alive and chaotic.</div>
+      <div class="feat-tags">
+        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?trivia</span>
+        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?roast</span>
+        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?fact</span>
+        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?wyr</span>
+        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?aura</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- COMMANDS -->
-<section class="commands" id="commands">
-  <div class="commands-inner">
-    <div class="section-label">All commands</div>
-    <h2 class="section-title reveal">Slash commands, ready to go.</h2>
-    <p class="section-sub reveal">Type <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:0.9em;color:var(--accent2);">/</code> in any channel to get started instantly.</p>
+<section class="commands-sec" id="commands">
+  <div class="cmd-wrap">
+    <div class="sec-label">Command reference</div>
+    <h2 class="sec-title reveal">Every command, right here.</h2>
+    <p class="sec-sub reveal">Prefix commands use <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:.88em;color:var(--accent2);">?</code> — slash commands use <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:.88em;color:var(--accent2);">/</code></p>
 
-    <div class="cmd-grid">
-      <div class="cmd-item reveal"><div class="cmd-emoji">🎯</div><div><div class="cmd-name">/trivia</div><div class="cmd-desc">Start a trivia round</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🔥</div><div><div class="cmd-name">/roast</div><div class="cmd-desc">Roast a server member</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">💬</div><div><div class="cmd-name">/quote</div><div class="cmd-desc">Get a random quote</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🎣</div><div><div class="cmd-name">/fish</div><div class="cmd-desc">Cast your rod</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">💰</div><div><div class="cmd-name">/balance</div><div class="cmd-desc">Check your racks</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">📅</div><div><div class="cmd-name">/daily</div><div class="cmd-desc">Claim daily racks</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">💼</div><div><div class="cmd-name">/work</div><div class="cmd-desc">Earn racks by working</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🎰</div><div><div class="cmd-name">/slots</div><div class="cmd-desc">Spin for big racks</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🦹</div><div><div class="cmd-name">/heist</div><div class="cmd-desc">Rob the vault</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">📊</div><div><div class="cmd-name">/leaderboard</div><div class="cmd-desc">Who's the richest?</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">📈</div><div><div class="cmd-name">/stocks</div><div class="cmd-desc">View market prices</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🧳</div><div><div class="cmd-name">/portfolio</div><div class="cmd-desc">Your stock holdings</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🎱</div><div><div class="cmd-name">/8ball</div><div class="cmd-desc">Ask the magic 8-ball</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🪙</div><div><div class="cmd-name">/flip</div><div class="cmd-desc">Flip a coin</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🎭</div><div><div class="cmd-name">/meme</div><div class="cmd-desc">Get a fresh meme</div></div></div>
-      <div class="cmd-item reveal"><div class="cmd-emoji">🤔</div><div><div class="cmd-name">/wouldyourather</div><div class="cmd-desc">Spicy dilemmas</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ECONOMY + STOCKS -->
-<section class="economy" id="economy">
-  <div class="section-label">Economy system</div>
-  <h2 class="section-title reveal">Build your racks empire.</h2>
-  <p class="section-sub reveal">Earn, spend, invest, and flex. Lorene's economy is full-featured and always running.</p>
-
-  <div class="stock-ticker-wrap reveal">
-    <div class="stock-ticker">
-      <div class="ticker-item"><span class="ticker-sym">DSCRD</span><span class="ticker-price">142.50</span><span class="ticker-change up">+3.2%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">RACKS</span><span class="ticker-price">88.00</span><span class="ticker-change up">+7.4%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">FISH</span><span class="ticker-price">22.10</span><span class="ticker-change down">-1.8%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">MEME</span><span class="ticker-price">420.69</span><span class="ticker-change up">+69%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">CHAOS</span><span class="ticker-price">9.99</span><span class="ticker-change down">-0.5%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">LORENE</span><span class="ticker-price">999.99</span><span class="ticker-change up">+∞</span></div>
-      <div class="ticker-item"><span class="ticker-sym">VIBE</span><span class="ticker-price">55.55</span><span class="ticker-change up">+5.5%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">HEIST</span><span class="ticker-price">314.15</span><span class="ticker-change down">-2.1%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">DSCRD</span><span class="ticker-price">142.50</span><span class="ticker-change up">+3.2%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">RACKS</span><span class="ticker-price">88.00</span><span class="ticker-change up">+7.4%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">FISH</span><span class="ticker-price">22.10</span><span class="ticker-change down">-1.8%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">MEME</span><span class="ticker-price">420.69</span><span class="ticker-change up">+69%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">CHAOS</span><span class="ticker-price">9.99</span><span class="ticker-change down">-0.5%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">LORENE</span><span class="ticker-price">999.99</span><span class="ticker-change up">+∞</span></div>
-      <div class="ticker-item"><span class="ticker-sym">VIBE</span><span class="ticker-price">55.55</span><span class="ticker-change up">+5.5%</span></div>
-      <div class="ticker-item"><span class="ticker-sym">HEIST</span><span class="ticker-price">314.15</span><span class="ticker-change down">-2.1%</span></div>
-    </div>
-  </div>
-
-  <div class="economy-showcase reveal">
-    <div class="eco-panel">
-      <div class="eco-panel-title"><span class="dot" style="background:var(--teal);"></span>Wallet</div>
-      <div class="balance-display">
-        <div class="balance-label">Your Racks</div>
-        <div class="balance-amt">🏦 4,820</div>
-        <div class="balance-sub">Rank #3 in server</div>
-      </div>
-      <div style="font-size:0.82rem;color:var(--muted);display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);">
-        <span>Daily streak</span><span style="color:var(--amber);font-weight:600;">🔥 12 days</span>
-      </div>
-      <div style="font-size:0.82rem;color:var(--muted);display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);">
-        <span>In stocks</span><span style="color:var(--blue);font-weight:600;">1,200 racks</span>
-      </div>
-      <div style="font-size:0.82rem;color:var(--muted);display:flex;justify-content:space-between;padding:0.5rem 0;">
-        <span>Fish sold</span><span style="color:var(--teal);font-weight:600;">342 fish</span>
-      </div>
+    <div class="cmd-tabs">
+      <button class="cmd-tab active" onclick="switchTab('economy',this)">💰 Economy</button>
+      <button class="cmd-tab" onclick="switchTab('fishing',this)">🎣 Fishing</button>
+      <button class="cmd-tab" onclick="switchTab('gambling',this)">🎰 Gambling</button>
+      <button class="cmd-tab" onclick="switchTab('stocks',this)">📈 Stocks</button>
+      <button class="cmd-tab" onclick="switchTab('hype',this)">🔥 Hype</button>
+      <button class="cmd-tab" onclick="switchTab('fun',this)">🧠 Fun</button>
+      <button class="cmd-tab" onclick="switchTab('slash',this)">⚡ Slash</button>
     </div>
 
-    <div class="eco-panel">
-      <div class="eco-panel-title"><span class="dot" style="background:var(--amber);"></span>Server Leaderboard</div>
-      <div class="leaderboard-row">
-        <div class="lb-left"><span class="lb-rank gold">1</span><div class="lb-avatar" style="background:rgba(251,191,36,0.15);color:var(--amber);">KG</div><span class="lb-name">KingGrind</span></div>
-        <span class="lb-amt">28,440</span>
-      </div>
-      <div class="leaderboard-row">
-        <div class="lb-left"><span class="lb-rank silver">2</span><div class="lb-avatar" style="background:rgba(192,192,192,0.15);color:#c0c0c0;">RL</div><span class="lb-name">RackLord</span></div>
-        <span class="lb-amt">19,100</span>
-      </div>
-      <div class="leaderboard-row">
-        <div class="lb-left"><span class="lb-rank bronze">3</span><div class="lb-avatar" style="background:rgba(205,127,50,0.15);color:#cd7f32;">You</div><span class="lb-name">You</span></div>
-        <span class="lb-amt">4,820</span>
-      </div>
-      <div class="leaderboard-row">
-        <div class="lb-left"><span class="lb-rank">4</span><div class="lb-avatar" style="background:rgba(124,106,247,0.12);color:var(--accent2);">FX</div><span class="lb-name">FishKing</span></div>
-        <span class="lb-amt">3,310</span>
-      </div>
-      <div class="leaderboard-row">
-        <div class="lb-left"><span class="lb-rank">5</span><div class="lb-avatar" style="background:rgba(244,114,182,0.12);color:var(--pink);">MX</div><span class="lb-name">Maxxx</span></div>
-        <span class="lb-amt">2,050</span>
-      </div>
+    <!-- Economy -->
+    <div class="cmd-panel active" id="panel-economy">
+      <div class="cmd-item"><div class="cmd-ico">💸</div><div><div class="cmd-name"><code>?racks</code></div><div class="cmd-desc">Check your balance</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📅</div><div><div class="cmd-name"><code>?daily</code></div><div class="cmd-desc">Claim daily racks</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🤝</div><div><div class="cmd-name"><code>?share</code></div><div class="cmd-desc">Send racks to someone</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🏆</div><div><div class="cmd-name"><code>?lb</code></div><div class="cmd-desc">Richest members board</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🦹</div><div><div class="cmd-name"><code>?rob @user</code></div><div class="cmd-desc">Steal racks from someone</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💣</div><div><div class="cmd-name"><code>?heist</code></div><div class="cmd-desc">Start a group heist</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🤜</div><div><div class="cmd-name"><code>?join</code></div><div class="cmd-desc">Join an active heist</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📦</div><div><div class="cmd-name"><code>?crate</code></div><div class="cmd-desc">Open a mystery crate</div></div></div>
     </div>
+
+    <!-- Fishing -->
+    <div class="cmd-panel" id="panel-fishing">
+      <div class="cmd-item"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>?fs</code> / <code>?fishing</code></div><div class="cmd-desc">Cast your rod (50 racks)</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🪣</div><div><div class="cmd-name"><code>?fi</code> / <code>?fishinv</code></div><div class="cmd-desc">View your fish bucket</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💲</div><div><div class="cmd-name"><code>?sell all</code></div><div class="cmd-desc">Sell all fish instantly</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🐟</div><div><div class="cmd-name"><code>?sell fish</code></div><div class="cmd-desc">Sell specific fish / rarity</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?fishstats</code></div><div class="cmd-desc">Your fishing stats</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🏅</div><div><div class="cmd-name"><code>?flb</code></div><div class="cmd-desc">Fishing leaderboard</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🌅</div><div><div class="cmd-name"><code>?fotd</code></div><div class="cmd-desc">Fish of the Day (3× value)</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🤲</div><div><div class="cmd-name"><code>?share fish</code></div><div class="cmd-desc">Give fish to someone</div></div></div>
+    </div>
+
+    <!-- Gambling -->
+    <div class="cmd-panel" id="panel-gambling">
+      <div class="cmd-item"><div class="cmd-ico">🪙</div><div><div class="cmd-name"><code>?cf &lt;amt&gt;</code></div><div class="cmd-desc">Coinflip heads or tails</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🎰</div><div><div class="cmd-name"><code>?slots &lt;amt&gt;</code></div><div class="cmd-desc">Spin the slot machine</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🎲</div><div><div class="cmd-name"><code>?dice &lt;amt&gt;</code></div><div class="cmd-desc">Roll the dice</div></div></div>
+    </div>
+
+    <!-- Stocks -->
+    <div class="cmd-panel" id="panel-stocks">
+      <div class="cmd-item"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>?st</code> / <code>?stocks</code></div><div class="cmd-desc">View live stock prices</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy shares of a company</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💹</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell your shares</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View your P&amp;L</div></div></div>
+    </div>
+
+    <!-- Hype -->
+    <div class="cmd-panel" id="panel-hype">
+      <div class="cmd-item"><div class="cmd-ico">⬆️</div><div><div class="cmd-name"><code>+hype @user</code></div><div class="cmd-desc">Give someone hype</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">⬇️</div><div><div class="cmd-name"><code>-hype @user</code></div><div class="cmd-desc">Take someone's hype</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?hype</code></div><div class="cmd-desc">Check your hype score</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">±10 hype nuke (1,000 racks)</div></div></div>
+    </div>
+
+    <!-- Fun -->
+    <div class="cmd-panel" id="panel-fun">
+      <div class="cmd-item"><div class="cmd-ico">🧠</div><div><div class="cmd-name"><code>?trivia</code></div><div class="cmd-desc">Answer trivia questions</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🔥</div><div><div class="cmd-name"><code>?roast @user</code></div><div class="cmd-desc">AI roast someone</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💡</div><div><div class="cmd-name"><code>?fact</code></div><div class="cmd-desc">Random interesting fact</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">😂</div><div><div class="cmd-name"><code>?joke</code></div><div class="cmd-desc">Get a random joke</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🤔</div><div><div class="cmd-name"><code>?wyr</code></div><div class="cmd-desc">Would you rather</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">✨</div><div><div class="cmd-name"><code>?aura</code></div><div class="cmd-desc">Check your aura score</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💬</div><div><div class="cmd-name"><code>?quote</code></div><div class="cmd-desc">Inspirational quote</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🤖</div><div><div class="cmd-name"><code>?ai &lt;msg&gt;</code></div><div class="cmd-desc">Chat with Lorene AI</div></div></div>
+    </div>
+
+    <!-- Slash -->
+    <div class="cmd-panel" id="panel-slash">
+      <div class="cmd-item"><div class="cmd-ico">🛍️</div><div><div class="cmd-name"><code>/shop</code></div><div class="cmd-desc">Browse the item shop</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buy</code></div><div class="cmd-desc">Purchase a shop item</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🎒</div><div><div class="cmd-name"><code>/inventory</code></div><div class="cmd-desc">View your items</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">⚡</div><div><div class="cmd-name"><code>/use</code></div><div class="cmd-desc">Use an inventory item</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>/fishingluck</code></div><div class="cmd-desc">Buy 2× or 3× luck boost</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">Nuke someone's hype</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📈</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy company shares</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell company shares</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View stock P&amp;L</div></div></div>
+      <div class="cmd-item"><div class="cmd-ico">📖</div><div><div class="cmd-name"><code>/help</code></div><div class="cmd-desc">Full command list</div></div></div>
+    </div>
+
   </div>
 </section>
 
 <!-- FISHING -->
-<section class="fishing" id="fishing">
-  <div class="fishing-inner">
-    <div class="section-label">Fishing system</div>
-    <h2 class="section-title reveal">Cast your line, reel in riches.</h2>
-    <p class="section-sub reveal">Over 20 fish to catch across 5 rarity tiers. Sell your haul for racks or show off your collection.</p>
+<section class="fishing-sec" id="fishing">
+  <div class="fish-inner">
+    <div class="sec-label">Fishing system</div>
+    <h2 class="sec-title reveal">Cast, catch, cash out.</h2>
+    <p class="sec-sub reveal">5 rarity tiers, 20+ fish, Fish of the Day, Lucky Rod, and luck boosters. 30-second cooldown, 50 racks per cast.</p>
 
-    <div class="fish-cards">
-      <div class="fish-card reveal"><span class="fish-emoji">🐟</span><div class="fish-name">Sardine</div><div class="fish-rarity rarity-common">Common</div><div class="fish-value">+5 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🐡</span><div class="fish-name">Pufferfish</div><div class="fish-rarity rarity-uncommon">Uncommon</div><div class="fish-value">+25 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🐠</span><div class="fish-name">Clownfish</div><div class="fish-rarity rarity-uncommon">Uncommon</div><div class="fish-value">+30 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🦑</span><div class="fish-name">Giant Squid</div><div class="fish-rarity rarity-rare">Rare</div><div class="fish-value">+120 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🦈</span><div class="fish-name">Shark</div><div class="fish-rarity rarity-epic">Epic</div><div class="fish-value">+500 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🐋</span><div class="fish-name">Blue Whale</div><div class="fish-rarity rarity-legendary">Legendary</div><div class="fish-value">+2000 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🦀</span><div class="fish-name">Red Crab</div><div class="fish-rarity rarity-common">Common</div><div class="fish-value">+8 racks</div></div>
-      <div class="fish-card reveal"><span class="fish-emoji">🐙</span><div class="fish-name">Octopus</div><div class="fish-rarity rarity-rare">Rare</div><div class="fish-value">+150 racks</div></div>
+    <!-- stock ticker style fish display -->
+    <div class="fish-grid reveal">
+      <div class="fish-card common"><span class="fish-emoji">🐟</span><div class="fish-nm">Sardine</div><div class="fish-rar r-common">Common</div><div class="fish-val">+5 racks</div></div>
+      <div class="fish-card common"><span class="fish-emoji">🦀</span><div class="fish-nm">Crab</div><div class="fish-rar r-common">Common</div><div class="fish-val">+8 racks</div></div>
+      <div class="fish-card uncommon"><span class="fish-emoji">🐡</span><div class="fish-nm">Pufferfish</div><div class="fish-rar r-uncommon">Uncommon</div><div class="fish-val">+25 racks</div></div>
+      <div class="fish-card uncommon"><span class="fish-emoji">🐠</span><div class="fish-nm">Clownfish</div><div class="fish-rar r-uncommon">Uncommon</div><div class="fish-val">+35 racks</div></div>
+      <div class="fish-card rare"><span class="fish-emoji">🦑</span><div class="fish-nm">Giant Squid</div><div class="fish-rar r-rare">Rare</div><div class="fish-val">+120 racks</div></div>
+      <div class="fish-card rare"><span class="fish-emoji">🐙</span><div class="fish-nm">Octopus</div><div class="fish-rar r-rare">Rare</div><div class="fish-val">+150 racks</div></div>
+      <div class="fish-card legendary"><span class="fish-emoji">🦈</span><div class="fish-nm">Shark</div><div class="fish-rar r-legendary">Legendary</div><div class="fish-val">+800 racks</div></div>
+      <div class="fish-card mythic"><span class="fish-emoji">🐋</span><div class="fish-nm">Blue Whale</div><div class="fish-rar r-mythic">Mythic</div><div class="fish-val">+2,000 racks</div></div>
     </div>
 
-    <div style="text-align:center;margin-top:2.5rem;">
-      <p style="color:var(--muted);font-size:0.85rem;">+ 12 more fish to discover. Some only appear at certain times... 👀</p>
+    <div class="fish-more reveal">🔒 12+ more fish to discover. Some only surface at certain times...</div>
+
+    <!-- Luck boosters -->
+    <div style="margin-top:2.8rem;">
+      <div class="sec-label" style="text-align:left;margin-bottom:.6rem;">Fishing Luck Boosters</div>
+      <div class="boosters reveal">
+        <div class="booster-card b2">
+          <div class="booster-icon">🎣</div>
+          <div>
+            <div class="booster-title">2× Fishing Luck</div>
+            <div class="booster-desc">Double your Rare+ catch chances for 1 hour.</div>
+            <div class="booster-price">50,000 racks · <code style="font-family:monospace;font-size:.8em;">/fishingluck</code></div>
+          </div>
+        </div>
+        <div class="booster-card b3">
+          <div class="booster-icon">🌟</div>
+          <div>
+            <div class="booster-title">3× Fishing Luck</div>
+            <div class="booster-desc">Triple your Rare+ catch chances for 1 hour.</div>
+            <div class="booster-price">100,000 racks · <code style="font-family:monospace;font-size:.8em;">/fishingluck</code></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- INVITE -->
-<section class="invite" id="invite">
-  <div class="glow-blob" style="width:600px;height:600px;background:rgba(124,106,247,0.08);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
-  <div class="invite-card reveal">
-    <div style="font-size:3.5rem;margin-bottom:1rem;">🤖</div>
-    <h2>Ready to add<br><span class="name-accent">Lorene?</span></h2>
-    <p>Free to add. Zero setup. Just pure server fun from minute one.</p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a href="#" class="btn-primary">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Add to Discord
-      </a>
-      <a href="https://discord.gg" class="btn-secondary">Join Support Server</a>
+<!-- STOCKS TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="t-item"><span class="t-sym">SHADE</span><span class="t-px">142.50</span><span class="up">+3.2%</span></div>
+    <div class="t-item"><span class="t-sym">LORENE</span><span class="t-px">999.99</span><span class="up">+∞</span></div>
+    <div class="t-item"><span class="t-sym">CHAOS</span><span class="t-px">9.99</span><span class="dn">-0.5%</span></div>
+    <div class="t-item"><span class="t-sym">DRIP</span><span class="t-px">88.00</span><span class="up">+7.4%</span></div>
+    <div class="t-item"><span class="t-sym">NOVA</span><span class="t-px">314.15</span><span class="dn">-2.1%</span></div>
+    <div class="t-item"><span class="t-sym">SHADE</span><span class="t-px">142.50</span><span class="up">+3.2%</span></div>
+    <div class="t-item"><span class="t-sym">LORENE</span><span class="t-px">999.99</span><span class="up">+∞</span></div>
+    <div class="t-item"><span class="t-sym">CHAOS</span><span class="t-px">9.99</span><span class="dn">-0.5%</span></div>
+    <div class="t-item"><span class="t-sym">DRIP</span><span class="t-px">88.00</span><span class="up">+7.4%</span></div>
+    <div class="t-item"><span class="t-sym">NOVA</span><span class="t-px">314.15</span><span class="dn">-2.1%</span></div>
+  </div>
+</div>
+
+<!-- SERVER SECTION -->
+<section class="server-sec" id="server">
+  <div class="sec-label">The community</div>
+  <h2 class="sec-title reveal">Shade of Thoughts.</h2>
+  <p class="sec-sub reveal">Where Lorene lives. A tight-knit server with big energy — come see what the chaos is about.</p>
+
+  <div class="server-card reveal">
+    <div class="server-banner">
+      <div class="server-banner-text">✦ Shade of Thoughts</div>
     </div>
-    <p style="margin-top:1.5rem;font-size:0.78rem;color:var(--faint);">Free forever · No credit card · Works instantly</p>
+    <div class="server-body">
+      <div class="server-meta">
+        <div>
+          <div class="server-name">Shade of Thoughts</div>
+          <div class="server-handle">discord.gg/MaRtdKbY2n</div>
+        </div>
+        <div class="server-badge">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pip 2s infinite;box-shadow:0 0 8px var(--teal);"></div>
+          Active Server
+        </div>
+      </div>
+
+      <p class="server-desc">
+        A chill community where Lorene runs wild. Economy grinders, fish hunters, stock traders, gamblers — everyone welcome. Small enough to know everyone, active enough to always have something going on.
+      </p>
+
+      <div class="server-stats">
+        <div class="srv-stat">
+          <div class="srv-stat-n" style="color:var(--accent2)">142</div>
+          <div class="srv-stat-l">Members</div>
+        </div>
+        <div class="srv-stat">
+          <div class="srv-stat-n" style="color:var(--teal)">Private</div>
+          <div class="srv-stat-l">Bot Access</div>
+        </div>
+        <div class="srv-stat">
+          <div class="srv-stat-n" style="color:var(--amber)">24/7</div>
+          <div class="srv-stat-l">Bot Online</div>
+        </div>
+      </div>
+
+      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" class="btn-main" style="width:100%;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Join Shade of Thoughts
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- INVITE CTA -->
+<section class="invite-sec" id="invite">
+  <div class="blob" style="width:500px;height:500px;background:rgba(124,106,247,.07);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="invite-box reveal">
+    <div style="font-size:3rem;margin-bottom:1rem;">🫂</div>
+    <h2>Come hang in<br><span class="grad">Shade of Thoughts.</span></h2>
+    <p>Lorene's waiting. The racks won't earn themselves.</p>
+    <div style="display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" class="btn-main">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Join the Server
+      </a>
+      <a href="#commands" class="btn-ghost">View Commands</a>
+    </div>
+    <p style="margin-top:1.4rem;font-size:.75rem;color:var(--faint);">Free to join · Lorene is exclusive to this server</p>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">✦ Lorene</div>
-    <ul class="footer-links">
+  <div class="foot-inner">
+    <div class="foot-logo">✦ Lorene</div>
+    <ul class="foot-links">
       <li><a href="#features">Features</a></li>
       <li><a href="#commands">Commands</a></li>
-      <li><a href="#invite">Invite</a></li>
-      <li><a href="https://discord.gg">Support</a></li>
+      <li><a href="#fishing">Fishing</a></li>
+      <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank">Join Server</a></li>
     </ul>
   </div>
-  <p class="footer-copy">Built with love for your Discord server · Lorene Bot © 2025</p>
+  <p class="foot-copy">Lorene is a private bot built for Shade of Thoughts · Not available for other servers</p>
 </footer>
 
 <script>
-  // ── SCROLL REVEAL ──
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 60);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ── LIVE BOT STATUS ──
-  function formatUptime(seconds) {
-    const d = Math.floor(seconds / 86400);
-    const h = Math.floor((seconds % 86400) / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    if (d > 0) return `${d}d ${h}h`;
-    if (h > 0) return `${h}h ${m}m`;
-    if (m > 0) return `${m}m ${s}s`;
-    return `${s}s`;
-  }
-
-  async function fetchBotStatus() {
-    const widget   = document.getElementById('statusWidget');
-    const label    = document.getElementById('statusLabel');
-    const uptime   = document.getElementById('statusUptime');
-    const servers  = document.getElementById('statusServers');
-    const ping     = document.getElementById('statusPing');
-
-    try {
-      const res  = await fetch('/api/status');
-      const data = await res.json();
-
-      widget.classList.remove('status-loading', 'online', 'offline');
-
-      if (data.status === 'online') {
-        widget.classList.add('online');
-        label.textContent   = 'Online';
-        uptime.textContent  = formatUptime(data.uptime);
-        servers.textContent = data.servers;
-        ping.textContent    = data.ping + 'ms';
-      } else {
-        widget.classList.add('offline');
-        label.textContent   = 'Offline';
-        uptime.textContent  = '--';
-        servers.textContent = '--';
-        ping.textContent    = '--';
-      }
-    } catch {
-      widget.classList.remove('status-loading');
-      widget.classList.add('offline');
-      label.textContent   = 'Offline';
-      uptime.textContent  = '--';
-      servers.textContent = '--';
-      ping.textContent    = '--';
+// ── SCROLL REVEAL ──────────────────────────────────────────────────
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 55);
+      obs.unobserve(e.target);
     }
-  }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  fetchBotStatus();
-  setInterval(fetchBotStatus, 10000);
+// ── CMD TABS ───────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.cmd-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.cmd-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── BOT STATUS ─────────────────────────────────────────────────────
+function fmtUptime(s) {
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (d > 0) return d + 'd ' + h + 'h';
+  if (h > 0) return h + 'h ' + m + 'm';
+  return m + 'm ' + (s % 60) + 's';
+}
+
+async function fetchStatus() {
+  const bar   = document.getElementById('statusBar');
+  const label = document.getElementById('sLabel');
+  const up    = document.getElementById('sUptime');
+  const ping  = document.getElementById('sPing');
+
+  try {
+    const res  = await fetch('/api/status');
+    const data = await res.json();
+    bar.classList.remove('loading', 'online', 'offline');
+    if (data.status === 'online') {
+      bar.classList.add('online');
+      label.textContent = 'Online';
+      up.textContent    = fmtUptime(data.uptime);
+      ping.textContent  = data.ping + 'ms';
+    } else {
+      throw new Error('offline');
+    }
+  } catch {
+    bar.classList.remove('loading');
+    bar.classList.add('offline');
+    label.textContent = 'Offline';
+    up.textContent    = '--';
+    ping.textContent  = '--';
+  }
+}
+
+fetchStatus();
+setInterval(fetchStatus, 10000);
 </script>
+
 </body>
 </html>
