@@ -41,7 +41,6 @@
     overflow-x: hidden;
   }
 
-  /* grid overlay */
   body::before {
     content: '';
     position: fixed;
@@ -64,7 +63,6 @@
 
   section, nav, footer { position: relative; z-index: 1; }
 
-  /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -126,7 +124,6 @@
 
   @media (max-width:640px) { .nav-links { display:none; } }
 
-  /* ── HERO ── */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -228,7 +225,6 @@
   }
   .btn-ghost:hover { border-color: var(--accent); background: rgba(124,106,247,.07); }
 
-  /* status bar */
   .status-bar {
     display: inline-flex;
     align-items: center;
@@ -270,7 +266,6 @@
   .status-bar.loading .s-val { color:var(--faint); animation:shimmer 1.5s ease-in-out infinite; }
   @keyframes shimmer { 0%,100%{opacity:.4} 50%{opacity:1} }
 
-  /* server facts */
   .hero-facts {
     display: flex;
     gap: 2.5rem;
@@ -283,7 +278,6 @@
   .fact-n { font-family:'Syne',sans-serif; font-size:1.85rem; font-weight:700; }
   .fact-l { font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-top:1px; }
 
-  /* ── SECTION SHARED ── */
   .sec-label {
     text-align:center;
     font-size:.72rem;
@@ -313,7 +307,6 @@
     font-weight:300;
   }
 
-  /* ── FEATURES ── */
   .features {
     padding: 6rem 2rem;
     max-width: 1160px;
@@ -377,7 +370,6 @@
     letter-spacing:.01em;
   }
 
-  /* ── COMMANDS ── */
   .commands-sec {
     padding: 6rem 2rem;
     background: var(--bg2);
@@ -446,7 +438,6 @@
 
   .cmd-desc { font-size:.76rem; color:var(--muted); line-height:1.4; }
 
-  /* ── FISHING ── */
   .fishing-sec {
     padding: 6rem 2rem;
     background: linear-gradient(180deg, var(--bg) 0%, rgba(45,212,191,.035) 50%, var(--bg) 100%);
@@ -499,7 +490,6 @@
     margin-top:.5rem;
   }
 
-  /* fishing boosters */
   .boosters {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -529,7 +519,6 @@
   .b2 .booster-price { color:var(--blue); }
   .b3 .booster-price { color:var(--accent2); }
 
-  /* ── ECONOMY ticker ── */
   .ticker-wrap {
     overflow:hidden;
     background:var(--bg2);
@@ -553,7 +542,6 @@
   .up     { color:var(--teal); font-weight:600; }
   .dn     { color:var(--red); font-weight:600; }
 
-  /* ── SERVER ── */
   .server-sec {
     padding: 6rem 2rem;
     max-width: 860px;
@@ -598,9 +586,7 @@
     text-shadow:0 2px 20px rgba(0,0,0,.5);
   }
 
-  .server-body {
-    padding:2rem;
-  }
+  .server-body { padding:2rem; }
 
   .server-meta {
     display:flex;
@@ -656,7 +642,6 @@
   .srv-stat-n { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; }
   .srv-stat-l { font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
 
-  /* ── INVITE CTA ── */
   .invite-sec {
     padding: 8rem 2rem;
     text-align:center;
@@ -696,7 +681,6 @@
 
   .invite-box p { color:var(--muted); font-size:.98rem; margin-bottom:2rem; font-weight:300; }
 
-  /* ── FOOTER ── */
   footer {
     background:var(--bg2);
     border-top:1px solid var(--border);
@@ -728,7 +712,6 @@
     border-top:1px solid var(--border);
   }
 
-  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(22px); }
     to   { opacity:1; transform:translateY(0); }
@@ -741,7 +724,6 @@
   }
   .reveal.visible { opacity:1; transform:translateY(0); }
 
-  /* scrollbar */
   ::-webkit-scrollbar { width:5px; }
   ::-webkit-scrollbar-track { background:var(--bg); }
   ::-webkit-scrollbar-thumb { background:var(--faint); border-radius:3px; }
@@ -749,7 +731,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
     <div class="logo-pip"></div>
@@ -764,7 +745,6 @@
   </ul>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="blob" style="width:520px;height:520px;background:rgba(124,106,247,.1);top:-80px;left:-120px;"></div>
   <div class="blob" style="width:400px;height:400px;background:rgba(244,114,182,.06);bottom:60px;right:-80px;"></div>
@@ -806,14 +786,12 @@
   </div>
 </section>
 
-<!-- FEATURES -->
 <section class="features" id="features">
   <div class="sec-label">What Lorene does</div>
   <h2 class="sec-title reveal">Everything in one bot.</h2>
   <p class="sec-sub reveal">Seven modules, all running 24/7 just for this server.</p>
 
   <div class="feat-grid">
-
     <div class="feat-card reveal" style="--ca:#7c6af7;">
       <div class="feat-icon" style="background:rgba(124,106,247,.14);">🤖</div>
       <div class="feat-title">AI Chat</div>
@@ -898,11 +876,9 @@
         <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?aura</span>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- COMMANDS -->
 <section class="commands-sec" id="commands">
   <div class="cmd-wrap">
     <div class="sec-label">Command reference</div>
@@ -919,7 +895,6 @@
       <button class="cmd-tab" onclick="switchTab('slash',this)">⚡ Slash</button>
     </div>
 
-    <!-- Economy -->
     <div class="cmd-panel active" id="panel-economy">
       <div class="cmd-item"><div class="cmd-ico">💸</div><div><div class="cmd-name"><code>?racks</code></div><div class="cmd-desc">Check your balance</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">📅</div><div><div class="cmd-name"><code>?daily</code></div><div class="cmd-desc">Claim daily racks</div></div></div>
@@ -931,7 +906,6 @@
       <div class="cmd-item"><div class="cmd-ico">📦</div><div><div class="cmd-name"><code>?crate</code></div><div class="cmd-desc">Open a mystery crate</div></div></div>
     </div>
 
-    <!-- Fishing -->
     <div class="cmd-panel" id="panel-fishing">
       <div class="cmd-item"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>?fs</code> / <code>?fishing</code></div><div class="cmd-desc">Cast your rod (50 racks)</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">🪣</div><div><div class="cmd-name"><code>?fi</code> / <code>?fishinv</code></div><div class="cmd-desc">View your fish bucket</div></div></div>
@@ -943,14 +917,12 @@
       <div class="cmd-item"><div class="cmd-ico">🤲</div><div><div class="cmd-name"><code>?share fish</code></div><div class="cmd-desc">Give fish to someone</div></div></div>
     </div>
 
-    <!-- Gambling -->
     <div class="cmd-panel" id="panel-gambling">
       <div class="cmd-item"><div class="cmd-ico">🪙</div><div><div class="cmd-name"><code>?cf &lt;amt&gt;</code></div><div class="cmd-desc">Coinflip heads or tails</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">🎰</div><div><div class="cmd-name"><code>?slots &lt;amt&gt;</code></div><div class="cmd-desc">Spin the slot machine</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">🎲</div><div><div class="cmd-name"><code>?dice &lt;amt&gt;</code></div><div class="cmd-desc">Roll the dice</div></div></div>
     </div>
 
-    <!-- Stocks -->
     <div class="cmd-panel" id="panel-stocks">
       <div class="cmd-item"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>?st</code> / <code>?stocks</code></div><div class="cmd-desc">View live stock prices</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy shares of a company</div></div></div>
@@ -958,7 +930,6 @@
       <div class="cmd-item"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View your P&amp;L</div></div></div>
     </div>
 
-    <!-- Hype -->
     <div class="cmd-panel" id="panel-hype">
       <div class="cmd-item"><div class="cmd-ico">⬆️</div><div><div class="cmd-name"><code>+hype @user</code></div><div class="cmd-desc">Give someone hype</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">⬇️</div><div><div class="cmd-name"><code>-hype @user</code></div><div class="cmd-desc">Take someone's hype</div></div></div>
@@ -966,7 +937,6 @@
       <div class="cmd-item"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">±10 hype nuke (1,000 racks)</div></div></div>
     </div>
 
-    <!-- Fun -->
     <div class="cmd-panel" id="panel-fun">
       <div class="cmd-item"><div class="cmd-ico">🧠</div><div><div class="cmd-name"><code>?trivia</code></div><div class="cmd-desc">Answer trivia questions</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">🔥</div><div><div class="cmd-name"><code>?roast @user</code></div><div class="cmd-desc">AI roast someone</div></div></div>
@@ -978,7 +948,6 @@
       <div class="cmd-item"><div class="cmd-ico">🤖</div><div><div class="cmd-name"><code>?ai &lt;msg&gt;</code></div><div class="cmd-desc">Chat with Lorene AI</div></div></div>
     </div>
 
-    <!-- Slash -->
     <div class="cmd-panel" id="panel-slash">
       <div class="cmd-item"><div class="cmd-ico">🛍️</div><div><div class="cmd-name"><code>/shop</code></div><div class="cmd-desc">Browse the item shop</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buy</code></div><div class="cmd-desc">Purchase a shop item</div></div></div>
@@ -991,18 +960,15 @@
       <div class="cmd-item"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View stock P&amp;L</div></div></div>
       <div class="cmd-item"><div class="cmd-ico">📖</div><div><div class="cmd-name"><code>/help</code></div><div class="cmd-desc">Full command list</div></div></div>
     </div>
-
   </div>
 </section>
 
-<!-- FISHING -->
 <section class="fishing-sec" id="fishing">
   <div class="fish-inner">
     <div class="sec-label">Fishing system</div>
     <h2 class="sec-title reveal">Cast, catch, cash out.</h2>
     <p class="sec-sub reveal">5 rarity tiers, 20+ fish, Fish of the Day, Lucky Rod, and luck boosters. 30-second cooldown, 50 racks per cast.</p>
 
-    <!-- stock ticker style fish display -->
     <div class="fish-grid reveal">
       <div class="fish-card common"><span class="fish-emoji">🐟</span><div class="fish-nm">Sardine</div><div class="fish-rar r-common">Common</div><div class="fish-val">+5 racks</div></div>
       <div class="fish-card common"><span class="fish-emoji">🦀</span><div class="fish-nm">Crab</div><div class="fish-rar r-common">Common</div><div class="fish-val">+8 racks</div></div>
@@ -1016,7 +982,6 @@
 
     <div class="fish-more reveal">🔒 12+ more fish to discover. Some only surface at certain times...</div>
 
-    <!-- Luck boosters -->
     <div style="margin-top:2.8rem;">
       <div class="sec-label" style="text-align:left;margin-bottom:.6rem;">Fishing Luck Boosters</div>
       <div class="boosters reveal">
@@ -1041,7 +1006,6 @@
   </div>
 </section>
 
-<!-- STOCKS TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track">
     <div class="t-item"><span class="t-sym">SHADE</span><span class="t-px">142.50</span><span class="up">+3.2%</span></div>
@@ -1057,7 +1021,6 @@
   </div>
 </div>
 
-<!-- SERVER SECTION -->
 <section class="server-sec" id="server">
   <div class="sec-label">The community</div>
   <h2 class="sec-title reveal">Shade of Thoughts.</h2>
@@ -1078,26 +1041,12 @@
           Active Server
         </div>
       </div>
-
-      <p class="server-desc">
-        A chill community where Lorene runs wild. Economy grinders, fish hunters, stock traders, gamblers — everyone welcome. Small enough to know everyone, active enough to always have something going on.
-      </p>
-
+      <p class="server-desc">A chill community where Lorene runs wild. Economy grinders, fish hunters, stock traders, gamblers — everyone welcome. Small enough to know everyone, active enough to always have something going on.</p>
       <div class="server-stats">
-        <div class="srv-stat">
-          <div class="srv-stat-n" style="color:var(--accent2)">142</div>
-          <div class="srv-stat-l">Members</div>
-        </div>
-        <div class="srv-stat">
-          <div class="srv-stat-n" style="color:var(--teal)">Private</div>
-          <div class="srv-stat-l">Bot Access</div>
-        </div>
-        <div class="srv-stat">
-          <div class="srv-stat-n" style="color:var(--amber)">24/7</div>
-          <div class="srv-stat-l">Bot Online</div>
-        </div>
+        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--accent2)">142</div><div class="srv-stat-l">Members</div></div>
+        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--teal)">Private</div><div class="srv-stat-l">Bot Access</div></div>
+        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--amber)">24/7</div><div class="srv-stat-l">Bot Online</div></div>
       </div>
-
       <a href="https://discord.gg/MaRtdKbY2n" target="_blank" class="btn-main" style="width:100%;justify-content:center;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         Join Shade of Thoughts
@@ -1106,7 +1055,6 @@
   </div>
 </section>
 
-<!-- INVITE CTA -->
 <section class="invite-sec" id="invite">
   <div class="blob" style="width:500px;height:500px;background:rgba(124,106,247,.07);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
   <div class="invite-box reveal">
@@ -1124,7 +1072,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="foot-inner">
     <div class="foot-logo">✦ Lorene</div>
@@ -1139,7 +1086,6 @@
 </footer>
 
 <script>
-// ── SCROLL REVEAL ──────────────────────────────────────────────────
 const obs = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
@@ -1150,7 +1096,6 @@ const obs = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// ── CMD TABS ───────────────────────────────────────────────────────
 function switchTab(id, btn) {
   document.querySelectorAll('.cmd-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.cmd-tab').forEach(t => t.classList.remove('active'));
@@ -1158,7 +1103,6 @@ function switchTab(id, btn) {
   btn.classList.add('active');
 }
 
-// ── BOT STATUS ─────────────────────────────────────────────────────
 function fmtUptime(s) {
   const d = Math.floor(s / 86400);
   const h = Math.floor((s % 86400) / 3600);
@@ -1173,7 +1117,6 @@ async function fetchStatus() {
   const label = document.getElementById('sLabel');
   const up    = document.getElementById('sUptime');
   const ping  = document.getElementById('sPing');
-
   try {
     const res  = await fetch('/api/status');
     const data = await res.json();
@@ -1195,7 +1138,6 @@ async function fetchStatus() {
   }
 }
 
-// Only initial fetch — no periodic polling
 fetchStatus();
 </script>
 
