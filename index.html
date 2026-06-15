@@ -50,27 +50,6 @@ body {
 }
 body.loaded { opacity: 1; }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(124,106,247,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124,106,247,0.025) 1px, transparent 1px);
-  background-size: 44px 44px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(130px);
-  pointer-events: none;
-  z-index: 0;
-  will-change: transform;
-}
-
 section, nav, footer { position: relative; z-index: 1; }
 
 /* Navigation */
@@ -193,8 +172,9 @@ nav.scrolled {
   justify-content: center;
   text-align: center;
   padding: 9rem 2rem 5rem;
-  overflow: hidden;
   position: relative;
+  background: radial-gradient(circle at 20% 20%, rgba(124,106,247,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(244,114,182,0.04) 0%, transparent 50%);
 }
 
 .hero-eyebrow {
@@ -397,7 +377,6 @@ nav.scrolled {
   transition: border-color .3s, transform .3s, background .3s;
   position: relative;
   overflow: hidden;
-  will-change: transform;
 }
 .feat-card::after {
   content:'';
@@ -538,18 +517,6 @@ nav.scrolled {
 }
 
 .cmd-desc { font-size:.76rem; color:var(--muted); line-height:1.4; }
-
-.copy-hint {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  font-size: 0.65rem;
-  color: var(--accent);
-  opacity: 0;
-  transition: opacity 0.2s;
-  pointer-events: none;
-}
-.cmd-item:hover .copy-hint { opacity: 1; }
 
 .no-results {
   grid-column: 1 / -1;
@@ -707,9 +674,8 @@ nav.scrolled {
   transition:transform .25s, border-color .25s, background .25s;
   position:relative;
   overflow:hidden;
-  will-change: transform;
 }
-.fish-card:hover { transform:translateY(-5px) rotate(-1.5deg); background:var(--card2); }
+.fish-card:hover { transform:translateY(-3px); background:var(--card2); }
 .fish-card.common:hover    { border-color:rgba(126,124,154,.5); }
 .fish-card.uncommon:hover  { border-color:rgba(96,165,250,.4); }
 .fish-card.rare:hover      { border-color:rgba(167,139,250,.5); }
@@ -836,30 +802,6 @@ nav.scrolled {
   align-items: center;
   gap: 5px;
 }
-
-/* Ticker */
-.ticker-wrap {
-  overflow:hidden;
-  background:var(--bg2);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  padding:.7rem 0;
-}
-.ticker-track {
-  display:flex;
-  gap:2.5rem;
-  animation:tick 35s linear infinite;
-  white-space:nowrap;
-  width:max-content;
-  will-change: transform;
-}
-@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-.t-item { display:flex; align-items:center; gap:7px; font-size:.8rem; font-weight:500; }
-.t-sym  { font-family:'Syne',sans-serif; font-weight:700; font-size:.82rem; color:var(--text); }
-.t-px   { color:var(--muted); }
-.up     { color:var(--teal); font-weight:600; }
-.dn     { color:var(--red); font-weight:600; }
 
 /* Server */
 .server-sec {
@@ -1112,7 +1054,6 @@ nav.scrolled {
   padding: 8rem 2rem;
   text-align:center;
   position:relative;
-  overflow:hidden;
 }
 
 .invite-box {
@@ -1301,14 +1242,11 @@ footer {
     <li><a href="#fishing">Fishing</a></li>
     <li><a href="#showcase">Screenshots</a></li>
     <li><a href="#pages">About</a></li>
-    <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="nav-cta">Join Server</a></li>
+    <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="nav-cta invite-link">Join Server</a></li>
   </ul>
 </nav>
 
 <section class="hero">
-  <div class="blob" data-speed="0.1" style="width:520px;height:520px;background:rgba(124,106,247,.1);top:-80px;left:-120px;"></div>
-  <div class="blob" data-speed="0.15" style="width:400px;height:400px;background:rgba(244,114,182,.06);bottom:60px;right:-80px;"></div>
-
   <div class="hero-eyebrow">
     <span class="dot"></span>
     Exclusive to Shade of Thoughts
@@ -1319,7 +1257,7 @@ footer {
   <p class="hero-sub">Economy, fishing, AI, stocks, gambling — built exclusively for Shade of Thoughts. This is not your average Discord bot.</p>
 
   <div class="hero-btns">
-    <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main">
+    <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main invite-link">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       Join the Server
     </a>
@@ -1339,9 +1277,9 @@ footer {
   </div>
 
   <div class="hero-facts">
-    <div class="fact"><div class="fact-n" data-count="142" style="color:var(--accent2)">0</div><div class="fact-l">Members</div></div>
-    <div class="fact"><div class="fact-n" data-count="7" style="color:var(--pink)">0</div><div class="fact-l">Modules</div></div>
-    <div class="fact"><div class="fact-n" data-count="50" data-suffix="+" style="color:var(--teal)">0</div><div class="fact-l">Commands</div></div>
+    <div class="fact"><div class="fact-n" id="onlineCountHero" style="color:var(--accent2)">--</div><div class="fact-l">Online</div></div>
+    <div class="fact"><div class="fact-n" style="color:var(--pink)">7</div><div class="fact-l">Modules</div></div>
+    <div class="fact"><div class="fact-n" style="color:var(--teal)">50+</div><div class="fact-l">Commands</div></div>
     <div class="fact"><div class="fact-n" style="color:var(--amber)">∞</div><div class="fact-l">Chaos</div></div>
   </div>
 </section>
@@ -1461,69 +1399,69 @@ footer {
     </div>
 
     <div class="cmd-panel active" id="panel-economy" data-panel="economy">
-      <div class="cmd-item" data-cmd="?racks"><div class="cmd-ico">💸</div><div><div class="cmd-name"><code>?racks</code></div><div class="cmd-desc">Check your balance</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?daily"><div class="cmd-ico">📅</div><div><div class="cmd-name"><code>?daily</code></div><div class="cmd-desc">Claim daily racks</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?share"><div class="cmd-ico">🤝</div><div><div class="cmd-name"><code>?share</code></div><div class="cmd-desc">Send racks to someone</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?lb"><div class="cmd-ico">🏆</div><div><div class="cmd-name"><code>?lb</code></div><div class="cmd-desc">Richest members board</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?rob @user"><div class="cmd-ico">🦹</div><div><div class="cmd-name"><code>?rob @user</code></div><div class="cmd-desc">Steal racks from someone</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?heist"><div class="cmd-ico">💣</div><div><div class="cmd-name"><code>?heist</code></div><div class="cmd-desc">Start a group heist</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?join"><div class="cmd-ico">🤜</div><div><div class="cmd-name"><code>?join</code></div><div class="cmd-desc">Join an active heist</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?crate"><div class="cmd-ico">📦</div><div><div class="cmd-name"><code>?crate</code></div><div class="cmd-desc">Open a mystery crate</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="?racks"><div class="cmd-ico">💸</div><div><div class="cmd-name"><code>?racks</code></div><div class="cmd-desc">Check your balance</div></div></div>
+      <div class="cmd-item" data-cmd="?daily"><div class="cmd-ico">📅</div><div><div class="cmd-name"><code>?daily</code></div><div class="cmd-desc">Claim daily racks</div></div></div>
+      <div class="cmd-item" data-cmd="?share"><div class="cmd-ico">🤝</div><div><div class="cmd-name"><code>?share</code></div><div class="cmd-desc">Send racks to someone</div></div></div>
+      <div class="cmd-item" data-cmd="?lb"><div class="cmd-ico">🏆</div><div><div class="cmd-name"><code>?lb</code></div><div class="cmd-desc">Richest members board</div></div></div>
+      <div class="cmd-item" data-cmd="?rob @user"><div class="cmd-ico">🦹</div><div><div class="cmd-name"><code>?rob @user</code></div><div class="cmd-desc">Steal racks from someone</div></div></div>
+      <div class="cmd-item" data-cmd="?heist"><div class="cmd-ico">💣</div><div><div class="cmd-name"><code>?heist</code></div><div class="cmd-desc">Start a group heist</div></div></div>
+      <div class="cmd-item" data-cmd="?join"><div class="cmd-ico">🤜</div><div><div class="cmd-name"><code>?join</code></div><div class="cmd-desc">Join an active heist</div></div></div>
+      <div class="cmd-item" data-cmd="?crate"><div class="cmd-ico">📦</div><div><div class="cmd-name"><code>?crate</code></div><div class="cmd-desc">Open a mystery crate</div></div></div>
     </div>
 
     <div class="cmd-panel" id="panel-fishing" data-panel="fishing">
-      <div class="cmd-item" data-cmd="?fs"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>?fs</code> / <code>?fishing</code></div><div class="cmd-desc">Cast your rod (50 racks)</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?fi"><div class="cmd-ico">🪣</div><div><div class="cmd-name"><code>?fi</code> / <code>?fishinv</code></div><div class="cmd-desc">View your fish bucket</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?sell all"><div class="cmd-ico">💲</div><div><div class="cmd-name"><code>?sell all</code></div><div class="cmd-desc">Sell all fish instantly</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?sell fish"><div class="cmd-ico">🐟</div><div><div class="cmd-name"><code>?sell fish</code></div><div class="cmd-desc">Sell specific fish / rarity</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?fishstats"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?fishstats</code></div><div class="cmd-desc">Your fishing stats</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?flb"><div class="cmd-ico">🏅</div><div><div class="cmd-name"><code>?flb</code></div><div class="cmd-desc">Fishing leaderboard</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?fotd"><div class="cmd-ico">🌅</div><div><div class="cmd-name"><code>?fotd</code></div><div class="cmd-desc">Fish of the Day (3× value)</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?share fish"><div class="cmd-ico">🤲</div><div><div class="cmd-name"><code>?share fish</code></div><div class="cmd-desc">Give fish to someone</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="?fs"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>?fs</code> / <code>?fishing</code></div><div class="cmd-desc">Cast your rod (50 racks)</div></div></div>
+      <div class="cmd-item" data-cmd="?fi"><div class="cmd-ico">🪣</div><div><div class="cmd-name"><code>?fi</code> / <code>?fishinv</code></div><div class="cmd-desc">View your fish bucket</div></div></div>
+      <div class="cmd-item" data-cmd="?sell all"><div class="cmd-ico">💲</div><div><div class="cmd-name"><code>?sell all</code></div><div class="cmd-desc">Sell all fish instantly</div></div></div>
+      <div class="cmd-item" data-cmd="?sell fish"><div class="cmd-ico">🐟</div><div><div class="cmd-name"><code>?sell fish</code></div><div class="cmd-desc">Sell specific fish / rarity</div></div></div>
+      <div class="cmd-item" data-cmd="?fishstats"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?fishstats</code></div><div class="cmd-desc">Your fishing stats</div></div></div>
+      <div class="cmd-item" data-cmd="?flb"><div class="cmd-ico">🏅</div><div><div class="cmd-name"><code>?flb</code></div><div class="cmd-desc">Fishing leaderboard</div></div></div>
+      <div class="cmd-item" data-cmd="?fotd"><div class="cmd-ico">🌅</div><div><div class="cmd-name"><code>?fotd</code></div><div class="cmd-desc">Fish of the Day (3× value)</div></div></div>
+      <div class="cmd-item" data-cmd="?share fish"><div class="cmd-ico">🤲</div><div><div class="cmd-name"><code>?share fish</code></div><div class="cmd-desc">Give fish to someone</div></div></div>
     </div>
 
     <div class="cmd-panel" id="panel-gambling" data-panel="gambling">
-      <div class="cmd-item" data-cmd="?cf"><div class="cmd-ico">🪙</div><div><div class="cmd-name"><code>?cf &lt;amt&gt;</code></div><div class="cmd-desc">Coinflip heads or tails</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?slots"><div class="cmd-ico">🎰</div><div><div class="cmd-name"><code>?slots &lt;amt&gt;</code></div><div class="cmd-desc">Spin the slot machine</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?dice"><div class="cmd-ico">🎲</div><div><div class="cmd-name"><code>?dice &lt;amt&gt;</code></div><div class="cmd-desc">Roll the dice</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="?cf"><div class="cmd-ico">🪙</div><div><div class="cmd-name"><code>?cf &lt;amt&gt;</code></div><div class="cmd-desc">Coinflip heads or tails</div></div></div>
+      <div class="cmd-item" data-cmd="?slots"><div class="cmd-ico">🎰</div><div><div class="cmd-name"><code>?slots &lt;amt&gt;</code></div><div class="cmd-desc">Spin the slot machine</div></div></div>
+      <div class="cmd-item" data-cmd="?dice"><div class="cmd-ico">🎲</div><div><div class="cmd-name"><code>?dice &lt;amt&gt;</code></div><div class="cmd-desc">Roll the dice</div></div></div>
     </div>
 
     <div class="cmd-panel" id="panel-stocks" data-panel="stocks">
-      <div class="cmd-item" data-cmd="?st"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>?st</code> / <code>?stocks</code></div><div class="cmd-desc">View live stock prices</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy shares of a company</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">💹</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell your shares</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View your P&amp;L</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="?st"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>?st</code> / <code>?stocks</code></div><div class="cmd-desc">View live stock prices</div></div></div>
+      <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy shares of a company</div></div></div>
+      <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">💹</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell your shares</div></div></div>
+      <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View your P&amp;L</div></div></div>
     </div>
 
     <div class="cmd-panel" id="panel-hype" data-panel="hype">
-      <div class="cmd-item" data-cmd="+hype @user"><div class="cmd-ico">⬆️</div><div><div class="cmd-name"><code>+hype @user</code></div><div class="cmd-desc">Give someone hype</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="-hype @user"><div class="cmd-ico">⬇️</div><div><div class="cmd-name"><code>-hype @user</code></div><div class="cmd-desc">Take someone's hype</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?hype"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?hype</code></div><div class="cmd-desc">Check your hype score</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">±10 hype nuke (1,000 racks)</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="+hype @user"><div class="cmd-ico">⬆️</div><div><div class="cmd-name"><code>+hype @user</code></div><div class="cmd-desc">Give someone hype</div></div></div>
+      <div class="cmd-item" data-cmd="-hype @user"><div class="cmd-ico">⬇️</div><div><div class="cmd-name"><code>-hype @user</code></div><div class="cmd-desc">Take someone's hype</div></div></div>
+      <div class="cmd-item" data-cmd="?hype"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?hype</code></div><div class="cmd-desc">Check your hype score</div></div></div>
+      <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">±10 hype nuke (1,000 racks)</div></div></div>
     </div>
 
     <div class="cmd-panel" id="panel-fun" data-panel="fun">
-      <div class="cmd-item" data-cmd="?trivia"><div class="cmd-ico">🧠</div><div><div class="cmd-name"><code>?trivia</code></div><div class="cmd-desc">Answer trivia questions</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?roast @user"><div class="cmd-ico">🔥</div><div><div class="cmd-name"><code>?roast @user</code></div><div class="cmd-desc">AI roast someone</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?fact"><div class="cmd-ico">💡</div><div><div class="cmd-name"><code>?fact</code></div><div class="cmd-desc">Random interesting fact</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?joke"><div class="cmd-ico">😂</div><div><div class="cmd-name"><code>?joke</code></div><div class="cmd-desc">Get a random joke</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?wyr"><div class="cmd-ico">🤔</div><div><div class="cmd-name"><code>?wyr</code></div><div class="cmd-desc">Would you rather</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?aura"><div class="cmd-ico">✨</div><div><div class="cmd-name"><code>?aura</code></div><div class="cmd-desc">Check your aura score</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?quote"><div class="cmd-ico">💬</div><div><div class="cmd-name"><code>?quote</code></div><div class="cmd-desc">Inspirational quote</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="?ai"><div class="cmd-ico">🤖</div><div><div class="cmd-name"><code>?ai &lt;msg&gt;</code></div><div class="cmd-desc">Chat with Lorene AI</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="?trivia"><div class="cmd-ico">🧠</div><div><div class="cmd-name"><code>?trivia</code></div><div class="cmd-desc">Answer trivia questions</div></div></div>
+      <div class="cmd-item" data-cmd="?roast @user"><div class="cmd-ico">🔥</div><div><div class="cmd-name"><code>?roast @user</code></div><div class="cmd-desc">AI roast someone</div></div></div>
+      <div class="cmd-item" data-cmd="?fact"><div class="cmd-ico">💡</div><div><div class="cmd-name"><code>?fact</code></div><div class="cmd-desc">Random interesting fact</div></div></div>
+      <div class="cmd-item" data-cmd="?joke"><div class="cmd-ico">😂</div><div><div class="cmd-name"><code>?joke</code></div><div class="cmd-desc">Get a random joke</div></div></div>
+      <div class="cmd-item" data-cmd="?wyr"><div class="cmd-ico">🤔</div><div><div class="cmd-name"><code>?wyr</code></div><div class="cmd-desc">Would you rather</div></div></div>
+      <div class="cmd-item" data-cmd="?aura"><div class="cmd-ico">✨</div><div><div class="cmd-name"><code>?aura</code></div><div class="cmd-desc">Check your aura score</div></div></div>
+      <div class="cmd-item" data-cmd="?quote"><div class="cmd-ico">💬</div><div><div class="cmd-name"><code>?quote</code></div><div class="cmd-desc">Inspirational quote</div></div></div>
+      <div class="cmd-item" data-cmd="?ai"><div class="cmd-ico">🤖</div><div><div class="cmd-name"><code>?ai &lt;msg&gt;</code></div><div class="cmd-desc">Chat with Lorene AI</div></div></div>
     </div>
 
     <div class="cmd-panel" id="panel-slash" data-panel="slash">
-      <div class="cmd-item" data-cmd="/shop"><div class="cmd-ico">🛍️</div><div><div class="cmd-name"><code>/shop</code></div><div class="cmd-desc">Browse the item shop</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/buy"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buy</code></div><div class="cmd-desc">Purchase a shop item</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/inventory"><div class="cmd-ico">🎒</div><div><div class="cmd-name"><code>/inventory</code></div><div class="cmd-desc">View your items</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/use"><div class="cmd-ico">⚡</div><div><div class="cmd-name"><code>/use</code></div><div class="cmd-desc">Use an inventory item</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/fishingluck"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>/fishingluck</code></div><div class="cmd-desc">Buy 2× or 3× luck boost</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">Nuke someone's hype</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">📈</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy company shares</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell company shares</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View stock P&amp;L</div></div><span class="copy-hint">click to copy</span></div>
-      <div class="cmd-item" data-cmd="/help"><div class="cmd-ico">📖</div><div><div class="cmd-name"><code>/help</code></div><div class="cmd-desc">Full command list</div></div><span class="copy-hint">click to copy</span></div>
+      <div class="cmd-item" data-cmd="/shop"><div class="cmd-ico">🛍️</div><div><div class="cmd-name"><code>/shop</code></div><div class="cmd-desc">Browse the item shop</div></div></div>
+      <div class="cmd-item" data-cmd="/buy"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buy</code></div><div class="cmd-desc">Purchase a shop item</div></div></div>
+      <div class="cmd-item" data-cmd="/inventory"><div class="cmd-ico">🎒</div><div><div class="cmd-name"><code>/inventory</code></div><div class="cmd-desc">View your items</div></div></div>
+      <div class="cmd-item" data-cmd="/use"><div class="cmd-ico">⚡</div><div><div class="cmd-name"><code>/use</code></div><div class="cmd-desc">Use an inventory item</div></div></div>
+      <div class="cmd-item" data-cmd="/fishingluck"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>/fishingluck</code></div><div class="cmd-desc">Buy 2× or 3× luck boost</div></div></div>
+      <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">Nuke someone's hype</div></div></div>
+      <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">📈</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy company shares</div></div></div>
+      <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell company shares</div></div></div>
+      <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View stock P&amp;L</div></div></div>
+      <div class="cmd-item" data-cmd="/help"><div class="cmd-ico">📖</div><div><div class="cmd-name"><code>/help</code></div><div class="cmd-desc">Full command list</div></div></div>
     </div>
   </div>
 </section>
@@ -1679,21 +1617,6 @@ footer {
   </div>
 </section>
 
-<div class="ticker-wrap">
-  <div class="ticker-track">
-    <div class="t-item"><span class="t-sym">SHADE</span><span class="t-px">142.50</span><span class="up">+3.2%</span></div>
-    <div class="t-item"><span class="t-sym">LORENE</span><span class="t-px">999.99</span><span class="up">+∞</span></div>
-    <div class="t-item"><span class="t-sym">CHAOS</span><span class="t-px">9.99</span><span class="dn">-0.5%</span></div>
-    <div class="t-item"><span class="t-sym">DRIP</span><span class="t-px">88.00</span><span class="up">+7.4%</span></div>
-    <div class="t-item"><span class="t-sym">NOVA</span><span class="t-px">314.15</span><span class="dn">-2.1%</span></div>
-    <div class="t-item"><span class="t-sym">SHADE</span><span class="t-px">142.50</span><span class="up">+3.2%</span></div>
-    <div class="t-item"><span class="t-sym">LORENE</span><span class="t-px">999.99</span><span class="up">+∞</span></div>
-    <div class="t-item"><span class="t-sym">CHAOS</span><span class="t-px">9.99</span><span class="dn">-0.5%</span></div>
-    <div class="t-item"><span class="t-sym">DRIP</span><span class="t-px">88.00</span><span class="up">+7.4%</span></div>
-    <div class="t-item"><span class="t-sym">NOVA</span><span class="t-px">314.15</span><span class="dn">-2.1%</span></div>
-  </div>
-</div>
-
 <section class="server-sec" id="server">
   <div class="sec-label">The community</div>
   <h2 class="sec-title reveal">Shade of Thoughts.</h2>
@@ -1716,11 +1639,11 @@ footer {
       </div>
       <p class="server-desc">A chill community where Lorene runs wild. Economy grinders, fish hunters, stock traders, gamblers — everyone welcome. Small enough to know everyone, active enough to always have something going on.</p>
       <div class="server-stats">
-        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--accent2)">142</div><div class="srv-stat-l">Members</div></div>
-        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--teal)">Private</div><div class="srv-stat-l">Bot Access</div></div>
+        <div class="srv-stat"><div class="srv-stat-n" id="serverOnline" style="color:var(--accent2)">--</div><div class="srv-stat-l">Online</div></div>
+        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--teal)">142</div><div class="srv-stat-l">Total Members</div></div>
         <div class="srv-stat"><div class="srv-stat-n" style="color:var(--amber)">24/7</div><div class="srv-stat-l">Bot Online</div></div>
       </div>
-      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main" style="width:100%;justify-content:center;">
+      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main invite-link" style="width:100%;justify-content:center;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         Join Shade of Thoughts
       </a>
@@ -1843,13 +1766,12 @@ footer {
 </section>
 
 <section class="invite-sec" id="invite">
-  <div class="blob" data-speed="0" style="width:500px;height:500px;background:rgba(124,106,247,.07);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
   <div class="invite-box reveal">
     <div style="font-size:3rem;margin-bottom:1rem;">🫂</div>
     <h2>Come hang in<br><span class="grad">Shade of Thoughts.</span></h2>
     <p>Lorene's waiting. The racks won't earn themselves.</p>
     <div style="display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;">
-      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main">
+      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main invite-link">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         Join the Server
       </a>
@@ -1868,7 +1790,7 @@ footer {
       <li><a href="#stocks">Stocks</a></li>
       <li><a href="#fishing">Fishing</a></li>
       <li><a href="#pages">About</a></li>
-      <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener">Join Server</a></li>
+      <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="invite-link">Join Server</a></li>
     </ul>
   </div>
   <p class="foot-copy">Lorene is a private bot built for Shade of Thoughts · Not available for other servers · © 2026</p>
@@ -1885,17 +1807,13 @@ footer {
 (() => {
   'use strict';
 
-  // ========== Utilities ==========
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
 
-  function debounce(fn, wait) {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(null, args), wait);
-    };
-  }
+  const GUILD_ID = '1483179549750464652';
+  const WIDGET_URL = `https://discord.com/api/guilds/${GUILD_ID}/widget.json`;
+  const FALLBACK_INVITE = 'https://discord.gg/MaRtdKbY2n';
+  let liveInvite = FALLBACK_INVITE;
 
   function showToast(message, icon = '✓') {
     const toast = $('#toast');
@@ -1904,6 +1822,68 @@ footer {
     clearTimeout(toast._t);
     toast._t = setTimeout(() => toast.classList.remove('show'), 2200);
   }
+
+  // Fetch Discord widget for online count & invite
+  async function fetchWidget() {
+    try {
+      const res = await fetch(WIDGET_URL, { signal: AbortSignal.timeout(5000) });
+      if (!res.ok) throw new Error('widget error');
+      const data = await res.json();
+      const online = data.presence_count || 0;
+      document.getElementById('onlineCountHero').textContent = online;
+      document.getElementById('serverOnline').textContent = online;
+
+      if (data.instant_invite) {
+        liveInvite = data.instant_invite;
+      }
+    } catch (e) {
+      document.getElementById('onlineCountHero').textContent = '--';
+      document.getElementById('serverOnline').textContent = '--';
+    }
+    // Update all invite links with live invite
+    $$('.invite-link').forEach(el => el.href = liveInvite);
+  }
+
+  // Fetch bot status (for status bar)
+  const statusBar = $('#statusBar');
+  const sLabel = $('#sLabel');
+  const sUptime = $('#sUptime');
+  const sPing = $('#sPing');
+  function fmtUptime(s) {
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    if (d > 0) return d + 'd ' + h + 'h';
+    if (h > 0) return h + 'h ' + m + 'm';
+    return m + 'm';
+  }
+  async function fetchStatus() {
+    if (!statusBar) return;
+    try {
+      const res = await fetch('/api/status', { signal: AbortSignal.timeout(4000) });
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      statusBar.classList.remove('loading', 'online', 'offline');
+      if (data.status === 'online') {
+        statusBar.classList.add('online');
+        sLabel.textContent = 'Online';
+        sUptime.textContent = fmtUptime(data.uptime);
+        sPing.textContent = data.ping + 'ms';
+      } else throw new Error('Offline');
+    } catch (err) {
+      statusBar.classList.remove('loading');
+      statusBar.classList.add('offline');
+      sLabel.textContent = 'Offline';
+      sUptime.textContent = '--';
+      sPing.textContent = '--';
+    }
+  }
+
+  // Initial fetches + periodic
+  fetchWidget();
+  fetchStatus();
+  setInterval(fetchWidget, 60000);
+  setInterval(fetchStatus, 30000);
 
   // ========== Page Loaded ==========
   window.addEventListener('load', () => document.body.classList.add('loaded'));
@@ -1924,11 +1904,6 @@ footer {
 
   // ========== Navbar Scroll ==========
   const nav = $('#mainNav');
-  const onScroll = debounce(() => {
-    if (window.scrollY > 50) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }, 10);
-  // Immediate response for first event, debounced thereafter
   let scrollTicking = false;
   window.addEventListener('scroll', () => {
     if (!scrollTicking) {
@@ -1951,94 +1926,6 @@ footer {
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   $$('.reveal').forEach(el => revealObs.observe(el));
-
-  // ========== Counter Animation ==========
-  const counterObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const el = e.target;
-        const target = parseInt(el.dataset.count, 10);
-        const suffix = el.dataset.suffix || '';
-        let cur = 0;
-        const dur = 1400;
-        const start = performance.now();
-        const step = (now) => {
-          const p = Math.min((now - start) / dur, 1);
-          const eased = 1 - Math.pow(1 - p, 3);
-          cur = Math.floor(target * eased);
-          el.textContent = cur + suffix;
-          if (p < 1) requestAnimationFrame(step);
-          else el.textContent = target + suffix;
-        };
-        requestAnimationFrame(step);
-        counterObs.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-  $$('[data-count]').forEach(el => counterObs.observe(el));
-
-  // ========== Parallax Blobs (fixed, no conflict) ==========
-  const blobs = $$('.blob[data-speed]');
-  let lastScrollY = 0;
-  let parallaxTicking = false;
-  function updateParallax() {
-    blobs.forEach(blob => {
-      // Don't touch blobs that have custom transforms (like the invite section one)
-      if (blob.style.transform.includes('translate(-50%')) return;
-      const speed = parseFloat(blob.dataset.speed) || 0;
-      blob.style.transform = `translateY(${lastScrollY * speed}px)`;
-    });
-    parallaxTicking = false;
-  }
-  window.addEventListener('scroll', () => {
-    lastScrollY = window.scrollY;
-    if (!parallaxTicking) {
-      requestAnimationFrame(updateParallax);
-      parallaxTicking = true;
-    }
-  }, { passive: true });
-
-  // ========== Status Bar ==========
-  const statusBar = $('#statusBar');
-  const sLabel = $('#sLabel');
-  const sUptime = $('#sUptime');
-  const sPing = $('#sPing');
-
-  function fmtUptime(s) {
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    if (d > 0) return d + 'd ' + h + 'h';
-    if (h > 0) return h + 'h ' + m + 'm';
-    return m + 'm';
-  }
-
-  async function fetchStatus() {
-    if (!statusBar) return;
-    try {
-      const res = await fetch('/api/status', {
-        cache: 'no-store',
-        signal: AbortSignal.timeout(4000)
-      });
-      if (!res.ok) throw new Error('API error');
-      const data = await res.json();
-      statusBar.classList.remove('loading', 'online', 'offline');
-      if (data.status === 'online') {
-        statusBar.classList.add('online');
-        sLabel.textContent = 'Online';
-        sUptime.textContent = fmtUptime(data.uptime);
-        sPing.textContent = data.ping + 'ms';
-      } else throw new Error('Offline');
-    } catch (err) {
-      statusBar.classList.remove('loading');
-      statusBar.classList.add('offline');
-      sLabel.textContent = 'Offline';
-      sUptime.textContent = '--';
-      sPing.textContent = '--';
-    }
-  }
-  fetchStatus();
-  setInterval(fetchStatus, 30000);
 
   // ========== Command Tabs & Search ==========
   const cmdTabs = $$('.cmd-tab');
@@ -2089,12 +1976,9 @@ footer {
     });
   });
 
-  // Search commands
   function filterCommands(query) {
     const q = query.toLowerCase().trim();
     let visibleCount = 0;
-
-    // Remove existing no-results
     $$('.no-results').forEach(n => n.remove());
 
     cmdPanels.forEach(panel => {
@@ -2109,7 +1993,6 @@ footer {
       });
 
       if (q) {
-        // When searching, show all panels with matches
         if (panelVisible > 0) {
           panel.style.display = 'grid';
           panel.classList.add('active');
@@ -2124,7 +2007,6 @@ footer {
     });
 
     if (q && visibleCount === 0) {
-      // Show no results in first visible area
       const firstActive = cmdPanels.find(p => p.classList.contains('active')) || cmdPanels[0];
       const noRes = document.createElement('div');
       noRes.className = 'no-results';
@@ -2134,7 +2016,6 @@ footer {
       firstActive.appendChild(noRes);
     }
 
-    // Update tab state during search
     if (q) {
       cmdTabs.forEach(t => t.classList.remove('active'));
     } else {
@@ -2170,7 +2051,6 @@ footer {
       const noise = (Math.random() - 0.5) * base * volatility;
       arr.push(Math.max(0.5, arr[i - 1] + drift + noise));
     }
-    // End at base
     arr[arr.length - 1] = base;
     return arr;
   }
@@ -2183,7 +2063,6 @@ footer {
   let currentSym = 'SHADE';
   let currentRange = 24;
   let chartSeries = {};
-  let chartAnim = 0;
 
   function buildChartSeries() {
     const points = { 24: 48, 7: 56, 30: 90 }[currentRange] || 48;
@@ -2240,12 +2119,10 @@ footer {
       ctx.fillText('$' + val.toFixed(2), pad.l, y - 4);
     }
 
-    // Line
     const color = stockData[currentSym].color;
     const getX = (i) => pad.l + (cw / (series.length - 1)) * i;
     const getY = (v) => pad.t + ch - ((v - min) / (max - min)) * ch;
 
-    // Gradient fill
     const grad = ctx.createLinearGradient(0, pad.t, 0, h);
     grad.addColorStop(0, color + '40');
     grad.addColorStop(1, color + '00');
@@ -2263,7 +2140,6 @@ footer {
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Stroke
     ctx.beginPath();
     ctx.moveTo(getX(0), getY(data[0]));
     for (let i = 1; i < data.length; i++) {
@@ -2275,7 +2151,6 @@ footer {
     ctx.lineWidth = 2.5;
     ctx.stroke();
 
-    // End dot
     const lastX = getX(data.length - 1);
     const lastY = getY(data[data.length - 1]);
     ctx.beginPath();
@@ -2328,7 +2203,6 @@ footer {
     });
   });
 
-  // Mini charts
   function drawMini(canvas, color, seed) {
     resizeCanvas(canvas);
     const ctx = canvas.getContext('2d');
@@ -2387,7 +2261,6 @@ footer {
   }, { threshold: 0.2 });
   $$('.stock-card').forEach(c => miniObs.observe(c));
 
-  // Init main chart on view
   const chartObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -2406,7 +2279,6 @@ footer {
     });
   }, 150));
 
-  // Live price updates
   setInterval(() => {
     Object.keys(stockData).forEach(sym => {
       const d = stockData[sym];
@@ -2414,7 +2286,6 @@ footer {
       d.base = Math.max(1, d.base + delta);
       d.chg += (Math.random() - 0.5) * 0.3;
     });
-    // Update current chart display
     const d = stockData[currentSym];
     chartPrice.textContent = '$' + d.base.toFixed(2);
     chartChg.textContent = (d.chg >= 0 ? '+' : '') + d.chg.toFixed(1) + '%';
@@ -2435,24 +2306,7 @@ footer {
     });
   }, 4000);
 
-  // ========== Fish Tilt ==========
-  $$('.fish-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-      const rx = ((y - cy) / cy) * 8;
-      const ry = ((cx - x) / cx) * 8;
-      card.style.transform = `perspective(500px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-5px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
-
-  // ========== Pages (About / Changelog) ==========
+  // ========== Pages ==========
   $$('.page-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const id = tab.dataset.page;
@@ -2502,16 +2356,7 @@ footer {
     });
   });
 
-  // ========== External link safety (no loading spinner for external) ==========
-  $$('a.btn-main, a.btn-ghost').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      const href = this.getAttribute('href') || '';
-      // Don't interfere with external or anchor links
-      if (href.startsWith('http') || href.startsWith('#')) return;
-    });
-  });
-
-  // ========== Keyboard shortcut: "/" to focus search ==========
+  // Keyboard shortcut for search
   document.addEventListener('keydown', (e) => {
     if (e.key === '/' && document.activeElement !== cmdSearch && !e.ctrlKey && !e.metaKey) {
       const active = document.activeElement;
@@ -2522,9 +2367,13 @@ footer {
     }
   });
 
-  console.log('🎣 Lorene Bot website loaded — built for Shade of Thoughts');
+  function debounce(fn, wait) {
+    let t;
+    return (...args) => { clearTimeout(t); t = setTimeout(() => fn.apply(null, args), wait); };
+  }
+
+  console.log('🎣 Lorene — clean & live ✦');
 })();
 </script>
 </body>
 </html>
-
