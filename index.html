@@ -1,2373 +1,2202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lorene — Shade of Thoughts | Discord Bot</title>
-<meta name="description" content="Lorene is a custom Discord bot for Shade of Thoughts server. Features economy, fishing, AI chat, stocks, gambling, and more.">
-<meta name="keywords" content="Discord bot, Lorene, Shade of Thoughts, economy bot, fishing game, AI chat">
-<meta name="author" content="Shade of Thoughts">
-<meta property="og:title" content="Lorene — Shade of Thoughts Bot">
-<meta property="og:description" content="Your server's own bot. Economy, fishing, AI, stocks, gambling — built exclusively for Shade of Thoughts.">
-<meta property="og:type" content="website">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://cdn.jsdelivr.net/npm/@fontsource/syne@5.0.18/index.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.0.21/index.min.css" rel="stylesheet">
-<style>
-:root {
-  --bg: #08080e;
-  --bg2: #0e0e17;
-  --bg3: #141420;
-  --card: #181825;
-  --card2: #1e1e2e;
-  --border: rgba(255,255,255,0.06);
-  --border2: rgba(255,255,255,0.11);
-  --accent: #7c6af7;
-  --accent2: #a78bfa;
-  --pink: #f472b6;
-  --teal: #2dd4bf;
-  --amber: #fbbf24;
-  --red: #f87171;
-  --blue: #60a5fa;
-  --green: #4ade80;
-  --text: #eeedf8;
-  --muted: #7e7c9a;
-  --faint: #2e2e42;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  overflow-x: hidden;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-body.loaded { opacity: 1; }
-
-section, nav, footer { position: relative; z-index: 1; }
-
-/* Navigation */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(8,8,14,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.3s, border-color 0.3s, padding 0.3s;
-}
-
-nav.scrolled {
-  background: rgba(8,8,14,0.95);
-  border-color: var(--border2);
-  padding: 0.7rem 2rem;
-}
-
-.nav-logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.3rem;
-  color: var(--text);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  letter-spacing: -0.02em;
-  transition: opacity 0.2s;
-}
-.nav-logo:hover { opacity: 0.85; }
-
-.logo-pip {
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 14px var(--accent);
-  animation: pip 2.4s ease-in-out infinite;
-}
-
-@keyframes pip {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%     { opacity:.5; transform:scale(.8); }
-}
-
-.nav-links { display:flex; gap:1.8rem; list-style:none; align-items:center; }
-.nav-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color .2s;
-  letter-spacing: .01em;
-}
-.nav-links a:hover { color: var(--text); }
-
-.nav-cta {
-  background: var(--accent) !important;
-  color: #fff !important;
-  padding: .42rem 1.1rem;
-  border-radius: 100px;
-  font-size: .82rem !important;
-  transition: background .2s, transform .15s !important;
-}
-.nav-cta:hover { background: var(--accent2) !important; transform: translateY(-1px); }
-
-.mobile-toggle {
-  display: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  z-index: 101;
-}
-.mobile-toggle span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--text);
-  margin: 5px 0;
-  transition: 0.3s;
-  border-radius: 2px;
-}
-.mobile-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.mobile-toggle.active span:nth-child(2) { opacity: 0; }
-.mobile-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-@media (max-width:900px) {
-  .mobile-toggle { display: block; }
-  .nav-links {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background: rgba(8,8,14,0.98);
-    flex-direction: column;
-    padding: 2rem;
-    gap: 1.5rem;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-  }
-  .nav-links.active { transform: translateX(0); }
-  .nav-links li { text-align: center; width: 100%; }
-}
-
-/* Hero */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 9rem 2rem 5rem;
-  position: relative;
-  background: radial-gradient(circle at 20% 20%, rgba(124,106,247,0.08) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(244,114,182,0.04) 0%, transparent 50%);
-}
-
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(124,106,247,.1);
-  border: 1px solid rgba(124,106,247,.28);
-  border-radius: 100px;
-  padding: .32rem .95rem;
-  font-size: .75rem;
-  color: var(--accent2);
-  font-weight: 600;
-  margin-bottom: 2rem;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  animation: fadeUp .5s ease both;
-}
-.hero-eyebrow .dot {
-  width:6px; height:6px;
-  border-radius:50%;
-  background: var(--teal);
-  animation: pip 2s ease-in-out infinite;
-}
-
-.hero h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(3rem, 8vw, 6.5rem);
-  font-weight: 800;
-  line-height: .94;
-  letter-spacing: -.035em;
-  margin-bottom: 1.5rem;
-  animation: fadeUp .55s .08s ease both;
-}
-
-.grad {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 55%, var(--amber) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero-sub {
-  font-size: 1.1rem;
-  color: var(--muted);
-  max-width: 500px;
-  margin: 0 auto 2.5rem;
-  font-weight: 300;
-  animation: fadeUp .55s .16s ease both;
-}
-
-.hero-btns {
-  display: flex;
-  gap: .9rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeUp .55s .23s ease both;
-}
-
-.btn-main {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: var(--accent);
-  color: #fff;
-  text-decoration: none;
-  padding: .78rem 1.85rem;
-  border-radius: 100px;
-  font-weight: 600;
-  font-size: .92rem;
-  transition: transform .15s, box-shadow .2s;
-  box-shadow: 0 4px 28px rgba(124,106,247,.38);
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-.btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(124,106,247,.55); }
-
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: transparent;
-  color: var(--text);
-  text-decoration: none;
-  padding: .78rem 1.85rem;
-  border-radius: 100px;
-  font-weight: 500;
-  font-size: .92rem;
-  border: 1px solid var(--border2);
-  transition: border-color .2s, background .2s;
-  cursor: pointer;
-  font-family: inherit;
-}
-.btn-ghost:hover { border-color: var(--accent); background: rgba(124,106,247,.07); }
-
-.status-bar {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: .8rem 1.4rem;
-  margin-top: 2.5rem;
-  animation: fadeUp .55s .3s ease both;
-  transition: border-color .3s;
-}
-.status-bar.online  { border-color: rgba(45,212,191,.28); }
-.status-bar.offline { border-color: rgba(248,113,113,.28); }
-
-.s-dot {
-  width:8px; height:8px;
-  border-radius:50%;
-  background: var(--muted);
-  transition: background .3s;
-}
-.status-bar.online  .s-dot { background: var(--teal); animation: pip 2s infinite; box-shadow: 0 0 8px var(--teal); }
-.status-bar.offline .s-dot { background: var(--red); }
-.status-bar.loading .s-dot { background: var(--amber); animation: pip 1s infinite; }
-
-.s-label { font-size:.78rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); transition:color .3s; }
-.status-bar.online  .s-label { color: var(--teal); }
-.status-bar.offline .s-label { color: var(--red); }
-.status-bar.loading .s-label { color: var(--amber); }
-
-.s-div { width:1px; height:22px; background:var(--border2); }
-
-.s-stat { text-align:center; }
-.s-val {
-  font-family:'Syne',sans-serif;
-  font-size:.95rem; font-weight:700;
-  color:var(--text); line-height:1;
-}
-.s-lbl { font-size:.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
-
-.status-bar.loading .s-val { color:var(--faint); animation:shimmer 1.5s ease-in-out infinite; }
-@keyframes shimmer { 0%,100%{opacity:.4} 50%{opacity:1} }
-
-.hero-facts {
-  display: flex;
-  gap: 2.5rem;
-  margin-top: 2.8rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fadeUp .55s .36s ease both;
-}
-.fact { text-align:center; }
-.fact-n { font-family:'Syne',sans-serif; font-size:1.85rem; font-weight:700; }
-.fact-l { font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-top:1px; }
-
-/* Section Labels */
-.sec-label {
-  text-align:center;
-  font-size:.72rem;
-  text-transform:uppercase;
-  letter-spacing:.13em;
-  color:var(--accent);
-  font-weight:600;
-  margin-bottom:.85rem;
-}
-
-.sec-title {
-  font-family:'Syne',sans-serif;
-  font-size: clamp(1.9rem,4vw,2.85rem);
-  font-weight:700;
-  text-align:center;
-  line-height:1.13;
-  letter-spacing:-.022em;
-  margin-bottom:.85rem;
-}
-
-.sec-sub {
-  text-align:center;
-  color:var(--muted);
-  font-size:1rem;
-  max-width:520px;
-  margin:0 auto 3.5rem;
-  font-weight:300;
-}
-
-/* Features */
-.features {
-  padding: 6rem 2rem;
-  max-width: 1160px;
-  margin: 0 auto;
-}
-
-.feat-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  gap:1.25rem;
-}
-
-.feat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 1.85rem;
-  transition: border-color .3s, transform .3s, background .3s;
-  position: relative;
-  overflow: hidden;
-}
-.feat-card::after {
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:2px;
-  background: linear-gradient(90deg, transparent, var(--ca, var(--accent)), transparent);
-  opacity:0;
-  transition:opacity .3s;
-}
-.feat-card:hover { border-color:var(--border2); transform:translateY(-4px); background:var(--card2); }
-.feat-card:hover::after { opacity:1; }
-.feat-card.wide { grid-column: span 2; }
-@media (max-width:700px) { .feat-card.wide { grid-column:span 1; } }
-
-.feat-icon {
-  width:46px; height:46px;
-  border-radius:13px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.4rem;
-  margin-bottom:1.1rem;
-}
-
-.feat-title {
-  font-family:'Syne',sans-serif;
-  font-size:1.1rem;
-  font-weight:700;
-  margin-bottom:.42rem;
-  color:var(--text);
-}
-
-.feat-desc { color:var(--muted); font-size:.88rem; line-height:1.65; }
-
-.feat-tags { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:1.1rem; }
-.tag {
-  padding:.22rem .65rem;
-  border-radius:100px;
-  font-size:.72rem;
-  font-weight:600;
-  font-family:'DM Sans',sans-serif;
-  letter-spacing:.01em;
-}
-
-/* Commands */
-.commands-sec {
-  padding: 6rem 2rem;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.cmd-wrap { max-width:1020px; margin:0 auto; }
-
-.cmd-search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: 12px;
-  padding: 0.7rem 1rem;
-  margin: 0 auto 1.5rem;
-  max-width: 420px;
-  transition: border-color 0.2s;
-}
-.cmd-search:focus-within { border-color: var(--accent); }
-.cmd-search svg { color: var(--muted); flex-shrink: 0; }
-.cmd-search input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.9rem;
-  flex: 1;
-}
-.cmd-search input::placeholder { color: var(--muted); }
-
-.cmd-tabs {
-  display:flex;
-  gap:.5rem;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-bottom:2rem;
-}
-
-.cmd-tab {
-  padding:.35rem .9rem;
-  border-radius:100px;
-  font-size:.78rem;
-  font-weight:600;
-  border:1px solid var(--border2);
-  background:transparent;
-  color:var(--muted);
-  cursor:pointer;
-  transition:all .2s;
-  font-family:'DM Sans',sans-serif;
-}
-.cmd-tab:hover { border-color:var(--accent); color:var(--text); }
-.cmd-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-
-.cmd-panel { display:none; }
-.cmd-panel.active { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.7rem; animation: fadeIn 0.3s ease; }
-
-@keyframes fadeIn { from {opacity:0; transform:translateY(8px);} to {opacity:1; transform:translateY(0);} }
-
-.cmd-item {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius:13px;
-  padding:.95rem 1.1rem;
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  transition:border-color .2s, background .2s, transform .2s;
-  cursor: pointer;
-  position: relative;
-}
-.cmd-item:hover { border-color:var(--border2); background:var(--card2); transform: translateY(-2px); }
-.cmd-item.copied { border-color: var(--teal) !important; }
-
-.cmd-ico { font-size:1.3rem; line-height:1; margin-top:1px; flex-shrink:0; }
-
-.cmd-name {
-  font-family:'Syne',sans-serif;
-  font-weight:600;
-  font-size:.9rem;
-  color:var(--text);
-  margin-bottom:2px;
-}
-.cmd-name code {
-  font-family: 'Courier New', monospace;
-  font-size:.82rem;
-  color:var(--accent2);
-  background: rgba(124,106,247,.1);
-  padding:1px 5px;
-  border-radius:5px;
-}
-
-.cmd-desc { font-size:.76rem; color:var(--muted); line-height:1.4; }
-
-.no-results {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 2rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* Stocks */
-.stocks-sec {
-  padding: 6rem 2rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.stocks-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-bottom: 2rem;
-}
-@media (max-width: 800px) { .stocks-grid { grid-template-columns: 1fr; } }
-
-.stock-chart-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 1.5rem;
-  grid-column: span 2;
-}
-
-.stock-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.stock-symbol {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.3rem;
-  color: var(--text);
-}
-
-.stock-price {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-}
-
-.stock-change {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-left: 0.5rem;
-}
-.stock-change.up { color: var(--teal); }
-.stock-change.dn { color: var(--red); }
-
-.stock-range {
-  display: flex;
-  gap: 0.4rem;
-}
-.stock-range button {
-  padding: 0.3rem 0.7rem;
-  font-size: 0.75rem;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--muted);
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-.stock-range button.active,
-.stock-range button:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-
-#stockCanvas {
-  width: 100%;
-  height: 280px;
-  display: block;
-}
-
-.stock-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.25rem;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.stock-card:hover { border-color: var(--border2); transform: translateY(-2px); background: var(--card2); }
-.stock-card.active { border-color: var(--accent); background: var(--card2); }
-
-.stock-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.stock-card-sym {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1rem;
-}
-
-.stock-card-px {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--text);
-}
-
-.stock-card-chg {
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.stock-mini {
-  width: 100%;
-  height: 40px;
-  margin-top: 0.5rem;
-}
-
-/* Fishing */
-.fishing-sec {
-  padding: 6rem 2rem;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(45,212,191,.035) 50%, var(--bg) 100%);
-}
-.fish-inner { max-width:920px; margin:0 auto; }
-
-.fish-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
-  gap:.9rem;
-  margin-bottom:1.5rem;
-}
-
-.fish-card {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:1.1rem .85rem;
-  text-align:center;
-  cursor:default;
-  transition:transform .25s, border-color .25s, background .25s;
-  position:relative;
-  overflow:hidden;
-}
-.fish-card:hover { transform:translateY(-3px); background:var(--card2); }
-.fish-card.common:hover    { border-color:rgba(126,124,154,.5); }
-.fish-card.uncommon:hover  { border-color:rgba(96,165,250,.4); }
-.fish-card.rare:hover      { border-color:rgba(167,139,250,.5); }
-.fish-card.legendary:hover { border-color:rgba(251,191,36,.45); }
-.fish-card.mythic:hover    { border-color:rgba(244,114,182,.5); }
-
-.fish-emoji { font-size:2.2rem; display:block; margin-bottom:.45rem; }
-.fish-nm    { font-family:'Syne',sans-serif; font-size:.8rem; font-weight:700; color:var(--text); margin-bottom:2px; }
-.fish-rar   { font-size:.65rem; text-transform:uppercase; letter-spacing:.07em; font-weight:600; }
-.fish-val   { font-size:.74rem; color:var(--teal); margin-top:4px; font-weight:500; }
-
-.r-common    { color:var(--muted); }
-.r-uncommon  { color:var(--blue); }
-.r-rare      { color:var(--accent2); }
-.r-legendary { color:var(--amber); }
-.r-mythic    { color:var(--pink); }
-
-.fish-more {
-  text-align:center;
-  color:var(--muted);
-  font-size:.83rem;
-  padding:.6rem;
-  border:1px dashed var(--faint);
-  border-radius:12px;
-  margin-top:.5rem;
-}
-
-.boosters {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1rem;
-  margin-top:2.5rem;
-}
-@media(max-width:540px) { .boosters{grid-template-columns:1fr;} }
-
-.booster-card {
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:1.4rem 1.5rem;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  transition:transform .2s,border-color .2s;
-}
-.booster-card:hover { transform:translateY(-2px); }
-.booster-card.b2:hover { border-color:rgba(96,165,250,.35); }
-.booster-card.b3:hover { border-color:rgba(167,139,250,.4); }
-
-.booster-icon { font-size:2rem; flex-shrink:0; }
-.booster-title { font-family:'Syne',sans-serif; font-weight:700; font-size:.95rem; color:var(--text); margin-bottom:2px; }
-.booster-desc  { font-size:.78rem; color:var(--muted); line-height:1.4; }
-.booster-price { font-size:.8rem; font-weight:600; margin-top:5px; }
-.b2 .booster-price { color:var(--blue); }
-.b3 .booster-price { color:var(--accent2); }
-
-/* Screenshots Showcase */
-.showcase-sec {
-  padding: 6rem 2rem;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.showcase-wrap { max-width: 1100px; margin: 0 auto; }
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-top: 2rem;
-}
-@media (max-width: 900px) { .showcase-grid { grid-template-columns: 1fr; } }
-
-.showcase-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow: hidden;
-  transition: all 0.3s;
-  position: relative;
-  cursor: pointer;
-}
-.showcase-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 60px rgba(124,106,247,0.15); }
-
-.showcase-img-wrap {
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #1e1f22;
-}
-.showcase-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.showcase-caption {
-  padding: 1rem 1.2rem;
-  border-top: 1px solid var(--border);
-}
-.showcase-caption-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
-  margin-bottom: 4px;
-}
-.showcase-caption-desc {
-  font-size: 0.8rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.showcase-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(8,8,14,0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border2);
-  border-radius: 100px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--accent2);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-/* Server */
-.server-sec {
-  padding: 6rem 2rem;
-  max-width: 860px;
-  margin: 0 auto;
-}
-
-.server-card {
-  background: var(--card);
-  border: 1px solid rgba(124,106,247,.22);
-  border-radius: 24px;
-  overflow: hidden;
-}
-
-.server-banner {
-  height: 120px;
-  background: linear-gradient(135deg, #1a0940 0%, #2d1b69 40%, #1a0940 100%);
-  position: relative;
-  overflow: hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.server-banner::before {
-  content:'';
-  position:absolute;
-  inset:0;
-  background-image:
-    radial-gradient(circle at 20% 50%, rgba(124,106,247,.4) 0%, transparent 50%),
-    radial-gradient(circle at 80% 30%, rgba(244,114,182,.25) 0%, transparent 50%);
-}
-.server-banner-text {
-  font-family:'Syne',sans-serif;
-  font-size:1.6rem;
-  font-weight:800;
-  letter-spacing:-.02em;
-  color:#fff;
-  position:relative;
-  z-index:1;
-  text-shadow:0 2px 20px rgba(0,0,0,.5);
-}
-
-.server-body { padding:2rem; }
-
-.server-meta {
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:1rem;
-  margin-bottom:1.25rem;
-}
-.server-name {
-  font-family:'Syne',sans-serif;
-  font-size:1.4rem;
-  font-weight:800;
-  letter-spacing:-.02em;
-}
-.server-handle { font-size:.82rem; color:var(--muted); margin-top:2px; }
-
-.server-badge {
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  background:rgba(124,106,247,.12);
-  border:1px solid rgba(124,106,247,.25);
-  border-radius:100px;
-  padding:.28rem .8rem;
-  font-size:.72rem;
-  color:var(--accent2);
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-}
-
-.server-desc {
-  color:var(--muted);
-  font-size:.9rem;
-  line-height:1.65;
-  margin-bottom:1.5rem;
-  border-left:2px solid var(--faint);
-  padding-left:.9rem;
-}
-
-.server-stats {
-  display:flex;
-  gap:1.5rem;
-  flex-wrap:wrap;
-  margin-bottom:1.75rem;
-}
-.srv-stat { text-align:left; }
-.srv-stat-n { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; }
-.srv-stat-l { font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
-
-/* About / Changelog */
-.pages-sec {
-  padding: 6rem 2rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.page-tabs {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-.page-tab {
-  padding: 0.5rem 1.2rem;
-  border-radius: 100px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--muted);
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.page-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-.page-tab:hover:not(.active) { color: var(--text); border-color: var(--accent); }
-
-.page-panel { display: none; animation: fadeIn 0.3s ease; }
-.page-panel.active { display: block; }
-
-.about-content {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2.5rem;
-}
-
-.about-content h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: var(--text);
-}
-
-.about-content p {
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 1rem;
-}
-
-.about-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.about-stat {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1.2rem;
-  text-align: center;
-}
-.about-stat-n {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--accent2);
-}
-.about-stat-l {
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-top: 4px;
-}
-
-.changelog-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.changelog-item {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  position: relative;
-  transition: border-color 0.2s;
-}
-.changelog-item:hover { border-color: var(--border2); }
-
-.changelog-head {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 0.8rem;
-  flex-wrap: wrap;
-}
-
-.changelog-ver {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--text);
-}
-
-.changelog-date {
-  font-size: 0.78rem;
-  color: var(--muted);
-}
-
-.changelog-tag {
-  padding: 0.15rem 0.6rem;
-  border-radius: 100px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.changelog-tag.latest { background: rgba(45,212,191,0.15); color: var(--teal); }
-.changelog-tag.major { background: rgba(124,106,247,0.15); color: var(--accent2); }
-.changelog-tag.fix { background: rgba(251,191,36,0.15); color: var(--amber); }
-
-.changelog-list-items {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.changelog-list-items li {
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  padding-left: 1.4rem;
-  position: relative;
-}
-.changelog-list-items li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55rem;
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-}
-
-/* Invite */
-.invite-sec {
-  padding: 8rem 2rem;
-  text-align:center;
-  position:relative;
-}
-
-.invite-box {
-  background:var(--card);
-  border:1px solid rgba(124,106,247,.2);
-  border-radius:28px;
-  padding:4rem 3rem;
-  max-width:660px;
-  margin:0 auto;
-  position:relative;
-  overflow:hidden;
-}
-.invite-box::before {
-  content:'';
-  position:absolute;
-  top:-100px;left:50%;transform:translateX(-50%);
-  width:380px;height:380px;
-  background:radial-gradient(circle,rgba(124,106,247,.13) 0%,transparent 70%);
-  border-radius:50%;
-  pointer-events:none;
-}
-
-.invite-box h2 {
-  font-family:'Syne',sans-serif;
-  font-size:clamp(1.8rem,4vw,2.6rem);
-  font-weight:800;
-  letter-spacing:-.03em;
-  line-height:1.08;
-  margin-bottom:1rem;
-}
-.invite-box p { color:var(--muted); font-size:.98rem; margin-bottom:2rem; font-weight:300; }
-
-/* Footer */
-footer {
-  background:var(--bg2);
-  border-top:1px solid var(--border);
-  padding:2.5rem 2rem 1.8rem;
-}
-.foot-inner {
-  max-width:1100px;
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:1rem;
-}
-.foot-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.15rem; }
-.foot-links { display:flex; gap:1.5rem; list-style:none; flex-wrap: wrap; }
-.foot-links a { color:var(--muted); text-decoration:none; font-size:.82rem; transition:color .2s; }
-.foot-links a:hover { color:var(--text); }
-
-.foot-copy {
-  font-size:.75rem;
-  color:var(--faint);
-  width:100%;
-  text-align:center;
-  margin-top:1.75rem;
-  padding-top:1.25rem;
-  border-top:1px solid var(--border);
-}
-
-/* Animations */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(22px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-.reveal {
-  opacity:0;
-  transform:translateY(18px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.reveal.visible { opacity:1; transform:translateY(0); }
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--card2);
-  border: 1px solid var(--accent);
-  border-radius: 12px;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.85rem;
-  color: var(--text);
-  box-shadow: 0 8px 32px rgba(124,106,247,0.3);
-  z-index: 1000;
-  opacity: 0;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  pointer-events: none;
-}
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-/* Lightbox */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  padding: 2rem;
-}
-.lightbox.active { opacity: 1; pointer-events: auto; }
-.lightbox img {
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 12px;
-  box-shadow: 0 20px 80px rgba(0,0,0,0.5);
-  transform: scale(0.9);
-  transition: transform 0.3s;
-}
-.lightbox.active img { transform: scale(1); }
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--card);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width:5px; height:5px; }
-::-webkit-scrollbar-track { background:var(--bg); }
-::-webkit-scrollbar-thumb { background:var(--faint); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--border2); }
-
-@media (max-width: 640px) {
-  .hero { padding: 7rem 1.5rem 4rem; }
-  .features, .commands-sec, .fishing-sec, .server-sec, .invite-sec, .stocks-sec, .showcase-sec, .pages-sec { padding: 4rem 1.5rem; }
-  .hero-facts { gap: 1.5rem; }
-  .fact-n { font-size: 1.5rem; }
-  .fish-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-  .cmd-panel.active { grid-template-columns: 1fr; }
-  .boosters { grid-template-columns: 1fr; }
-  .server-stats { gap: 1rem; }
-  .invite-box { padding: 3rem 1.5rem; }
-  .about-content { padding: 1.5rem; }
-  .changelog-item { padding: 1.2rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lorene — Bot Command Reference</title>
+    <meta name="description" content="Complete command reference for Lorene — a feature-rich Discord bot with economy, fishing, AI chat, stocks, gambling, hype, and fun modules." />
+    <meta name="keywords" content="Discord bot, Lorene, commands, economy bot, fishing bot, AI chat bot, stocks bot" />
+    <meta property="og:title" content="Lorene — Bot Command Reference" />
+    <meta property="og:description" content="Full command documentation for Lorene — economy, fishing, AI, stocks, gambling, hype, and fun." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/syne@5.0.18/index.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@5.0.21/index.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #08080e;
+            --bg2: #0e0e17;
+            --bg3: #141420;
+            --card: #181825;
+            --card2: #1e1e2e;
+            --border: rgba(255, 255, 255, 0.06);
+            --border2: rgba(255, 255, 255, 0.11);
+            --accent: #7c6af7;
+            --accent2: #a78bfa;
+            --pink: #f472b6;
+            --teal: #2dd4bf;
+            --amber: #fbbf24;
+            --red: #f87171;
+            --blue: #60a5fa;
+            --green: #4ade80;
+            --text: #eeedf8;
+            --muted: #7e7c9a;
+            --faint: #2e2e42;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+
+        section,
+        nav,
+        footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(8, 8, 14, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s, border-color 0.3s, padding 0.3s;
+        }
+        nav.scrolled {
+            background: rgba(8, 8, 14, 0.95);
+            border-color: var(--border2);
+            padding: 0.7rem 2rem;
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            letter-spacing: -0.02em;
+            transition: opacity 0.2s;
+        }
+        .nav-logo:hover {
+            opacity: 0.85;
+        }
+
+        .logo-pip {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 14px var(--accent);
+            animation: pip 2.4s ease-in-out infinite;
+        }
+
+        @keyframes pip {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: .5;
+                transform: scale(.8);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color .2s;
+            letter-spacing: .01em;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+        .mobile-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        .mobile-toggle.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-toggle.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        @media (max-width: 900px) {
+            .mobile-toggle {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(8, 8, 14, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                border-bottom: 1px solid var(--border);
+                backdrop-filter: blur(20px);
+            }
+            .nav-links.active {
+                transform: translateX(0);
+            }
+            .nav-links li {
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 9rem 2rem 4rem;
+            position: relative;
+            background: radial-gradient(circle at 20% 20%, rgba(124, 106, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(244, 114, 182, 0.04) 0%, transparent 50%);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(124, 106, 247, .1);
+            border: 1px solid rgba(124, 106, 247, .28);
+            border-radius: 100px;
+            padding: .32rem .95rem;
+            font-size: .75rem;
+            color: var(--accent2);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            animation: fadeUp .5s ease both;
+        }
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--teal);
+            animation: pip 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 800;
+            line-height: .94;
+            letter-spacing: -.035em;
+            margin-bottom: 1.5rem;
+            animation: fadeUp .55s .08s ease both;
+        }
+
+        .grad {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 55%, var(--amber) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 540px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+            animation: fadeUp .55s .16s ease both;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: .9rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp .55s .23s ease both;
+        }
+
+        .btn-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            padding: .78rem 1.85rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: .92rem;
+            transition: transform .15s, box-shadow .2s;
+            box-shadow: 0 4px 28px rgba(124, 106, 247, .38);
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(124, 106, 247, .55);
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            padding: .78rem 1.85rem;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: .92rem;
+            border: 1px solid var(--border2);
+            transition: border-color .2s, background .2s;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-ghost:hover {
+            border-color: var(--accent);
+            background: rgba(124, 106, 247, .07);
+        }
+
+        .hero-facts {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 2.8rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp .55s .36s ease both;
+        }
+        .fact {
+            text-align: center;
+        }
+        .fact-n {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+        }
+        .fact-l {
+            font-size: .74rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            margin-top: 1px;
+        }
+
+        /* Section Labels */
+        .sec-label {
+            text-align: center;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .13em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: .85rem;
+        }
+
+        .sec-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.9rem, 4vw, 2.85rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.13;
+            letter-spacing: -.022em;
+            margin-bottom: .85rem;
+        }
+
+        .sec-sub {
+            text-align: center;
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 520px;
+            margin: 0 auto 3.5rem;
+            font-weight: 300;
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1160px;
+            margin: 0 auto;
+        }
+
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .feat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.85rem;
+            transition: border-color .3s, transform .3s, background .3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .feat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--ca, var(--accent)), transparent);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+        .feat-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-4px);
+            background: var(--card2);
+        }
+        .feat-card:hover::after {
+            opacity: 1;
+        }
+        .feat-card.wide {
+            grid-column: span 2;
+        }
+        @media (max-width: 700px) {
+            .feat-card.wide {
+                grid-column: span 1;
+            }
+        }
+
+        .feat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .feat-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: .42rem;
+            color: var(--text);
+        }
+
+        .feat-desc {
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.65;
+        }
+
+        .feat-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .35rem;
+            margin-top: 1.1rem;
+        }
+        .tag {
+            padding: .22rem .65rem;
+            border-radius: 100px;
+            font-size: .72rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: .01em;
+        }
+
+        /* Commands */
+        .commands-sec {
+            padding: 6rem 2rem;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cmd-wrap {
+            max-width: 1020px;
+            margin: 0 auto;
+        }
+
+        .cmd-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            border-radius: 12px;
+            padding: 0.7rem 1rem;
+            margin: 0 auto 1.5rem;
+            max-width: 420px;
+            transition: border-color 0.2s;
+        }
+        .cmd-search:focus-within {
+            border-color: var(--accent);
+        }
+        .cmd-search svg {
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+        .cmd-search input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        .cmd-search input::placeholder {
+            color: var(--muted);
+        }
+
+        .cmd-tabs {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .cmd-tab {
+            padding: .35rem .9rem;
+            border-radius: 100px;
+            font-size: .78rem;
+            font-weight: 600;
+            border: 1px solid var(--border2);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .cmd-tab:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        .cmd-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .cmd-panel {
+            display: none;
+        }
+        .cmd-panel.active {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: .7rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cmd-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: .95rem 1.1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            transition: border-color .2s, background .2s, transform .2s;
+            cursor: pointer;
+            position: relative;
+        }
+        .cmd-item:hover {
+            border-color: var(--border2);
+            background: var(--card2);
+            transform: translateY(-2px);
+        }
+        .cmd-item.copied {
+            border-color: var(--teal) !important;
+        }
+
+        .cmd-ico {
+            font-size: 1.3rem;
+            line-height: 1;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .cmd-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: .9rem;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .cmd-name code {
+            font-family: 'Courier New', monospace;
+            font-size: .82rem;
+            color: var(--accent2);
+            background: rgba(124, 106, 247, .1);
+            padding: 1px 5px;
+            border-radius: 5px;
+        }
+
+        .cmd-desc {
+            font-size: .76rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Stocks */
+        .stocks-sec {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .stocks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 800px) {
+            .stocks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stock-chart-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            grid-column: span 2;
+        }
+
+        .stock-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stock-symbol {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        .stock-price {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .stock-change {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .stock-change.up {
+            color: var(--teal);
+        }
+        .stock-change.dn {
+            color: var(--red);
+        }
+
+        .stock-range {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .stock-range button {
+            padding: 0.3rem 0.7rem;
+            font-size: 0.75rem;
+            background: transparent;
+            border: 1px solid var(--border2);
+            color: var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .stock-range button.active,
+        .stock-range button:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        #stockCanvas {
+            width: 100%;
+            height: 280px;
+            display: block;
+        }
+
+        .stock-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .stock-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-2px);
+            background: var(--card2);
+        }
+        .stock-card.active {
+            border-color: var(--accent);
+            background: var(--card2);
+        }
+
+        .stock-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .stock-card-sym {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .stock-card-px {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .stock-card-chg {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stock-mini {
+            width: 100%;
+            height: 40px;
+            margin-top: 0.5rem;
+        }
+
+        /* Fishing */
+        .fishing-sec {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(45, 212, 191, .035) 50%, var(--bg) 100%);
+        }
+        .fish-inner {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .fish-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: .9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .fish-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 1.1rem .85rem;
+            text-align: center;
+            cursor: default;
+            transition: transform .25s, border-color .25s, background .25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .fish-card:hover {
+            transform: translateY(-3px);
+            background: var(--card2);
+        }
+        .fish-card.common:hover {
+            border-color: rgba(126, 124, 154, .5);
+        }
+        .fish-card.uncommon:hover {
+            border-color: rgba(96, 165, 250, .4);
+        }
+        .fish-card.rare:hover {
+            border-color: rgba(167, 139, 250, .5);
+        }
+        .fish-card.legendary:hover {
+            border-color: rgba(251, 191, 36, .45);
+        }
+        .fish-card.mythic:hover {
+            border-color: rgba(244, 114, 182, .5);
+        }
+
+        .fish-emoji {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: .45rem;
+        }
+        .fish-nm {
+            font-family: 'Syne', sans-serif;
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .fish-rar {
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            font-weight: 600;
+        }
+        .fish-val {
+            font-size: .74rem;
+            color: var(--teal);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .r-common {
+            color: var(--muted);
+        }
+        .r-uncommon {
+            color: var(--blue);
+        }
+        .r-rare {
+            color: var(--accent2);
+        }
+        .r-legendary {
+            color: var(--amber);
+        }
+        .r-mythic {
+            color: var(--pink);
+        }
+
+        .fish-more {
+            text-align: center;
+            color: var(--muted);
+            font-size: .83rem;
+            padding: .6rem;
+            border: 1px dashed var(--faint);
+            border-radius: 12px;
+            margin-top: .5rem;
+        }
+
+        .boosters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        @media (max-width: 540px) {
+            .boosters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .booster-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: transform .2s, border-color .2s;
+        }
+        .booster-card:hover {
+            transform: translateY(-2px);
+        }
+        .booster-card.b2:hover {
+            border-color: rgba(96, 165, 250, .35);
+        }
+        .booster-card.b3:hover {
+            border-color: rgba(167, 139, 250, .4);
+        }
+
+        .booster-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .booster-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: .95rem;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .booster-desc {
+            font-size: .78rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+        .booster-price {
+            font-size: .8rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .b2 .booster-price {
+            color: var(--blue);
+        }
+        .b3 .booster-price {
+            color: var(--accent2);
+        }
+
+        /* Pages (About / Changelog) */
+        .pages-sec {
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-tabs {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .page-tab {
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            border: 1px solid var(--border2);
+            background: transparent;
+            color: var(--muted);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .page-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .page-tab:hover:not(.active) {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        .page-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .page-panel.active {
+            display: block;
+        }
+
+        .about-content {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .about-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .about-content p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .about-stat {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .about-stat-n {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent2);
+        }
+        .about-stat-l {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-top: 4px;
+        }
+
+        .changelog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .changelog-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+        .changelog-item:hover {
+            border-color: var(--border2);
+        }
+
+        .changelog-head {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .changelog-ver {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .changelog-date {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .changelog-tag {
+            padding: 0.15rem 0.6rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .changelog-tag.latest {
+            background: rgba(45, 212, 191, 0.15);
+            color: var(--teal);
+        }
+        .changelog-tag.major {
+            background: rgba(124, 106, 247, 0.15);
+            color: var(--accent2);
+        }
+        .changelog-tag.fix {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--amber);
+        }
+
+        .changelog-list-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .changelog-list-items li {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            padding-left: 1.4rem;
+            position: relative;
+        }
+        .changelog-list-items li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            padding: 2.5rem 2rem 1.8rem;
+        }
+        .foot-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .foot-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+        .foot-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .foot-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .82rem;
+            transition: color .2s;
+        }
+        .foot-links a:hover {
+            color: var(--text);
+        }
+
+        .foot-copy {
+            font-size: .75rem;
+            color: var(--faint);
+            width: 100%;
+            text-align: center;
+            margin-top: 1.75rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card2);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text);
+            box-shadow: 0 8px 32px rgba(124, 106, 247, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--faint);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border2);
+        }
+
+        @media (max-width: 640px) {
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+                min-height: 60vh;
+            }
+            .features,
+            .commands-sec,
+            .fishing-sec,
+            .stocks-sec,
+            .pages-sec {
+                padding: 4rem 1.5rem;
+            }
+            .hero-facts {
+                gap: 1.5rem;
+            }
+            .fact-n {
+                font-size: 1.5rem;
+            }
+            .fish-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            .cmd-panel.active {
+                grid-template-columns: 1fr;
+            }
+            .boosters {
+                grid-template-columns: 1fr;
+            }
+            .about-content {
+                padding: 1.5rem;
+            }
+            .changelog-item {
+                padding: 1.2rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<nav id="mainNav">
-  <a href="#" class="nav-logo">
-    <div class="logo-pip"></div>
-    Lorene
-  </a>
-  <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#showcase">Screenshots</a></li>
-    <li><a href="#commands">Commands</a></li>
-    <li><a href="#stocks">Stocks</a></li>
-    <li><a href="#fishing">Fishing</a></li>
-    <li><a href="#pages">About</a></li>
-    <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="nav-cta invite-link">Join Server</a></li>
-  </ul>
-</nav>
-
-<section class="hero">
-  <div class="hero-eyebrow">
-    <span class="dot"></span>
-    Exclusive to Shade of Thoughts
-  </div>
-
-  <h1>Meet <span class="grad">Lorene.</span><br>Your server's<br>own bot.</h1>
-
-  <p class="hero-sub">Economy, fishing, AI, stocks, gambling — built exclusively for Shade of Thoughts. This is not your average Discord bot.</p>
-
-  <div class="hero-btns">
-    <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main invite-link">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      Join the Server
-    </a>
-    <a href="#commands" class="btn-ghost">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      Browse Commands
-    </a>
-  </div>
-
-  <div class="status-bar loading" id="statusBar">
-    <div class="s-dot"></div>
-    <span class="s-label" id="sLabel">Checking…</span>
-    <div class="s-div"></div>
-    <div class="s-stat"><div class="s-val" id="sUptime">--</div><div class="s-lbl">Uptime</div></div>
-    <div class="s-div"></div>
-    <div class="s-stat"><div class="s-val" id="sPing">--</div><div class="s-lbl">Ping</div></div>
-  </div>
-
-  <div class="hero-facts">
-    <div class="fact"><div class="fact-n" id="onlineCountHero" style="color:var(--accent2)">--</div><div class="fact-l">Online</div></div>
-    <div class="fact"><div class="fact-n" style="color:var(--pink)">7</div><div class="fact-l">Modules</div></div>
-    <div class="fact"><div class="fact-n" style="color:var(--teal)">50+</div><div class="fact-l">Commands</div></div>
-    <div class="fact"><div class="fact-n" style="color:var(--amber)">∞</div><div class="fact-l">Chaos</div></div>
-  </div>
-</section>
-
-<section class="features" id="features">
-  <div class="sec-label">What Lorene does</div>
-  <h2 class="sec-title reveal">Everything in one bot.</h2>
-  <p class="sec-sub reveal">Seven modules, all running 24/7 just for this server.</p>
-
-  <div class="feat-grid">
-    <div class="feat-card reveal" style="--ca:#7c6af7;">
-      <div class="feat-icon" style="background:rgba(124,106,247,.14);">🤖</div>
-      <div class="feat-title">AI Chat</div>
-      <div class="feat-desc">Talk to Lorene with <code style="font-family:monospace;font-size:.85em;color:var(--accent2);">?ai</code>, mention her directly, or let auto-starters keep the conversation going. Full context memory per conversation.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">?ai</span>
-        <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">?aiclear</span>
-        <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">@mention</span>
-      </div>
-    </div>
-
-    <div class="feat-card reveal" style="--ca:#34d399;">
-      <div class="feat-icon" style="background:rgba(52,211,153,.12);">🎣</div>
-      <div class="feat-title">Fishing</div>
-      <div class="feat-desc">Cast your rod for 50 racks, reel in fish across 5 rarity tiers. Fish of the Day gives 3× sell value. Buy luck boosters to catch rarer fish more often.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?fs</span>
-        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?fi</span>
-        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?sell</span>
-        <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">/fishingluck</span>
-      </div>
-    </div>
-
-    <div class="feat-card wide reveal" style="--ca:#fbbf24;">
-      <div class="feat-icon" style="background:rgba(251,191,36,.12);">💰</div>
-      <div class="feat-title">Economy — Racks</div>
-      <div class="feat-desc">Full server economy built around racks. Earn passively by chatting, claim daily bonuses, rob other members, run heists, buy items from the shop, or blow it all on slots. Check the leaderboard to see who's running the server financially.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?racks</span>
-        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?daily</span>
-        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?rob</span>
-        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?heist</span>
-        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?lb</span>
-        <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">/shop</span>
-      </div>
-    </div>
-
-    <div class="feat-card reveal" style="--ca:#60a5fa;">
-      <div class="feat-icon" style="background:rgba(96,165,250,.12);">📈</div>
-      <div class="feat-title">Fake Stock Market</div>
-      <div class="feat-desc">5 in-server companies (SHADE, LORENE, CHAOS, DRIP, NOVA). Prices fluctuate live. Buy low, sell high, flex your portfolio.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">?st</span>
-        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/buystock</span>
-        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/sellstock</span>
-        <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/portfolio</span>
-      </div>
-    </div>
-
-    <div class="feat-card reveal" style="--ca:#f472b6;">
-      <div class="feat-icon" style="background:rgba(244,114,182,.12);">🔥</div>
-      <div class="feat-title">Hype System</div>
-      <div class="feat-desc">Give or take hype from members. Use HypeNuke to blast ±10 hype for 1,000 racks. Flex your hype score on the server.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">+hype</span>
-        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">-hype</span>
-        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">?hype</span>
-        <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">/hypenuke</span>
-      </div>
-    </div>
-
-    <div class="feat-card reveal" style="--ca:#a78bfa;">
-      <div class="feat-icon" style="background:rgba(167,139,250,.12);">🎰</div>
-      <div class="feat-title">Gambling</div>
-      <div class="feat-desc">Coinflip, slots, dice — risk your racks for a chance to double up. Classic server degenerate activity, no judgment.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?cf</span>
-        <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?slots</span>
-        <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?dice</span>
-      </div>
-    </div>
-
-    <div class="feat-card reveal" style="--ca:#2dd4bf;">
-      <div class="feat-icon" style="background:rgba(45,212,191,.12);">🧠</div>
-      <div class="feat-title">Trivia &amp; Fun</div>
-      <div class="feat-desc">Trivia, roasts, facts, jokes, would-you-rather, aura tracking — all the tools needed to keep chat alive and chaotic.</div>
-      <div class="feat-tags">
-        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?trivia</span>
-        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?roast</span>
-        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?fact</span>
-        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?wyr</span>
-        <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?aura</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="showcase-sec" id="showcase">
-  <div class="showcase-wrap">
-    <div class="sec-label">Lorene in action</div>
-    <h2 class="sec-title reveal">Real Discord screenshots.</h2>
-    <p class="sec-sub reveal">See how Lorene looks inside the server. Click any screenshot to enlarge.</p>
-
-    <div class="showcase-grid reveal">
-      <div class="showcase-card" data-img="https://raw.githubusercontent.com/shadexai/lorene/main/Screenshot_20260615_183950_Discord.jpg">
-        <div class="showcase-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--pink);"></span> AI Chat</div>
-        <div class="showcase-img-wrap">
-          <img class="showcase-img" src="https://raw.githubusercontent.com/shadexai/lorene/main/Screenshot_20260615_183950_Discord.jpg" alt="Lorene AI chat screenshot 1" loading="lazy">
-        </div>
-        <div class="showcase-caption">
-          <div class="showcase-caption-title">@Lorene — AI Conversation</div>
-          <div class="showcase-caption-desc">Full AI responses with context memory and casual, on‑brand tone.</div>
-        </div>
-      </div>
-
-      <div class="showcase-card" data-img="https://raw.githubusercontent.com/shadexai/lorene/main/Screenshot_20260615_185053_Discord.jpg">
-        <div class="showcase-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--pink);"></span> AI Chat</div>
-        <div class="showcase-img-wrap">
-          <img class="showcase-img" src="https://raw.githubusercontent.com/shadexai/lorene/main/Screenshot_20260615_185053_Discord.jpg" alt="Lorene AI chat screenshot 2" loading="lazy">
-        </div>
-        <div class="showcase-caption">
-          <div class="showcase-caption-title">@Lorene — AI Conversation</div>
-          <div class="showcase-caption-desc">Natural replies, emotional range, and the ability to adapt to your conversation style.</div>
-        </div>
-      </div>
-
-      <div class="showcase-card" data-img="https://raw.githubusercontent.com/shadexai/lorene/main/Screenshot_20260615_185131_Discord.jpg">
-        <div class="showcase-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--pink);"></span> AI Chat</div>
-        <div class="showcase-img-wrap">
-          <img class="showcase-img" src="https://raw.githubusercontent.com/shadexai/lorene/main/Screenshot_20260615_185131_Discord.jpg" alt="Lorene AI chat screenshot 3" loading="lazy">
-        </div>
-        <div class="showcase-caption">
-          <div class="showcase-caption-title">@Lorene — AI Conversation</div>
-          <div class="showcase-caption-desc">Lorene keeps the server chat lively, deep, or chaotic — whatever fits the moment.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="commands-sec" id="commands">
-  <div class="cmd-wrap">
-    <div class="sec-label">Command reference</div>
-    <h2 class="sec-title reveal">Every command, right here.</h2>
-    <p class="sec-sub reveal">Prefix commands use <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:.88em;color:var(--accent2);">?</code> — slash commands use <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:.88em;color:var(--accent2);">/</code></p>
-
-    <div class="cmd-search reveal">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="cmdSearch" placeholder="Search commands... (e.g., fishing, racks, ai)" autocomplete="off">
-    </div>
-
-    <div class="cmd-tabs reveal" id="cmdTabs">
-      <button class="cmd-tab active" data-tab="economy">💰 Economy</button>
-      <button class="cmd-tab" data-tab="fishing">🎣 Fishing</button>
-      <button class="cmd-tab" data-tab="gambling">🎰 Gambling</button>
-      <button class="cmd-tab" data-tab="stocks">📈 Stocks</button>
-      <button class="cmd-tab" data-tab="hype">🔥 Hype</button>
-      <button class="cmd-tab" data-tab="fun">🧠 Fun</button>
-      <button class="cmd-tab" data-tab="slash">⚡ Slash</button>
-    </div>
-
-    <div class="cmd-panel active" id="panel-economy" data-panel="economy">
-      <div class="cmd-item" data-cmd="?racks"><div class="cmd-ico">💸</div><div><div class="cmd-name"><code>?racks</code></div><div class="cmd-desc">Check your balance</div></div></div>
-      <div class="cmd-item" data-cmd="?daily"><div class="cmd-ico">📅</div><div><div class="cmd-name"><code>?daily</code></div><div class="cmd-desc">Claim daily racks</div></div></div>
-      <div class="cmd-item" data-cmd="?share"><div class="cmd-ico">🤝</div><div><div class="cmd-name"><code>?share</code></div><div class="cmd-desc">Send racks to someone</div></div></div>
-      <div class="cmd-item" data-cmd="?lb"><div class="cmd-ico">🏆</div><div><div class="cmd-name"><code>?lb</code></div><div class="cmd-desc">Richest members board</div></div></div>
-      <div class="cmd-item" data-cmd="?rob @user"><div class="cmd-ico">🦹</div><div><div class="cmd-name"><code>?rob @user</code></div><div class="cmd-desc">Steal racks from someone</div></div></div>
-      <div class="cmd-item" data-cmd="?heist"><div class="cmd-ico">💣</div><div><div class="cmd-name"><code>?heist</code></div><div class="cmd-desc">Start a group heist</div></div></div>
-      <div class="cmd-item" data-cmd="?join"><div class="cmd-ico">🤜</div><div><div class="cmd-name"><code>?join</code></div><div class="cmd-desc">Join an active heist</div></div></div>
-      <div class="cmd-item" data-cmd="?crate"><div class="cmd-ico">📦</div><div><div class="cmd-name"><code>?crate</code></div><div class="cmd-desc">Open a mystery crate</div></div></div>
-    </div>
-
-    <div class="cmd-panel" id="panel-fishing" data-panel="fishing">
-      <div class="cmd-item" data-cmd="?fs"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>?fs</code> / <code>?fishing</code></div><div class="cmd-desc">Cast your rod (50 racks)</div></div></div>
-      <div class="cmd-item" data-cmd="?fi"><div class="cmd-ico">🪣</div><div><div class="cmd-name"><code>?fi</code> / <code>?fishinv</code></div><div class="cmd-desc">View your fish bucket</div></div></div>
-      <div class="cmd-item" data-cmd="?sell all"><div class="cmd-ico">💲</div><div><div class="cmd-name"><code>?sell all</code></div><div class="cmd-desc">Sell all fish instantly</div></div></div>
-      <div class="cmd-item" data-cmd="?sell fish"><div class="cmd-ico">🐟</div><div><div class="cmd-name"><code>?sell fish</code></div><div class="cmd-desc">Sell specific fish / rarity</div></div></div>
-      <div class="cmd-item" data-cmd="?fishstats"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?fishstats</code></div><div class="cmd-desc">Your fishing stats</div></div></div>
-      <div class="cmd-item" data-cmd="?flb"><div class="cmd-ico">🏅</div><div><div class="cmd-name"><code>?flb</code></div><div class="cmd-desc">Fishing leaderboard</div></div></div>
-      <div class="cmd-item" data-cmd="?fotd"><div class="cmd-ico">🌅</div><div><div class="cmd-name"><code>?fotd</code></div><div class="cmd-desc">Fish of the Day (3× value)</div></div></div>
-      <div class="cmd-item" data-cmd="?share fish"><div class="cmd-ico">🤲</div><div><div class="cmd-name"><code>?share fish</code></div><div class="cmd-desc">Give fish to someone</div></div></div>
-    </div>
-
-    <div class="cmd-panel" id="panel-gambling" data-panel="gambling">
-      <div class="cmd-item" data-cmd="?cf"><div class="cmd-ico">🪙</div><div><div class="cmd-name"><code>?cf &lt;amt&gt;</code></div><div class="cmd-desc">Coinflip heads or tails</div></div></div>
-      <div class="cmd-item" data-cmd="?slots"><div class="cmd-ico">🎰</div><div><div class="cmd-name"><code>?slots &lt;amt&gt;</code></div><div class="cmd-desc">Spin the slot machine</div></div></div>
-      <div class="cmd-item" data-cmd="?dice"><div class="cmd-ico">🎲</div><div><div class="cmd-name"><code>?dice &lt;amt&gt;</code></div><div class="cmd-desc">Roll the dice</div></div></div>
-    </div>
-
-    <div class="cmd-panel" id="panel-stocks" data-panel="stocks">
-      <div class="cmd-item" data-cmd="?st"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>?st</code> / <code>?stocks</code></div><div class="cmd-desc">View live stock prices</div></div></div>
-      <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy shares of a company</div></div></div>
-      <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">💹</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell your shares</div></div></div>
-      <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View your P&amp;L</div></div></div>
-    </div>
-
-    <div class="cmd-panel" id="panel-hype" data-panel="hype">
-      <div class="cmd-item" data-cmd="+hype @user"><div class="cmd-ico">⬆️</div><div><div class="cmd-name"><code>+hype @user</code></div><div class="cmd-desc">Give someone hype</div></div></div>
-      <div class="cmd-item" data-cmd="-hype @user"><div class="cmd-ico">⬇️</div><div><div class="cmd-name"><code>-hype @user</code></div><div class="cmd-desc">Take someone's hype</div></div></div>
-      <div class="cmd-item" data-cmd="?hype"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?hype</code></div><div class="cmd-desc">Check your hype score</div></div></div>
-      <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">±10 hype nuke (1,000 racks)</div></div></div>
-    </div>
-
-    <div class="cmd-panel" id="panel-fun" data-panel="fun">
-      <div class="cmd-item" data-cmd="?trivia"><div class="cmd-ico">🧠</div><div><div class="cmd-name"><code>?trivia</code></div><div class="cmd-desc">Answer trivia questions</div></div></div>
-      <div class="cmd-item" data-cmd="?roast @user"><div class="cmd-ico">🔥</div><div><div class="cmd-name"><code>?roast @user</code></div><div class="cmd-desc">AI roast someone</div></div></div>
-      <div class="cmd-item" data-cmd="?fact"><div class="cmd-ico">💡</div><div><div class="cmd-name"><code>?fact</code></div><div class="cmd-desc">Random interesting fact</div></div></div>
-      <div class="cmd-item" data-cmd="?joke"><div class="cmd-ico">😂</div><div><div class="cmd-name"><code>?joke</code></div><div class="cmd-desc">Get a random joke</div></div></div>
-      <div class="cmd-item" data-cmd="?wyr"><div class="cmd-ico">🤔</div><div><div class="cmd-name"><code>?wyr</code></div><div class="cmd-desc">Would you rather</div></div></div>
-      <div class="cmd-item" data-cmd="?aura"><div class="cmd-ico">✨</div><div><div class="cmd-name"><code>?aura</code></div><div class="cmd-desc">Check your aura score</div></div></div>
-      <div class="cmd-item" data-cmd="?quote"><div class="cmd-ico">💬</div><div><div class="cmd-name"><code>?quote</code></div><div class="cmd-desc">Inspirational quote</div></div></div>
-      <div class="cmd-item" data-cmd="?ai"><div class="cmd-ico">🤖</div><div><div class="cmd-name"><code>?ai &lt;msg&gt;</code></div><div class="cmd-desc">Chat with Lorene AI</div></div></div>
-    </div>
-
-    <div class="cmd-panel" id="panel-slash" data-panel="slash">
-      <div class="cmd-item" data-cmd="/shop"><div class="cmd-ico">🛍️</div><div><div class="cmd-name"><code>/shop</code></div><div class="cmd-desc">Browse the item shop</div></div></div>
-      <div class="cmd-item" data-cmd="/buy"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buy</code></div><div class="cmd-desc">Purchase a shop item</div></div></div>
-      <div class="cmd-item" data-cmd="/inventory"><div class="cmd-ico">🎒</div><div><div class="cmd-name"><code>/inventory</code></div><div class="cmd-desc">View your items</div></div></div>
-      <div class="cmd-item" data-cmd="/use"><div class="cmd-ico">⚡</div><div><div class="cmd-name"><code>/use</code></div><div class="cmd-desc">Use an inventory item</div></div></div>
-      <div class="cmd-item" data-cmd="/fishingluck"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>/fishingluck</code></div><div class="cmd-desc">Buy 2× or 3× luck boost</div></div></div>
-      <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">Nuke someone's hype</div></div></div>
-      <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">📈</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy company shares</div></div></div>
-      <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell company shares</div></div></div>
-      <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View stock P&amp;L</div></div></div>
-      <div class="cmd-item" data-cmd="/help"><div class="cmd-ico">📖</div><div><div class="cmd-name"><code>/help</code></div><div class="cmd-desc">Full command list</div></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="stocks-sec" id="stocks">
-  <div class="sec-label">Fake Stock Market</div>
-  <h2 class="sec-title reveal">Trade the chaos.</h2>
-  <p class="sec-sub reveal">5 in-server companies with live-fluctuating prices. Click a company to view its chart.</p>
-
-  <div class="stocks-grid reveal">
-    <div class="stock-chart-card">
-      <div class="stock-header">
-        <div>
-          <div class="stock-symbol" id="chartSym">SHADE</div>
-          <div>
-            <span class="stock-price" id="chartPrice">142.50</span>
-            <span class="stock-change up" id="chartChg">+3.2%</span>
-          </div>
-        </div>
-        <div class="stock-range" id="stockRange">
-          <button data-range="24" class="active">24H</button>
-          <button data-range="7">7D</button>
-          <button data-range="30">30D</button>
-        </div>
-      </div>
-      <canvas id="stockCanvas"></canvas>
-    </div>
-
-    <div class="stock-card active" data-sym="SHADE" data-px="142.50" data-chg="3.2" data-color="#7c6af7">
-      <div class="stock-card-head">
-        <div class="stock-card-sym" style="color:#7c6af7">SHADE</div>
-        <div class="stock-card-px">$142.50</div>
-      </div>
-      <div class="stock-card-chg up">+3.2%</div>
-      <canvas class="stock-mini"></canvas>
-    </div>
-
-    <div class="stock-card" data-sym="LORENE" data-px="999.99" data-chg="12.4" data-color="#f472b6">
-      <div class="stock-card-head">
-        <div class="stock-card-sym" style="color:#f472b6">LORENE</div>
-        <div class="stock-card-px">$999.99</div>
-      </div>
-      <div class="stock-card-chg up">+12.4%</div>
-      <canvas class="stock-mini"></canvas>
-    </div>
-
-    <div class="stock-card" data-sym="CHAOS" data-px="9.99" data-chg="-0.5" data-color="#fbbf24">
-      <div class="stock-card-head">
-        <div class="stock-card-sym" style="color:#fbbf24">CHAOS</div>
-        <div class="stock-card-px">$9.99</div>
-      </div>
-      <div class="stock-card-chg dn">-0.5%</div>
-      <canvas class="stock-mini"></canvas>
-    </div>
-
-    <div class="stock-card" data-sym="DRIP" data-px="88.00" data-chg="7.4" data-color="#2dd4bf">
-      <div class="stock-card-head">
-        <div class="stock-card-sym" style="color:#2dd4bf">DRIP</div>
-        <div class="stock-card-px">$88.00</div>
-      </div>
-      <div class="stock-card-chg up">+7.4%</div>
-      <canvas class="stock-mini"></canvas>
-    </div>
-
-    <div class="stock-card" data-sym="NOVA" data-px="314.15" data-chg="-2.1" data-color="#60a5fa">
-      <div class="stock-card-head">
-        <div class="stock-card-sym" style="color:#60a5fa">NOVA</div>
-        <div class="stock-card-px">$314.15</div>
-      </div>
-      <div class="stock-card-chg dn">-2.1%</div>
-      <canvas class="stock-mini"></canvas>
-    </div>
-  </div>
-</section>
-
-<section class="fishing-sec" id="fishing">
-  <div class="fish-inner">
-    <div class="sec-label">Fishing system</div>
-    <h2 class="sec-title reveal">Cast, catch, cash out.</h2>
-    <p class="sec-sub reveal">5 rarity tiers, 20+ fish, Fish of the Day, Lucky Rod, and luck boosters. 30-second cooldown, 50 racks per cast.</p>
-
-    <div class="fish-grid reveal">
-      <div class="fish-card common"><span class="fish-emoji">🐟</span><div class="fish-nm">Sardine</div><div class="fish-rar r-common">Common</div><div class="fish-val">+5 racks</div></div>
-      <div class="fish-card common"><span class="fish-emoji">🦀</span><div class="fish-nm">Crab</div><div class="fish-rar r-common">Common</div><div class="fish-val">+8 racks</div></div>
-      <div class="fish-card uncommon"><span class="fish-emoji">🐡</span><div class="fish-nm">Pufferfish</div><div class="fish-rar r-uncommon">Uncommon</div><div class="fish-val">+25 racks</div></div>
-      <div class="fish-card uncommon"><span class="fish-emoji">🐠</span><div class="fish-nm">Clownfish</div><div class="fish-rar r-uncommon">Uncommon</div><div class="fish-val">+35 racks</div></div>
-      <div class="fish-card rare"><span class="fish-emoji">🦑</span><div class="fish-nm">Giant Squid</div><div class="fish-rar r-rare">Rare</div><div class="fish-val">+120 racks</div></div>
-      <div class="fish-card rare"><span class="fish-emoji">🐙</span><div class="fish-nm">Octopus</div><div class="fish-rar r-rare">Rare</div><div class="fish-val">+150 racks</div></div>
-      <div class="fish-card legendary"><span class="fish-emoji">🦈</span><div class="fish-nm">Shark</div><div class="fish-rar r-legendary">Legendary</div><div class="fish-val">+800 racks</div></div>
-      <div class="fish-card mythic"><span class="fish-emoji">🐋</span><div class="fish-nm">Blue Whale</div><div class="fish-rar r-mythic">Mythic</div><div class="fish-val">+2,000 racks</div></div>
-    </div>
-
-    <div class="fish-more reveal">🔒 12+ more fish to discover. Some only surface at certain times...</div>
-
-    <div style="margin-top:2.8rem;">
-      <div class="sec-label" style="text-align:left;margin-bottom:.6rem;">Fishing Luck Boosters</div>
-      <div class="boosters reveal">
-        <div class="booster-card b2">
-          <div class="booster-icon">🎣</div>
-          <div>
-            <div class="booster-title">2× Fishing Luck</div>
-            <div class="booster-desc">Double your Rare+ catch chances for 1 hour.</div>
-            <div class="booster-price">50,000 racks · <code style="font-family:monospace;font-size:.8em;">/fishingluck</code></div>
-          </div>
-        </div>
-        <div class="booster-card b3">
-          <div class="booster-icon">🌟</div>
-          <div>
-            <div class="booster-title">3× Fishing Luck</div>
-            <div class="booster-desc">Triple your Rare+ catch chances for 1 hour.</div>
-            <div class="booster-price">100,000 racks · <code style="font-family:monospace;font-size:.8em;">/fishingluck</code></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="server-sec" id="server">
-  <div class="sec-label">The community</div>
-  <h2 class="sec-title reveal">Shade of Thoughts.</h2>
-  <p class="sec-sub reveal">A server for deep conversations, random thoughts, life discussions, and genuine people. Lorene runs the show here.</p>
-
-  <div class="server-card reveal">
-    <div class="server-banner">
-      <div class="server-banner-text">✦ Shade of Thoughts</div>
-    </div>
-    <div class="server-body">
-      <div class="server-meta">
-        <div>
-          <div class="server-name">Shade of Thoughts</div>
-          <div class="server-handle">discord.gg/MaRtdKbY2n</div>
-        </div>
-        <div class="server-badge">
-          <div style="width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pip 2s infinite;box-shadow:0 0 8px var(--teal);"></div>
-          Active Server
-        </div>
-      </div>
-      <p class="server-desc">A server for deep conversations, random thoughts, life discussions, and genuine people. Economy grinders, fish hunters, stock traders, gamblers — everyone is welcome. Lorene adapts to your vibe and keeps the energy going.</p>
-      <div class="server-stats">
-        <div class="srv-stat"><div class="srv-stat-n" id="serverOnline" style="color:var(--accent2)">--</div><div class="srv-stat-l">Online</div></div>
-        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--teal)">150+</div><div class="srv-stat-l">Total Members</div></div>
-        <div class="srv-stat"><div class="srv-stat-n" style="color:var(--amber)">24/7</div><div class="srv-stat-l">Bot Online</div></div>
-      </div>
-      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main invite-link" style="width:100%;justify-content:center;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Join Shade of Thoughts
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="pages-sec" id="pages">
-  <div class="sec-label">More info</div>
-  <h2 class="sec-title reveal">About &amp; Changelog.</h2>
-  <p class="sec-sub reveal">Learn the story behind Lorene, or see what's been shipping.</p>
-
-  <div class="page-tabs reveal">
-    <button class="page-tab active" data-page="about">About Lorene</button>
-    <button class="page-tab" data-page="changelog">Changelog</button>
-  </div>
-
-  <div class="page-panel active" id="page-about" data-page="about">
-    <div class="about-content reveal">
-      <h3>The bot behind the chaos.</h3>
-      <p>Lorene was built from the ground up specifically for <strong style="color:var(--text);">Shade of Thoughts</strong>. Not a multi-server public bot with generic features — this is a hand-crafted, opinionated, custom-tailored companion designed around how our community actually plays.</p>
-      <p>From the in-house stock tickers named after our in-jokes (SHADE, LORENE, CHAOS, DRIP, NOVA) to the fishing system that has members setting alarms for Fish of the Day — every module exists because someone in the server asked for it, and we built it properly.</p>
-      <p>Lorene runs 24/7 with full AI context memory, live-updating economy, and real-time stock prices. She's not just a bot — she's basically a member.</p>
-
-      <div class="about-grid">
-        <div class="about-stat"><div class="about-stat-n">7</div><div class="about-stat-l">Modules</div></div>
-        <div class="about-stat"><div class="about-stat-n">50+</div><div class="about-stat-l">Commands</div></div>
-        <div class="about-stat"><div class="about-stat-n">99.8%</div><div class="about-stat-l">Uptime</div></div>
-        <div class="about-stat"><div class="about-stat-n">April 28, 2026</div><div class="about-stat-l">Launched</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-panel" id="page-changelog" data-page="changelog">
-    <div class="changelog-list reveal">
-      <div class="changelog-item">
-        <div class="changelog-head">
-          <div class="changelog-ver">v3.2.0</div>
-          <span class="changelog-tag latest">Latest</span>
-          <div class="changelog-date">June 12, 2026</div>
-        </div>
-        <ul class="changelog-list-items">
-          <li>Added Fish of the Day with 3× sell value multiplier</li>
-          <li>New fishing luck boosters (2× and 3×) via /fishingluck</li>
-          <li>Expanded fish roster with 4 new rare+ species</li>
-          <li>Fixed fish inventory sorting for large collections</li>
+    <nav id="mainNav">
+        <a href="#" class="nav-logo">
+            <div class="logo-pip"></div>
+            Lorene
+        </a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#commands">Commands</a></li>
+            <li><a href="#stocks">Stocks</a></li>
+            <li><a href="#fishing">Fishing</a></li>
+            <li><a href="#pages">About</a></li>
         </ul>
-      </div>
+    </nav>
 
-      <div class="changelog-item">
-        <div class="changelog-head">
-          <div class="changelog-ver">v3.1.0</div>
-          <span class="changelog-tag major">Major</span>
-          <div class="changelog-date">May 28, 2026</div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Full command reference
         </div>
-        <ul class="changelog-list-items">
-          <li>Full AI context memory — Lorene now remembers conversations</li>
-          <li>Auto-starter conversations triggered by keywords in chat</li>
-          <li>?aiclear command to reset your AI memory</li>
-          <li>Improved roast quality with new model fine-tuning</li>
-        </ul>
-      </div>
 
-      <div class="changelog-item">
-        <div class="changelog-head">
-          <div class="changelog-ver">v3.0.0</div>
-          <span class="changelog-tag major">Major</span>
-          <div class="changelog-date">May 14, 2026</div>
+        <h1>Meet <span class="grad">Lorene.</span><br />Your complete<br />bot reference.</h1>
+
+        <p class="hero-sub">Economy, fishing, AI, stocks, gambling, hype, and fun — every command documented in one place. Built for Discord, built to last.</p>
+
+        <div class="hero-btns">
+            <a href="#commands" class="btn-main">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Browse Commands
+            </a>
+            <a href="#features" class="btn-ghost">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Explore Features
+            </a>
         </div>
-        <ul class="changelog-list-items">
-          <li>🎉 Stock market module launched with 5 companies</li>
-          <li>/buystock, /sellstock, /portfolio slash commands</li>
-          <li>Live price updates every 5 minutes with volatility engine</li>
-          <li>Stock ticker embed in daily recap messages</li>
-        </ul>
-      </div>
 
-      <div class="changelog-item">
-        <div class="changelog-head">
-          <div class="changelog-ver">v2.8.4</div>
-          <span class="changelog-tag fix">Fix</span>
-          <div class="changelog-date">May 2, 2026</div>
+        <div class="hero-facts">
+            <div class="fact"><div class="fact-n" style="color:var(--accent2)">7</div><div class="fact-l">Modules</div></div>
+            <div class="fact"><div class="fact-n" style="color:var(--pink)">50+</div><div class="fact-l">Commands</div></div>
+            <div class="fact"><div class="fact-n" style="color:var(--teal)">24/7</div><div class="fact-l">Available</div></div>
+            <div class="fact"><div class="fact-n" style="color:var(--amber)">∞</div><div class="fact-l">Chaos</div></div>
         </div>
-        <ul class="changelog-list-items">
-          <li>Fixed heist timer desync on server restart</li>
-          <li>Rob cooldown now properly respects timezone changes</li>
-          <li>Prevented duplicate daily claims via API race condition</li>
-          <li>Memory optimization — reduced RAM usage by 34%</li>
-        </ul>
-      </div>
+    </section>
 
-      <div class="changelog-item">
-        <div class="changelog-head">
-          <div class="changelog-ver">v2.8.0</div>
-          <span class="changelog-tag major">Major</span>
-          <div class="changelog-date">April 18, 2026</div>
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="sec-label">What Lorene does</div>
+        <h2 class="sec-title reveal">Everything in one bot.</h2>
+        <p class="sec-sub reveal">Seven modules, all running 24/7 — each packed with commands and depth.</p>
+
+        <div class="feat-grid">
+            <div class="feat-card reveal" style="--ca:#7c6af7;">
+                <div class="feat-icon" style="background:rgba(124,106,247,.14);">🤖</div>
+                <div class="feat-title">AI Chat</div>
+                <div class="feat-desc">Talk to Lorene with <code style="font-family:monospace;font-size:.85em;color:var(--accent2);">?ai</code>, mention her directly, or let auto-starters keep the conversation going. Full context memory per conversation.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">?ai</span>
+                    <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">?aiclear</span>
+                    <span class="tag" style="background:rgba(124,106,247,.12);color:#a78bfa;">@mention</span>
+                </div>
+            </div>
+
+            <div class="feat-card reveal" style="--ca:#34d399;">
+                <div class="feat-icon" style="background:rgba(52,211,153,.12);">🎣</div>
+                <div class="feat-title">Fishing</div>
+                <div class="feat-desc">Cast your rod for 50 racks, reel in fish across 5 rarity tiers. Fish of the Day gives 3× sell value. Buy luck boosters to catch rarer fish more often.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?fs</span>
+                    <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?fi</span>
+                    <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">?sell</span>
+                    <span class="tag" style="background:rgba(52,211,153,.12);color:#34d399;">/fishingluck</span>
+                </div>
+            </div>
+
+            <div class="feat-card wide reveal" style="--ca:#fbbf24;">
+                <div class="feat-icon" style="background:rgba(251,191,36,.12);">💰</div>
+                <div class="feat-title">Economy — Racks</div>
+                <div class="feat-desc">Full server economy built around racks. Earn passively by chatting, claim daily bonuses, rob other members, run heists, buy items from the shop, or blow it all on slots. Check the leaderboard to see who's running the show.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?racks</span>
+                    <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?daily</span>
+                    <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?rob</span>
+                    <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?heist</span>
+                    <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">?lb</span>
+                    <span class="tag" style="background:rgba(251,191,36,.12);color:#fbbf24;">/shop</span>
+                </div>
+            </div>
+
+            <div class="feat-card reveal" style="--ca:#60a5fa;">
+                <div class="feat-icon" style="background:rgba(96,165,250,.12);">📈</div>
+                <div class="feat-title">Fake Stock Market</div>
+                <div class="feat-desc">5 in-server companies (SHADE, LORENE, CHAOS, DRIP, NOVA). Prices fluctuate live. Buy low, sell high, flex your portfolio.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">?st</span>
+                    <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/buystock</span>
+                    <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/sellstock</span>
+                    <span class="tag" style="background:rgba(96,165,250,.12);color:#60a5fa;">/portfolio</span>
+                </div>
+            </div>
+
+            <div class="feat-card reveal" style="--ca:#f472b6;">
+                <div class="feat-icon" style="background:rgba(244,114,182,.12);">🔥</div>
+                <div class="feat-title">Hype System</div>
+                <div class="feat-desc">Give or take hype from members. Use HypeNuke to blast ±10 hype for 1,000 racks. Flex your hype score on the server.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">+hype</span>
+                    <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">-hype</span>
+                    <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">?hype</span>
+                    <span class="tag" style="background:rgba(244,114,182,.12);color:#f472b6;">/hypenuke</span>
+                </div>
+            </div>
+
+            <div class="feat-card reveal" style="--ca:#a78bfa;">
+                <div class="feat-icon" style="background:rgba(167,139,250,.12);">🎰</div>
+                <div class="feat-title">Gambling</div>
+                <div class="feat-desc">Coinflip, slots, dice — risk your racks for a chance to double up. Classic server degenerate activity, no judgment.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?cf</span>
+                    <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?slots</span>
+                    <span class="tag" style="background:rgba(167,139,250,.12);color:#a78bfa;">?dice</span>
+                </div>
+            </div>
+
+            <div class="feat-card reveal" style="--ca:#2dd4bf;">
+                <div class="feat-icon" style="background:rgba(45,212,191,.12);">🧠</div>
+                <div class="feat-title">Trivia &amp; Fun</div>
+                <div class="feat-desc">Trivia, roasts, facts, jokes, would-you-rather, aura tracking — all the tools needed to keep chat alive and chaotic.</div>
+                <div class="feat-tags">
+                    <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?trivia</span>
+                    <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?roast</span>
+                    <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?fact</span>
+                    <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?wyr</span>
+                    <span class="tag" style="background:rgba(45,212,191,.12);color:#2dd4bf;">?aura</span>
+                </div>
+            </div>
         </div>
-        <ul class="changelog-list-items">
-          <li>HypeNuke command — blast ±10 hype for 1,000 racks</li>
-          <li>Aura tracking system with ?aura leaderboard</li>
-          <li>Would-you-rather (?wyr) with community voting</li>
-          <li>Improved command help embeds with examples</li>
-        </ul>
-      </div>
+    </section>
 
-      <div class="changelog-item">
-        <div class="changelog-head">
-          <div class="changelog-ver">v2.5.0</div>
-          <div class="changelog-date">March 22, 2026</div>
+    <!-- Commands -->
+    <section class="commands-sec" id="commands">
+        <div class="cmd-wrap">
+            <div class="sec-label">Command reference</div>
+            <h2 class="sec-title reveal">Every command, right here.</h2>
+            <p class="sec-sub reveal">Prefix commands use <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:.88em;color:var(--accent2);">?</code> — slash commands use <code style="background:var(--card);padding:2px 7px;border-radius:6px;font-family:monospace;font-size:.88em;color:var(--accent2);">/</code></p>
+
+            <div class="cmd-search reveal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="cmdSearch" placeholder="Search commands... (e.g., fishing, racks, ai)" autocomplete="off" />
+            </div>
+
+            <div class="cmd-tabs reveal" id="cmdTabs">
+                <button class="cmd-tab active" data-tab="economy">💰 Economy</button>
+                <button class="cmd-tab" data-tab="fishing">🎣 Fishing</button>
+                <button class="cmd-tab" data-tab="gambling">🎰 Gambling</button>
+                <button class="cmd-tab" data-tab="stocks">📈 Stocks</button>
+                <button class="cmd-tab" data-tab="hype">🔥 Hype</button>
+                <button class="cmd-tab" data-tab="fun">🧠 Fun</button>
+                <button class="cmd-tab" data-tab="slash">⚡ Slash</button>
+            </div>
+
+            <div class="cmd-panel active" id="panel-economy" data-panel="economy">
+                <div class="cmd-item" data-cmd="?racks"><div class="cmd-ico">💸</div><div><div class="cmd-name"><code>?racks</code></div><div class="cmd-desc">Check your balance</div></div></div>
+                <div class="cmd-item" data-cmd="?daily"><div class="cmd-ico">📅</div><div><div class="cmd-name"><code>?daily</code></div><div class="cmd-desc">Claim daily racks</div></div></div>
+                <div class="cmd-item" data-cmd="?share"><div class="cmd-ico">🤝</div><div><div class="cmd-name"><code>?share</code></div><div class="cmd-desc">Send racks to someone</div></div></div>
+                <div class="cmd-item" data-cmd="?lb"><div class="cmd-ico">🏆</div><div><div class="cmd-name"><code>?lb</code></div><div class="cmd-desc">Richest members board</div></div></div>
+                <div class="cmd-item" data-cmd="?rob @user"><div class="cmd-ico">🦹</div><div><div class="cmd-name"><code>?rob @user</code></div><div class="cmd-desc">Steal racks from someone</div></div></div>
+                <div class="cmd-item" data-cmd="?heist"><div class="cmd-ico">💣</div><div><div class="cmd-name"><code>?heist</code></div><div class="cmd-desc">Start a group heist</div></div></div>
+                <div class="cmd-item" data-cmd="?join"><div class="cmd-ico">🤜</div><div><div class="cmd-name"><code>?join</code></div><div class="cmd-desc">Join an active heist</div></div></div>
+                <div class="cmd-item" data-cmd="?crate"><div class="cmd-ico">📦</div><div><div class="cmd-name"><code>?crate</code></div><div class="cmd-desc">Open a mystery crate</div></div></div>
+            </div>
+
+            <div class="cmd-panel" id="panel-fishing" data-panel="fishing">
+                <div class="cmd-item" data-cmd="?fs"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>?fs</code> / <code>?fishing</code></div><div class="cmd-desc">Cast your rod (50 racks)</div></div></div>
+                <div class="cmd-item" data-cmd="?fi"><div class="cmd-ico">🪣</div><div><div class="cmd-name"><code>?fi</code> / <code>?fishinv</code></div><div class="cmd-desc">View your fish bucket</div></div></div>
+                <div class="cmd-item" data-cmd="?sell all"><div class="cmd-ico">💲</div><div><div class="cmd-name"><code>?sell all</code></div><div class="cmd-desc">Sell all fish instantly</div></div></div>
+                <div class="cmd-item" data-cmd="?sell fish"><div class="cmd-ico">🐟</div><div><div class="cmd-name"><code>?sell fish</code></div><div class="cmd-desc">Sell specific fish / rarity</div></div></div>
+                <div class="cmd-item" data-cmd="?fishstats"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?fishstats</code></div><div class="cmd-desc">Your fishing stats</div></div></div>
+                <div class="cmd-item" data-cmd="?flb"><div class="cmd-ico">🏅</div><div><div class="cmd-name"><code>?flb</code></div><div class="cmd-desc">Fishing leaderboard</div></div></div>
+                <div class="cmd-item" data-cmd="?fotd"><div class="cmd-ico">🌅</div><div><div class="cmd-name"><code>?fotd</code></div><div class="cmd-desc">Fish of the Day (3× value)</div></div></div>
+                <div class="cmd-item" data-cmd="?share fish"><div class="cmd-ico">🤲</div><div><div class="cmd-name"><code>?share fish</code></div><div class="cmd-desc">Give fish to someone</div></div></div>
+            </div>
+
+            <div class="cmd-panel" id="panel-gambling" data-panel="gambling">
+                <div class="cmd-item" data-cmd="?cf"><div class="cmd-ico">🪙</div><div><div class="cmd-name"><code>?cf &lt;amt&gt;</code></div><div class="cmd-desc">Coinflip heads or tails</div></div></div>
+                <div class="cmd-item" data-cmd="?slots"><div class="cmd-ico">🎰</div><div><div class="cmd-name"><code>?slots &lt;amt&gt;</code></div><div class="cmd-desc">Spin the slot machine</div></div></div>
+                <div class="cmd-item" data-cmd="?dice"><div class="cmd-ico">🎲</div><div><div class="cmd-name"><code>?dice &lt;amt&gt;</code></div><div class="cmd-desc">Roll the dice</div></div></div>
+            </div>
+
+            <div class="cmd-panel" id="panel-stocks" data-panel="stocks">
+                <div class="cmd-item" data-cmd="?st"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>?st</code> / <code>?stocks</code></div><div class="cmd-desc">View live stock prices</div></div></div>
+                <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy shares of a company</div></div></div>
+                <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">💹</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell your shares</div></div></div>
+                <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View your P&amp;L</div></div></div>
+            </div>
+
+            <div class="cmd-panel" id="panel-hype" data-panel="hype">
+                <div class="cmd-item" data-cmd="+hype @user"><div class="cmd-ico">⬆️</div><div><div class="cmd-name"><code>+hype @user</code></div><div class="cmd-desc">Give someone hype</div></div></div>
+                <div class="cmd-item" data-cmd="-hype @user"><div class="cmd-ico">⬇️</div><div><div class="cmd-name"><code>-hype @user</code></div><div class="cmd-desc">Take someone's hype</div></div></div>
+                <div class="cmd-item" data-cmd="?hype"><div class="cmd-ico">📊</div><div><div class="cmd-name"><code>?hype</code></div><div class="cmd-desc">Check your hype score</div></div></div>
+                <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">±10 hype nuke (1,000 racks)</div></div></div>
+            </div>
+
+            <div class="cmd-panel" id="panel-fun" data-panel="fun">
+                <div class="cmd-item" data-cmd="?trivia"><div class="cmd-ico">🧠</div><div><div class="cmd-name"><code>?trivia</code></div><div class="cmd-desc">Answer trivia questions</div></div></div>
+                <div class="cmd-item" data-cmd="?roast @user"><div class="cmd-ico">🔥</div><div><div class="cmd-name"><code>?roast @user</code></div><div class="cmd-desc">AI roast someone</div></div></div>
+                <div class="cmd-item" data-cmd="?fact"><div class="cmd-ico">💡</div><div><div class="cmd-name"><code>?fact</code></div><div class="cmd-desc">Random interesting fact</div></div></div>
+                <div class="cmd-item" data-cmd="?joke"><div class="cmd-ico">😂</div><div><div class="cmd-name"><code>?joke</code></div><div class="cmd-desc">Get a random joke</div></div></div>
+                <div class="cmd-item" data-cmd="?wyr"><div class="cmd-ico">🤔</div><div><div class="cmd-name"><code>?wyr</code></div><div class="cmd-desc">Would you rather</div></div></div>
+                <div class="cmd-item" data-cmd="?aura"><div class="cmd-ico">✨</div><div><div class="cmd-name"><code>?aura</code></div><div class="cmd-desc">Check your aura score</div></div></div>
+                <div class="cmd-item" data-cmd="?quote"><div class="cmd-ico">💬</div><div><div class="cmd-name"><code>?quote</code></div><div class="cmd-desc">Inspirational quote</div></div></div>
+                <div class="cmd-item" data-cmd="?ai"><div class="cmd-ico">🤖</div><div><div class="cmd-name"><code>?ai &lt;msg&gt;</code></div><div class="cmd-desc">Chat with Lorene AI</div></div></div>
+            </div>
+
+            <div class="cmd-panel" id="panel-slash" data-panel="slash">
+                <div class="cmd-item" data-cmd="/shop"><div class="cmd-ico">🛍️</div><div><div class="cmd-name"><code>/shop</code></div><div class="cmd-desc">Browse the item shop</div></div></div>
+                <div class="cmd-item" data-cmd="/buy"><div class="cmd-ico">🛒</div><div><div class="cmd-name"><code>/buy</code></div><div class="cmd-desc">Purchase a shop item</div></div></div>
+                <div class="cmd-item" data-cmd="/inventory"><div class="cmd-ico">🎒</div><div><div class="cmd-name"><code>/inventory</code></div><div class="cmd-desc">View your items</div></div></div>
+                <div class="cmd-item" data-cmd="/use"><div class="cmd-ico">⚡</div><div><div class="cmd-name"><code>/use</code></div><div class="cmd-desc">Use an inventory item</div></div></div>
+                <div class="cmd-item" data-cmd="/fishingluck"><div class="cmd-ico">🎣</div><div><div class="cmd-name"><code>/fishingluck</code></div><div class="cmd-desc">Buy 2× or 3× luck boost</div></div></div>
+                <div class="cmd-item" data-cmd="/hypenuke"><div class="cmd-ico">💥</div><div><div class="cmd-name"><code>/hypenuke</code></div><div class="cmd-desc">Nuke someone's hype</div></div></div>
+                <div class="cmd-item" data-cmd="/buystock"><div class="cmd-ico">📈</div><div><div class="cmd-name"><code>/buystock</code></div><div class="cmd-desc">Buy company shares</div></div></div>
+                <div class="cmd-item" data-cmd="/sellstock"><div class="cmd-ico">📉</div><div><div class="cmd-name"><code>/sellstock</code></div><div class="cmd-desc">Sell company shares</div></div></div>
+                <div class="cmd-item" data-cmd="/portfolio"><div class="cmd-ico">🧳</div><div><div class="cmd-name"><code>/portfolio</code></div><div class="cmd-desc">View stock P&amp;L</div></div></div>
+                <div class="cmd-item" data-cmd="/help"><div class="cmd-ico">📖</div><div><div class="cmd-name"><code>/help</code></div><div class="cmd-desc">Full command list</div></div></div>
+            </div>
         </div>
-        <ul class="changelog-list-items">
-          <li>Initial fishing module release with 5 rarity tiers</li>
-          <li>Fish bucket inventory and sell commands</li>
-          <li>Fishing leaderboard (?flb) with weekly reset</li>
-          <li>30-second cast cooldown to prevent spam</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="invite-sec" id="invite">
-  <div class="invite-box reveal">
-    <div style="font-size:3rem;margin-bottom:1rem;">🫂</div>
-    <h2>Come hang in<br><span class="grad">Shade of Thoughts.</span></h2>
-    <p>Lorene's waiting. The racks won't earn themselves.</p>
-    <div style="display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;">
-      <a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="btn-main invite-link">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Join the Server
-      </a>
-      <a href="#commands" class="btn-ghost">View Commands</a>
-    </div>
-    <p style="margin-top:1.4rem;font-size:.75rem;color:var(--faint);">Free to join · Lorene is exclusive to this server</p>
-  </div>
-</section>
-
-<footer>
-  <div class="foot-inner">
-    <div class="foot-logo">✦ Lorene</div>
-    <ul class="foot-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#showcase">Screenshots</a></li>
-      <li><a href="#commands">Commands</a></li>
-      <li><a href="#stocks">Stocks</a></li>
-      <li><a href="#fishing">Fishing</a></li>
-      <li><a href="#pages">About</a></li>
-      <li><a href="https://discord.gg/MaRtdKbY2n" target="_blank" rel="noopener" class="invite-link">Join Server</a></li>
-    </ul>
-  </div>
-  <p class="foot-copy">Lorene is a private bot built for Shade of Thoughts · Not available for other servers · © 2026</p>
-</footer>
-
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
-  <img id="lightboxImg" src="" alt="">
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-(() => {
-  'use strict';
-
-  const $ = (s, c = document) => c.querySelector(s);
-  const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
-
-  const GUILD_ID = '1483179549750464652';
-  const WIDGET_URL = `https://discord.com/api/guilds/${GUILD_ID}/widget.json`;
-  const FALLBACK_INVITE = 'https://discord.gg/MaRtdKbY2n';
-  let liveInvite = FALLBACK_INVITE;
-
-  function showToast(message, icon = '✓') {
-    const toast = $('#toast');
-    toast.innerHTML = `<span style="color:var(--teal)">${icon}</span> ${message}`;
-    toast.classList.add('show');
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.classList.remove('show'), 2200);
-  }
-
-  async function fetchWidget() {
-    try {
-      const res = await fetch(WIDGET_URL, { signal: AbortSignal.timeout(5000) });
-      if (!res.ok) throw new Error('widget error');
-      const data = await res.json();
-      const online = data.presence_count || 0;
-      document.getElementById('onlineCountHero').textContent = online;
-      document.getElementById('serverOnline').textContent = online;
-
-      if (data.instant_invite) {
-        liveInvite = data.instant_invite;
-      }
-    } catch (e) {
-      document.getElementById('onlineCountHero').textContent = '--';
-      document.getElementById('serverOnline').textContent = '--';
-    }
-    $$('.invite-link').forEach(el => el.href = liveInvite);
-  }
-
-  const statusBar = $('#statusBar');
-  const sLabel = $('#sLabel');
-  const sUptime = $('#sUptime');
-  const sPing = $('#sPing');
-  function fmtUptime(s) {
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    if (d > 0) return d + 'd ' + h + 'h';
-    if (h > 0) return h + 'h ' + m + 'm';
-    return m + 'm';
-  }
-  async function fetchStatus() {
-    if (!statusBar) return;
-    try {
-      const res = await fetch('/api/status', { signal: AbortSignal.timeout(4000) });
-      if (!res.ok) throw new Error('API error');
-      const data = await res.json();
-      statusBar.classList.remove('loading', 'online', 'offline');
-      if (data.status === 'online') {
-        statusBar.classList.add('online');
-        sLabel.textContent = 'Online';
-        sUptime.textContent = fmtUptime(data.uptime);
-        sPing.textContent = data.ping + 'ms';
-      } else throw new Error('Offline');
-    } catch (err) {
-      statusBar.classList.remove('loading');
-      statusBar.classList.add('offline');
-      sLabel.textContent = 'Offline';
-      sUptime.textContent = '--';
-      sPing.textContent = '--';
-    }
-  }
-
-  fetchWidget();
-  fetchStatus();
-  setInterval(fetchWidget, 60000);
-  setInterval(fetchStatus, 30000);
-
-  window.addEventListener('load', () => document.body.classList.add('loaded'));
-
-  const mobileToggle = $('#mobileToggle');
-  const navLinks = $('#navLinks');
-  mobileToggle?.addEventListener('click', () => {
-    mobileToggle.classList.toggle('active');
-    navLinks.classList.toggle('active');
-  });
-  $$('a', navLinks).forEach(link => {
-    link.addEventListener('click', () => {
-      mobileToggle.classList.remove('active');
-      navLinks.classList.remove('active');
-    });
-  });
-
-  const nav = $('#mainNav');
-  let scrollTicking = false;
-  window.addEventListener('scroll', () => {
-    if (!scrollTicking) {
-      requestAnimationFrame(() => {
-        if (window.scrollY > 50) nav.classList.add('scrolled');
-        else nav.classList.remove('scrolled');
-        scrollTicking = false;
-      });
-      scrollTicking = true;
-    }
-  }, { passive: true });
-
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 40);
-        revealObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  $$('.reveal').forEach(el => revealObs.observe(el));
-
-  const cmdTabs = $$('.cmd-tab');
-  const cmdPanels = $$('.cmd-panel');
-  const cmdSearch = $('#cmdSearch');
-
-  function switchTab(id) {
-    cmdPanels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
-    cmdTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
-  }
-
-  cmdTabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      switchTab(btn.dataset.tab);
-      if (cmdSearch) cmdSearch.value = '';
-      filterCommands('');
-    });
-  });
-
-  $('#cmdTabs').addEventListener('keydown', (e) => {
-    const cur = e.target;
-    if (!cur.classList.contains('cmd-tab')) return;
-    const idx = cmdTabs.indexOf(cur);
-    let next = -1;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (idx + 1) % cmdTabs.length;
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (idx - 1 + cmdTabs.length) % cmdTabs.length;
-    if (next >= 0) {
-      e.preventDefault();
-      cmdTabs[next].focus();
-      cmdTabs[next].click();
-    }
-  });
-
-  $$('.cmd-item').forEach(item => {
-    item.addEventListener('click', async () => {
-      const cmd = item.dataset.cmd;
-      if (!cmd) return;
-      try {
-        await navigator.clipboard.writeText(cmd);
-        item.classList.add('copied');
-        showToast(`Copied: ${cmd}`, '📋');
-        setTimeout(() => item.classList.remove('copied'), 600);
-      } catch (err) {
-        showToast('Copy failed', '✕');
-      }
-    });
-  });
-
-  function filterCommands(query) {
-    const q = query.toLowerCase().trim();
-    let visibleCount = 0;
-    $$('.no-results').forEach(n => n.remove());
-
-    cmdPanels.forEach(panel => {
-      const items = $$('.cmd-item', panel);
-      let panelVisible = 0;
-      items.forEach(it => {
-        const cmd = (it.dataset.cmd || '').toLowerCase();
-        const desc = (it.querySelector('.cmd-desc')?.textContent || '').toLowerCase();
-        const match = !q || cmd.includes(q) || desc.includes(q);
-        it.style.display = match ? '' : 'none';
-        if (match) panelVisible++;
-      });
-
-      if (q) {
-        if (panelVisible > 0) {
-          panel.style.display = 'grid';
-          panel.classList.add('active');
-          visibleCount += panelVisible;
-        } else {
-          panel.style.display = 'none';
-          panel.classList.remove('active');
-        }
-      } else {
-        panel.style.display = '';
-      }
-    });
-
-    if (q && visibleCount === 0) {
-      const firstActive = cmdPanels.find(p => p.classList.contains('active')) || cmdPanels[0];
-      const noRes = document.createElement('div');
-      noRes.className = 'no-results';
-      noRes.textContent = `No commands match "${query}"`;
-      firstActive.style.display = 'grid';
-      firstActive.classList.add('active');
-      firstActive.appendChild(noRes);
-    }
-
-    if (q) {
-      cmdTabs.forEach(t => t.classList.remove('active'));
-    } else {
-      const activePanel = cmdPanels.find(p => p.classList.contains('active'));
-      if (activePanel) {
-        cmdTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === activePanel.dataset.panel));
-      }
-    }
-  }
-
-  cmdSearch?.addEventListener('input', (e) => filterCommands(e.target.value));
-  cmdSearch?.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      cmdSearch.value = '';
-      filterCommands('');
-      cmdSearch.blur();
-    }
-  });
-
-  // Stock Chart
-  const stockData = {
-    SHADE:  { base: 142.50, color: '#7c6af7', chg: 3.2 },
-    LORENE: { base: 999.99, color: '#f472b6', chg: 12.4 },
-    CHAOS:  { base: 9.99,   color: '#fbbf24', chg: -0.5 },
-    DRIP:   { base: 88.00,  color: '#2dd4bf', chg: 7.4 },
-    NOVA:   { base: 314.15, color: '#60a5fa', chg: -2.1 }
-  };
-
-  function genSeries(base, points, volatility = 0.08) {
-    const arr = [base * (1 - volatility / 2)];
-    for (let i = 1; i < points; i++) {
-      const drift = (base - arr[i - 1]) * 0.04;
-      const noise = (Math.random() - 0.5) * base * volatility;
-      arr.push(Math.max(0.5, arr[i - 1] + drift + noise));
-    }
-    arr[arr.length - 1] = base;
-    return arr;
-  }
-
-  const chartCanvas = $('#stockCanvas');
-  const chartCtx = chartCanvas?.getContext('2d');
-  const chartSym = $('#chartSym');
-  const chartPrice = $('#chartPrice');
-  const chartChg = $('#chartChg');
-  let currentSym = 'SHADE';
-  let currentRange = 24;
-  let chartSeries = {};
-
-  function buildChartSeries() {
-    const points = { 24: 48, 7: 56, 30: 90 }[currentRange] || 48;
-    Object.keys(stockData).forEach(sym => {
-      chartSeries[sym + '_' + currentRange] = genSeries(stockData[sym].base, points, 0.12);
-    });
-  }
-  buildChartSeries();
-
-  function resizeCanvas(canvas) {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    const ctx = canvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function drawMainChart(progress = 1) {
-    if (!chartCanvas) return;
-    resizeCanvas(chartCanvas);
-    const ctx = chartCtx;
-    const w = chartCanvas.clientWidth;
-    const h = chartCanvas.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-
-    const series = chartSeries[currentSym + '_' + currentRange];
-    if (!series) return;
-
-    const visible = Math.floor(series.length * progress);
-    const data = series.slice(0, visible);
-    if (data.length < 2) return;
-
-    const min = Math.min(...series) * 0.96;
-    const max = Math.max(...series) * 1.04;
-    const pad = { l: 10, r: 10, t: 20, b: 30 };
-    const cw = w - pad.l - pad.r;
-    const ch = h - pad.t - pad.b;
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) {
-      const y = pad.t + (ch / 4) * i;
-      ctx.beginPath();
-      ctx.moveTo(pad.l, y);
-      ctx.lineTo(w - pad.r, y);
-      ctx.stroke();
-
-      const val = max - ((max - min) / 4) * i;
-      ctx.fillStyle = 'rgba(126,124,154,0.6)';
-      ctx.font = '10px "DM Sans", sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('$' + val.toFixed(2), pad.l, y - 4);
-    }
-
-    const color = stockData[currentSym].color;
-    const getX = (i) => pad.l + (cw / (series.length - 1)) * i;
-    const getY = (v) => pad.t + ch - ((v - min) / (max - min)) * ch;
-
-    const grad = ctx.createLinearGradient(0, pad.t, 0, h);
-    grad.addColorStop(0, color + '40');
-    grad.addColorStop(1, color + '00');
-
-    ctx.beginPath();
-    ctx.moveTo(getX(0), getY(data[0]));
-    for (let i = 1; i < data.length; i++) {
-      const cx = (getX(i - 1) + getX(i)) / 2;
-      ctx.quadraticCurveTo(getX(i - 1), getY(data[i - 1]), cx, (getY(data[i - 1]) + getY(data[i])) / 2);
-    }
-    ctx.lineTo(getX(data.length - 1), getY(data[data.length - 1]));
-    ctx.lineTo(getX(data.length - 1), h - pad.b);
-    ctx.lineTo(getX(0), h - pad.b);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(getX(0), getY(data[0]));
-    for (let i = 1; i < data.length; i++) {
-      const cx = (getX(i - 1) + getX(i)) / 2;
-      ctx.quadraticCurveTo(getX(i - 1), getY(data[i - 1]), cx, (getY(data[i - 1]) + getY(data[i])) / 2);
-    }
-    ctx.lineTo(getX(data.length - 1), getY(data[data.length - 1]));
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-
-    const lastX = getX(data.length - 1);
-    const lastY = getY(data[data.length - 1]);
-    ctx.beginPath();
-    ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(lastX, lastY, 8, 0, Math.PI * 2);
-    ctx.fillStyle = color + '40';
-    ctx.fill();
-  }
-
-  function animateChart() {
-    let p = 0;
-    const start = performance.now();
-    const dur = 900;
-    const step = (now) => {
-      p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      drawMainChart(eased);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-
-  function selectStock(sym) {
-    currentSym = sym;
-    const d = stockData[sym];
-    chartSym.textContent = sym;
-    chartPrice.textContent = '$' + d.base.toFixed(2);
-    chartPrice.style.color = d.color;
-    chartChg.textContent = (d.chg >= 0 ? '+' : '') + d.chg.toFixed(1) + '%';
-    chartChg.className = 'stock-change ' + (d.chg >= 0 ? 'up' : 'dn');
-
-    $$('.stock-card').forEach(c => c.classList.toggle('active', c.dataset.sym === sym));
-    animateChart();
-  }
-
-  $$('.stock-card').forEach(card => {
-    card.addEventListener('click', () => selectStock(card.dataset.sym));
-  });
-
-  $$('#stockRange button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $$('#stockRange button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentRange = parseInt(btn.dataset.range, 10);
-      buildChartSeries();
-      animateChart();
-    });
-  });
-
-  function drawMini(canvas, color, seed) {
-    resizeCanvas(canvas);
-    const ctx = canvas.getContext('2d');
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-
-    const pts = 20;
-    const arr = [];
-    let v = 50;
-    for (let i = 0; i < pts; i++) {
-      v += (Math.sin(seed + i * 0.7) + (Math.random() - 0.5)) * 8;
-      arr.push(v);
-    }
-    const min = Math.min(...arr);
-    const max = Math.max(...arr);
-    const range = max - min || 1;
-
-    ctx.beginPath();
-    arr.forEach((val, i) => {
-      const x = (w / (pts - 1)) * i;
-      const y = h - ((val - min) / range) * h * 0.8 - h * 0.1;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.lineTo(w, h);
-    ctx.lineTo(0, h);
-    ctx.closePath();
-    const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, color + '50');
-    grad.addColorStop(1, color + '00');
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    ctx.beginPath();
-    arr.forEach((val, i) => {
-      const x = (w / (pts - 1)) * i;
-      const y = h - ((val - min) / range) * h * 0.8 - h * 0.1;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1.8;
-    ctx.stroke();
-  }
-
-  const miniObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const card = e.target;
-        const mini = card.querySelector('.stock-mini');
-        if (mini) drawMini(mini, card.dataset.color, card.dataset.sym.charCodeAt(0));
-        miniObs.unobserve(card);
-      }
-    });
-  }, { threshold: 0.2 });
-  $$('.stock-card').forEach(c => miniObs.observe(c));
-
-  const chartObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        animateChart();
-        chartObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  if (chartCanvas) chartObs.observe(chartCanvas);
-
-  window.addEventListener('resize', debounce(() => {
-    drawMainChart(1);
-    $$('.stock-card').forEach(c => {
-      const mini = c.querySelector('.stock-mini');
-      if (mini) drawMini(mini, c.dataset.color, c.dataset.sym.charCodeAt(0));
-    });
-  }, 150));
-
-  setInterval(() => {
-    Object.keys(stockData).forEach(sym => {
-      const d = stockData[sym];
-      const delta = (Math.random() - 0.5) * d.base * 0.015;
-      d.base = Math.max(1, d.base + delta);
-      d.chg += (Math.random() - 0.5) * 0.3;
-    });
-    const d = stockData[currentSym];
-    chartPrice.textContent = '$' + d.base.toFixed(2);
-    chartChg.textContent = (d.chg >= 0 ? '+' : '') + d.chg.toFixed(1) + '%';
-    chartChg.className = 'stock-change ' + (d.chg >= 0 ? 'up' : 'dn');
-
-    $$('.stock-card').forEach(c => {
-      const sym = c.dataset.sym;
-      const sd = stockData[sym];
-      const px = c.querySelector('.stock-card-px');
-      const chg = c.querySelector('.stock-card-chg');
-      if (px) px.textContent = '$' + sd.base.toFixed(2);
-      if (chg) {
-        chg.textContent = (sd.chg >= 0 ? '+' : '') + sd.chg.toFixed(1) + '%';
-        chg.className = 'stock-card-chg ' + (sd.chg >= 0 ? 'up' : 'dn');
-      }
-      c.dataset.px = sd.base.toFixed(2);
-      c.dataset.chg = sd.chg.toFixed(1);
-    });
-  }, 4000);
-
-  $$('.page-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const id = tab.dataset.page;
-      $$('.page-tab').forEach(t => t.classList.toggle('active', t.dataset.page === id));
-      $$('.page-panel').forEach(p => p.classList.toggle('active', p.dataset.page === id));
-    });
-  });
-
-  const lightbox = $('#lightbox');
-  const lightboxImg = $('#lightboxImg');
-  const lightboxClose = $('#lightboxClose');
-
-  $$('.showcase-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const src = card.dataset.img;
-      if (!src) return;
-      lightboxImg.src = src;
-      lightbox.classList.add('active');
-    });
-  });
-
-  function closeLightbox() {
-    lightbox.classList.remove('active');
-    setTimeout(() => { lightboxImg.src = ''; }, 300);
-  }
-  lightboxClose?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
-  });
-
-  $$('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      if (!href || href === '#') return;
-      const target = $(href);
-      if (target) {
-        e.preventDefault();
-        const offset = 80;
-        const top = target.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
-    });
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement !== cmdSearch && !e.ctrlKey && !e.metaKey) {
-      const active = document.activeElement;
-      if (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable) return;
-      e.preventDefault();
-      cmdSearch?.focus();
-      $('#commands')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
-
-  function debounce(fn, wait) {
-    let t;
-    return (...args) => { clearTimeout(t); t = setTimeout(() => fn.apply(null, args), wait); };
-  }
-
-  console.log('🎣 Lorene — clean & live ✦');
-})();
-</script>
+    </section>
+
+    <!-- Stocks -->
+    <section class="stocks-sec" id="stocks">
+        <div class="sec-label">Fake Stock Market</div>
+        <h2 class="sec-title reveal">Trade the chaos.</h2>
+        <p class="sec-sub reveal">5 in-server companies with live-fluctuating prices. Click a company to view its chart.</p>
+
+        <div class="stocks-grid reveal">
+            <div class="stock-chart-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-symbol" id="chartSym">SHADE</div>
+                        <div>
+                            <span class="stock-price" id="chartPrice">142.50</span>
+                            <span class="stock-change up" id="chartChg">+3.2%</span>
+                        </div>
+                    </div>
+                    <div class="stock-range" id="stockRange">
+                        <button data-range="24" class="active">24H</button>
+                        <button data-range="7">7D</button>
+                        <button data-range="30">30D</button>
+                    </div>
+                </div>
+                <canvas id="stockCanvas"></canvas>
+            </div>
+
+            <div class="stock-card active" data-sym="SHADE" data-px="142.50" data-chg="3.2" data-color="#7c6af7">
+                <div class="stock-card-head">
+                    <div class="stock-card-sym" style="color:#7c6af7">SHADE</div>
+                    <div class="stock-card-px">$142.50</div>
+                </div>
+                <div class="stock-card-chg up">+3.2%</div>
+                <canvas class="stock-mini"></canvas>
+            </div>
+
+            <div class="stock-card" data-sym="LORENE" data-px="999.99" data-chg="12.4" data-color="#f472b6">
+                <div class="stock-card-head">
+                    <div class="stock-card-sym" style="color:#f472b6">LORENE</div>
+                    <div class="stock-card-px">$999.99</div>
+                </div>
+                <div class="stock-card-chg up">+12.4%</div>
+                <canvas class="stock-mini"></canvas>
+            </div>
+
+            <div class="stock-card" data-sym="CHAOS" data-px="9.99" data-chg="-0.5" data-color="#fbbf24">
+                <div class="stock-card-head">
+                    <div class="stock-card-sym" style="color:#fbbf24">CHAOS</div>
+                    <div class="stock-card-px">$9.99</div>
+                </div>
+                <div class="stock-card-chg dn">-0.5%</div>
+                <canvas class="stock-mini"></canvas>
+            </div>
+
+            <div class="stock-card" data-sym="DRIP" data-px="88.00" data-chg="7.4" data-color="#2dd4bf">
+                <div class="stock-card-head">
+                    <div class="stock-card-sym" style="color:#2dd4bf">DRIP</div>
+                    <div class="stock-card-px">$88.00</div>
+                </div>
+                <div class="stock-card-chg up">+7.4%</div>
+                <canvas class="stock-mini"></canvas>
+            </div>
+
+            <div class="stock-card" data-sym="NOVA" data-px="314.15" data-chg="-2.1" data-color="#60a5fa">
+                <div class="stock-card-head">
+                    <div class="stock-card-sym" style="color:#60a5fa">NOVA</div>
+                    <div class="stock-card-px">$314.15</div>
+                </div>
+                <div class="stock-card-chg dn">-2.1%</div>
+                <canvas class="stock-mini"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fishing -->
+    <section class="fishing-sec" id="fishing">
+        <div class="fish-inner">
+            <div class="sec-label">Fishing system</div>
+            <h2 class="sec-title reveal">Cast, catch, cash out.</h2>
+            <p class="sec-sub reveal">5 rarity tiers, 20+ fish, Fish of the Day, Lucky Rod, and luck boosters. 30-second cooldown, 50 racks per cast.</p>
+
+            <div class="fish-grid reveal">
+                <div class="fish-card common"><span class="fish-emoji">🐟</span><div class="fish-nm">Sardine</div><div class="fish-rar r-common">Common</div><div class="fish-val">+5 racks</div></div>
+                <div class="fish-card common"><span class="fish-emoji">🦀</span><div class="fish-nm">Crab</div><div class="fish-rar r-common">Common</div><div class="fish-val">+8 racks</div></div>
+                <div class="fish-card uncommon"><span class="fish-emoji">🐡</span><div class="fish-nm">Pufferfish</div><div class="fish-rar r-uncommon">Uncommon</div><div class="fish-val">+25 racks</div></div>
+                <div class="fish-card uncommon"><span class="fish-emoji">🐠</span><div class="fish-nm">Clownfish</div><div class="fish-rar r-uncommon">Uncommon</div><div class="fish-val">+35 racks</div></div>
+                <div class="fish-card rare"><span class="fish-emoji">🦑</span><div class="fish-nm">Giant Squid</div><div class="fish-rar r-rare">Rare</div><div class="fish-val">+120 racks</div></div>
+                <div class="fish-card rare"><span class="fish-emoji">🐙</span><div class="fish-nm">Octopus</div><div class="fish-rar r-rare">Rare</div><div class="fish-val">+150 racks</div></div>
+                <div class="fish-card legendary"><span class="fish-emoji">🦈</span><div class="fish-nm">Shark</div><div class="fish-rar r-legendary">Legendary</div><div class="fish-val">+800 racks</div></div>
+                <div class="fish-card mythic"><span class="fish-emoji">🐋</span><div class="fish-nm">Blue Whale</div><div class="fish-rar r-mythic">Mythic</div><div class="fish-val">+2,000 racks</div></div>
+            </div>
+
+            <div class="fish-more reveal">🔒 12+ more fish to discover. Some only surface at certain times...</div>
+
+            <div style="margin-top:2.8rem;">
+                <div class="sec-label" style="text-align:left;margin-bottom:.6rem;">Fishing Luck Boosters</div>
+                <div class="boosters reveal">
+                    <div class="booster-card b2">
+                        <div class="booster-icon">🎣</div>
+                        <div>
+                            <div class="booster-title">2× Fishing Luck</div>
+                            <div class="booster-desc">Double your Rare+ catch chances for 1 hour.</div>
+                            <div class="booster-price">50,000 racks · <code style="font-family:monospace;font-size:.8em;">/fishingluck</code></div>
+                        </div>
+                    </div>
+                    <div class="booster-card b3">
+                        <div class="booster-icon">🌟</div>
+                        <div>
+                            <div class="booster-title">3× Fishing Luck</div>
+                            <div class="booster-desc">Triple your Rare+ catch chances for 1 hour.</div>
+                            <div class="booster-price">100,000 racks · <code style="font-family:monospace;font-size:.8em;">/fishingluck</code></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Changelog -->
+    <section class="pages-sec" id="pages">
+        <div class="sec-label">More info</div>
+        <h2 class="sec-title reveal">About &amp; Changelog.</h2>
+        <p class="sec-sub reveal">Learn the story behind Lorene, or see what's been shipping.</p>
+
+        <div class="page-tabs reveal">
+            <button class="page-tab active" data-page="about">About Lorene</button>
+            <button class="page-tab" data-page="changelog">Changelog</button>
+        </div>
+
+        <div class="page-panel active" id="page-about" data-page="about">
+            <div class="about-content reveal">
+                <h3>The bot behind the chaos.</h3>
+                <p>Lorene is a hand-crafted, opinionated Discord bot built from the ground up. Not a generic multi-server bot — every module exists because someone asked for it, and we built it properly.</p>
+                <p>From the in-house stock tickers (SHADE, LORENE, CHAOS, DRIP, NOVA) to the fishing system that has members setting alarms for Fish of the Day — every feature is designed with depth and personality.</p>
+                <p>Lorene runs 24/7 with full AI context memory, live-updating economy, and real-time stock prices. She's not just a bot — she's basically part of the server.</p>
+
+                <div class="about-grid">
+                    <div class="about-stat"><div class="about-stat-n">7</div><div class="about-stat-l">Modules</div></div>
+                    <div class="about-stat"><div class="about-stat-n">50+</div><div class="about-stat-l">Commands</div></div>
+                    <div class="about-stat"><div class="about-stat-n">99.8%</div><div class="about-stat-l">Uptime</div></div>
+                    <div class="about-stat"><div class="about-stat-n">April 28, 2026</div><div class="about-stat-l">Launched</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-panel" id="page-changelog" data-page="changelog">
+            <div class="changelog-list reveal">
+                <div class="changelog-item">
+                    <div class="changelog-head">
+                        <div class="changelog-ver">v3.2.0</div>
+                        <span class="changelog-tag latest">Latest</span>
+                        <div class="changelog-date">June 12, 2026</div>
+                    </div>
+                    <ul class="changelog-list-items">
+                        <li>Added Fish of the Day with 3× sell value multiplier</li>
+                        <li>New fishing luck boosters (2× and 3×) via /fishingluck</li>
+                        <li>Expanded fish roster with 4 new rare+ species</li>
+                        <li>Fixed fish inventory sorting for large collections</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-item">
+                    <div class="changelog-head">
+                        <div class="changelog-ver">v3.1.0</div>
+                        <span class="changelog-tag major">Major</span>
+                        <div class="changelog-date">May 28, 2026</div>
+                    </div>
+                    <ul class="changelog-list-items">
+                        <li>Full AI context memory — Lorene now remembers conversations</li>
+                        <li>Auto-starter conversations triggered by keywords in chat</li>
+                        <li>?aiclear command to reset your AI memory</li>
+                        <li>Improved roast quality with new model fine-tuning</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-item">
+                    <div class="changelog-head">
+                        <div class="changelog-ver">v3.0.0</div>
+                        <span class="changelog-tag major">Major</span>
+                        <div class="changelog-date">May 14, 2026</div>
+                    </div>
+                    <ul class="changelog-list-items">
+                        <li>🎉 Stock market module launched with 5 companies</li>
+                        <li>/buystock, /sellstock, /portfolio slash commands</li>
+                        <li>Live price updates every 5 minutes with volatility engine</li>
+                        <li>Stock ticker embed in daily recap messages</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-item">
+                    <div class="changelog-head">
+                        <div class="changelog-ver">v2.8.4</div>
+                        <span class="changelog-tag fix">Fix</span>
+                        <div class="changelog-date">May 2, 2026</div>
+                    </div>
+                    <ul class="changelog-list-items">
+                        <li>Fixed heist timer desync on server restart</li>
+                        <li>Rob cooldown now properly respects timezone changes</li>
+                        <li>Prevented duplicate daily claims via API race condition</li>
+                        <li>Memory optimization — reduced RAM usage by 34%</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-item">
+                    <div class="changelog-head">
+                        <div class="changelog-ver">v2.8.0</div>
+                        <span class="changelog-tag major">Major</span>
+                        <div class="changelog-date">April 18, 2026</div>
+                    </div>
+                    <ul class="changelog-list-items">
+                        <li>HypeNuke command — blast ±10 hype for 1,000 racks</li>
+                        <li>Aura tracking system with ?aura leaderboard</li>
+                        <li>Would-you-rather (?wyr) with community voting</li>
+                        <li>Improved command help embeds with examples</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-item">
+                    <div class="changelog-head">
+                        <div class="changelog-ver">v2.5.0</div>
+                        <div class="changelog-date">March 22, 2026</div>
+                    </div>
+                    <ul class="changelog-list-items">
+                        <li>Initial fishing module release with 5 rarity tiers</li>
+                        <li>Fish bucket inventory and sell commands</li>
+                        <li>Fishing leaderboard (?flb) with weekly reset</li>
+                        <li>30-second cast cooldown to prevent spam</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="foot-inner">
+            <div class="foot-logo">✦ Lorene</div>
+            <ul class="foot-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#stocks">Stocks</a></li>
+                <li><a href="#fishing">Fishing</a></li>
+                <li><a href="#pages">About</a></li>
+            </ul>
+        </div>
+        <p class="foot-copy">Lorene — A custom Discord bot · Full command reference · © 2026</p>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (() => {
+            'use strict';
+
+            const $ = (s, c = document) => c.querySelector(s);
+            const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+
+            function showToast(message, icon = '✓') {
+                const toast = $('#toast');
+                toast.innerHTML = `<span style="color:var(--teal)">${icon}</span> ${message}`;
+                toast.classList.add('show');
+                clearTimeout(toast._t);
+                toast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            // Load
+            window.addEventListener('load', () => document.body.classList.add('loaded'));
+
+            // Mobile toggle
+            const mobileToggle = $('#mobileToggle');
+            const navLinks = $('#navLinks');
+            mobileToggle?.addEventListener('click', () => {
+                mobileToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+            $$('a', navLinks).forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Nav scroll
+            const nav = $('#mainNav');
+            let scrollTicking = false;
+            window.addEventListener('scroll', () => {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        if (window.scrollY > 50) nav.classList.add('scrolled');
+                        else nav.classList.remove('scrolled');
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }, { passive: true });
+
+            // Reveal
+            const revealObs = new IntersectionObserver((entries) => {
+                entries.forEach((e, i) => {
+                    if (e.isIntersecting) {
+                        setTimeout(() => e.target.classList.add('visible'), i * 40);
+                        revealObs.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            $$('.reveal').forEach(el => revealObs.observe(el));
+
+            // Command tabs
+            const cmdTabs = $$('.cmd-tab');
+            const cmdPanels = $$('.cmd-panel');
+            const cmdSearch = $('#cmdSearch');
+
+            function switchTab(id) {
+                cmdPanels.forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+                cmdTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+            }
+
+            cmdTabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tab);
+                    if (cmdSearch) cmdSearch.value = '';
+                    filterCommands('');
+                });
+            });
+
+            $('#cmdTabs').addEventListener('keydown', (e) => {
+                const cur = e.target;
+                if (!cur.classList.contains('cmd-tab')) return;
+                const idx = cmdTabs.indexOf(cur);
+                let next = -1;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (idx + 1) % cmdTabs.length;
+                else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (idx - 1 + cmdTabs.length) % cmdTabs.length;
+                if (next >= 0) {
+                    e.preventDefault();
+                    cmdTabs[next].focus();
+                    cmdTabs[next].click();
+                }
+            });
+
+            // Copy command on click
+            $$('.cmd-item').forEach(item => {
+                item.addEventListener('click', async () => {
+                    const cmd = item.dataset.cmd;
+                    if (!cmd) return;
+                    try {
+                        await navigator.clipboard.writeText(cmd);
+                        item.classList.add('copied');
+                        showToast(`Copied: ${cmd}`, '📋');
+                        setTimeout(() => item.classList.remove('copied'), 600);
+                    } catch (_) {
+                        showToast('Copy failed', '✕');
+                    }
+                });
+            });
+
+            function filterCommands(query) {
+                const q = query.toLowerCase().trim();
+                let visibleCount = 0;
+                $$('.no-results').forEach(n => n.remove());
+
+                cmdPanels.forEach(panel => {
+                    const items = $$('.cmd-item', panel);
+                    let panelVisible = 0;
+                    items.forEach(it => {
+                        const cmd = (it.dataset.cmd || '').toLowerCase();
+                        const desc = (it.querySelector('.cmd-desc')?.textContent || '').toLowerCase();
+                        const match = !q || cmd.includes(q) || desc.includes(q);
+                        it.style.display = match ? '' : 'none';
+                        if (match) panelVisible++;
+                    });
+
+                    if (q) {
+                        if (panelVisible > 0) {
+                            panel.style.display = 'grid';
+                            panel.classList.add('active');
+                            visibleCount += panelVisible;
+                        } else {
+                            panel.style.display = 'none';
+                            panel.classList.remove('active');
+                        }
+                    } else {
+                        panel.style.display = '';
+                    }
+                });
+
+                if (q && visibleCount === 0) {
+                    const firstActive = cmdPanels.find(p => p.classList.contains('active')) || cmdPanels[0];
+                    const noRes = document.createElement('div');
+                    noRes.className = 'no-results';
+                    noRes.textContent = `No commands match "${query}"`;
+                    firstActive.style.display = 'grid';
+                    firstActive.classList.add('active');
+                    firstActive.appendChild(noRes);
+                }
+
+                if (q) {
+                    cmdTabs.forEach(t => t.classList.remove('active'));
+                } else {
+                    const activePanel = cmdPanels.find(p => p.classList.contains('active'));
+                    if (activePanel) {
+                        cmdTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === activePanel.dataset.panel));
+                    }
+                }
+            }
+
+            cmdSearch?.addEventListener('input', (e) => filterCommands(e.target.value));
+            cmdSearch?.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    cmdSearch.value = '';
+                    filterCommands('');
+                    cmdSearch.blur();
+                }
+            });
+
+            // ---- Stocks ----
+            const stockData = {
+                SHADE: { base: 142.50, color: '#7c6af7', chg: 3.2 },
+                LORENE: { base: 999.99, color: '#f472b6', chg: 12.4 },
+                CHAOS: { base: 9.99, color: '#fbbf24', chg: -0.5 },
+                DRIP: { base: 88.00, color: '#2dd4bf', chg: 7.4 },
+                NOVA: { base: 314.15, color: '#60a5fa', chg: -2.1 }
+            };
+
+            function genSeries(base, points, volatility = 0.08) {
+                const arr = [base * (1 - volatility / 2)];
+                for (let i = 1; i < points; i++) {
+                    const drift = (base - arr[i - 1]) * 0.04;
+                    const noise = (Math.random() - 0.5) * base * volatility;
+                    arr.push(Math.max(0.5, arr[i - 1] + drift + noise));
+                }
+                arr[arr.length - 1] = base;
+                return arr;
+            }
+
+            const chartCanvas = $('#stockCanvas');
+            const chartCtx = chartCanvas?.getContext('2d');
+            const chartSym = $('#chartSym');
+            const chartPrice = $('#chartPrice');
+            const chartChg = $('#chartChg');
+            let currentSym = 'SHADE';
+            let currentRange = 24;
+            let chartSeries = {};
+
+            function buildChartSeries() {
+                const points = { 24: 48, 7: 56, 30: 90 } [currentRange] || 48;
+                Object.keys(stockData).forEach(sym => {
+                    chartSeries[sym + '_' + currentRange] = genSeries(stockData[sym].base, points, 0.12);
+                });
+            }
+            buildChartSeries();
+
+            function resizeCanvas(canvas) {
+                const dpr = window.devicePixelRatio || 1;
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                const ctx = canvas.getContext('2d');
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+
+            function drawMainChart(progress = 1) {
+                if (!chartCanvas) return;
+                resizeCanvas(chartCanvas);
+                const ctx = chartCtx;
+                const w = chartCanvas.clientWidth;
+                const h = chartCanvas.clientHeight;
+                ctx.clearRect(0, 0, w, h);
+
+                const series = chartSeries[currentSym + '_' + currentRange];
+                if (!series) return;
+
+                const visible = Math.floor(series.length * progress);
+                const data = series.slice(0, visible);
+                if (data.length < 2) return;
+
+                const min = Math.min(...series) * 0.96;
+                const max = Math.max(...series) * 1.04;
+                const pad = { l: 10, r: 10, t: 20, b: 30 };
+                const cw = w - pad.l - pad.r;
+                const ch = h - pad.t - pad.b;
+
+                ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= 4; i++) {
+                    const y = pad.t + (ch / 4) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(pad.l, y);
+                    ctx.lineTo(w - pad.r, y);
+                    ctx.stroke();
+
+                    const val = max - ((max - min) / 4) * i;
+                    ctx.fillStyle = 'rgba(126,124,154,0.6)';
+                    ctx.font = '10px "DM Sans", sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.fillText('$' + val.toFixed(2), pad.l, y - 4);
+                }
+
+                const color = stockData[currentSym].color;
+                const getX = (i) => pad.l + (cw / (series.length - 1)) * i;
+                const getY = (v) => pad.t + ch - ((v - min) / (max - min)) * ch;
+
+                const grad = ctx.createLinearGradient(0, pad.t, 0, h);
+                grad.addColorStop(0, color + '40');
+                grad.addColorStop(1, color + '00');
+
+                ctx.beginPath();
+                ctx.moveTo(getX(0), getY(data[0]));
+                for (let i = 1; i < data.length; i++) {
+                    const cx = (getX(i - 1) + getX(i)) / 2;
+                    ctx.quadraticCurveTo(getX(i - 1), getY(data[i - 1]), cx, (getY(data[i - 1]) + getY(data[i])) / 2);
+                }
+                ctx.lineTo(getX(data.length - 1), getY(data[data.length - 1]));
+                ctx.lineTo(getX(data.length - 1), h - pad.b);
+                ctx.lineTo(getX(0), h - pad.b);
+                ctx.closePath();
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(getX(0), getY(data[0]));
+                for (let i = 1; i < data.length; i++) {
+                    const cx = (getX(i - 1) + getX(i)) / 2;
+                    ctx.quadraticCurveTo(getX(i - 1), getY(data[i - 1]), cx, (getY(data[i - 1]) + getY(data[i])) / 2);
+                }
+                ctx.lineTo(getX(data.length - 1), getY(data[data.length - 1]));
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                const lastX = getX(data.length - 1);
+                const lastY = getY(data[data.length - 1]);
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, 8, 0, Math.PI * 2);
+                ctx.fillStyle = color + '40';
+                ctx.fill();
+            }
+
+            function animateChart() {
+                let p = 0;
+                const start = performance.now();
+                const dur = 900;
+                const step = (now) => {
+                    p = Math.min((now - start) / dur, 1);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    drawMainChart(eased);
+                    if (p < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            }
+
+            function selectStock(sym) {
+                currentSym = sym;
+                const d = stockData[sym];
+                chartSym.textContent = sym;
+                chartPrice.textContent = '$' + d.base.toFixed(2);
+                chartPrice.style.color = d.color;
+                chartChg.textContent = (d.chg >= 0 ? '+' : '') + d.chg.toFixed(1) + '%';
+                chartChg.className = 'stock-change ' + (d.chg >= 0 ? 'up' : 'dn');
+
+                $$('.stock-card').forEach(c => c.classList.toggle('active', c.dataset.sym === sym));
+                animateChart();
+            }
+
+            $$('.stock-card').forEach(card => {
+                card.addEventListener('click', () => selectStock(card.dataset.sym));
+            });
+
+            $$('#stockRange button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    $$('#stockRange button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentRange = parseInt(btn.dataset.range, 10);
+                    buildChartSeries();
+                    animateChart();
+                });
+            });
+
+            function drawMini(canvas, color, seed) {
+                resizeCanvas(canvas);
+                const ctx = canvas.getContext('2d');
+                const w = canvas.clientWidth;
+                const h = canvas.clientHeight;
+                ctx.clearRect(0, 0, w, h);
+
+                const pts = 20;
+                const arr = [];
+                let v = 50;
+                for (let i = 0; i < pts; i++) {
+                    v += (Math.sin(seed + i * 0.7) + (Math.random() - 0.5)) * 8;
+                    arr.push(v);
+                }
+                const min = Math.min(...arr);
+                const max = Math.max(...arr);
+                const range = max - min || 1;
+
+                ctx.beginPath();
+                arr.forEach((val, i) => {
+                    const x = (w / (pts - 1)) * i;
+                    const y = h - ((val - min) / range) * h * 0.8 - h * 0.1;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.lineTo(w, h);
+                ctx.lineTo(0, h);
+                ctx.closePath();
+                const grad = ctx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, color + '50');
+                grad.addColorStop(1, color + '00');
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                ctx.beginPath();
+                arr.forEach((val, i) => {
+                    const x = (w / (pts - 1)) * i;
+                    const y = h - ((val - min) / range) * h * 0.8 - h * 0.1;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.8;
+                ctx.stroke();
+            }
+
+            const miniObs = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        const card = e.target;
+                        const mini = card.querySelector('.stock-mini');
+                        if (mini) drawMini(mini, card.dataset.color, card.dataset.sym.charCodeAt(0));
+                        miniObs.unobserve(card);
+                    }
+                });
+            }, { threshold: 0.2 });
+            $$('.stock-card').forEach(c => miniObs.observe(c));
+
+            const chartObs = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        animateChart();
+                        chartObs.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            if (chartCanvas) chartObs.observe(chartCanvas);
+
+            window.addEventListener('resize', debounce(() => {
+                drawMainChart(1);
+                $$('.stock-card').forEach(c => {
+                    const mini = c.querySelector('.stock-mini');
+                    if (mini) drawMini(mini, c.dataset.color, c.dataset.sym.charCodeAt(0));
+                });
+            }, 150));
+
+            setInterval(() => {
+                Object.keys(stockData).forEach(sym => {
+                    const d = stockData[sym];
+                    const delta = (Math.random() - 0.5) * d.base * 0.015;
+                    d.base = Math.max(1, d.base + delta);
+                    d.chg += (Math.random() - 0.5) * 0.3;
+                });
+                const d = stockData[currentSym];
+                chartPrice.textContent = '$' + d.base.toFixed(2);
+                chartChg.textContent = (d.chg >= 0 ? '+' : '') + d.chg.toFixed(1) + '%';
+                chartChg.className = 'stock-change ' + (d.chg >= 0 ? 'up' : 'dn');
+
+                $$('.stock-card').forEach(c => {
+                    const sym = c.dataset.sym;
+                    const sd = stockData[sym];
+                    const px = c.querySelector('.stock-card-px');
+                    const chg = c.querySelector('.stock-card-chg');
+                    if (px) px.textContent = '$' + sd.base.toFixed(2);
+                    if (chg) {
+                        chg.textContent = (sd.chg >= 0 ? '+' : '') + sd.chg.toFixed(1) + '%';
+                        chg.className = 'stock-card-chg ' + (sd.chg >= 0 ? 'up' : 'dn');
+                    }
+                    c.dataset.px = sd.base.toFixed(2);
+                    c.dataset.chg = sd.chg.toFixed(1);
+                });
+            }, 4000);
+
+            // Page tabs
+            $$('.page-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const id = tab.dataset.page;
+                    $$('.page-tab').forEach(t => t.classList.toggle('active', t.dataset.page === id));
+                    $$('.page-panel').forEach(p => p.classList.toggle('active', p.dataset.page === id));
+                });
+            });
+
+            // Smooth anchor scroll
+            $$('a[href^="#"]').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (!href || href === '#') return;
+                    const target = $(href);
+                    if (target) {
+                        e.preventDefault();
+                        const offset = 80;
+                        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Keyboard shortcut: / to focus search
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '/' && document.activeElement !== cmdSearch && !e.ctrlKey && !e.metaKey) {
+                    const active = document.activeElement;
+                    if (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable) return;
+                    e.preventDefault();
+                    cmdSearch?.focus();
+                    $('#commands')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+
+            function debounce(fn, wait) {
+                let t;
+                return (...args) => { clearTimeout(t);
+                    t = setTimeout(() => fn.apply(null, args), wait); };
+            }
+
+            console.log('🎣 Lorene — command reference ✦');
+        })();
+    </script>
 </body>
 </html>
